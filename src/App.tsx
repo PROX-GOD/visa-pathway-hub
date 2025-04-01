@@ -13,14 +13,14 @@ import VisaExperiencesPage from "./pages/VisaExperiencesPage";
 import ResourcesPage from "./pages/ResourcesPage";
 import ContactPage from "./pages/ContactPage";
 import ShareExperiencePage from "./pages/ShareExperiencePage";
-import { AuthProvider } from "./components/auth/AuthProvider";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import ProfilePage from "./pages/ProfilePage";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import BlogPage from "./pages/BlogPage";
-import BlogPostPage from "./pages/BlogPostPage";
-import AdminElectionPage from "./pages/AdminElectionPage";
+import { AuthProvider } from "@/components/auth/AuthProvider";
+import LoginPage from "@/pages/LoginPage";
+import RegisterPage from "@/pages/RegisterPage";
+import ProfilePage from "@/pages/ProfilePage";
+import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
+import BlogPage from "@/pages/BlogPage";
+import BlogPostPage from "@/pages/BlogPostPage";
+import AdminElectionPage from "@/pages/AdminElectionPage";
 
 const queryClient = new QueryClient();
 

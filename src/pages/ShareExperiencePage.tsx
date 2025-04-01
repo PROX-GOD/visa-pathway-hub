@@ -7,10 +7,17 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import { ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ArrowLeft, Loader2 } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { createClient } from '@supabase/supabase-js';
+
+// Initialize Supabase client
+const supabaseUrl = 'https://mpckiisrkczpdnyzpqpm.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1wY2tpaXNya2N6cGRueXpwcXBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ4MzQwMjEsImV4cCI6MjAzMDQxMDAyMX0.ZBWcdHw1t0P4j4r0sqFxaj_aiGYAgse5FZE3MIobN8Q';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const ShareExperiencePage = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -29,14 +36,33 @@ const ShareExperiencePage = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const { data, error } = await supabase
+        .from('visa_experiences')
+        .insert([
+          {
+            name: formData.name,
+            email: formData.email,
+            consulate: formData.consulate,
+            interview_date: formData.interviewDate,
+            university: formData.university,
+            major: formData.major,
+            approved: formData.approved,
+            experience: formData.experience
+          }
+        ])
+        .select();
+
+      if (error) {
+        throw error;
+      }
+
       toast.success("Your experience has been submitted successfully!");
+      
       // Reset form
       setFormData({
         name: '',
@@ -48,7 +74,17 @@ const ShareExperiencePage = () => {
         approved: 'yes',
         experience: ''
       });
-    }, 1500);
+      
+      // Redirect to experiences page after successful submission
+      setTimeout(() => {
+        navigate('/visa-experiences');
+      }, 2000);
+    } catch (error) {
+      console.error("Error submitting experience:", error);
+      toast.error("Failed to submit your experience. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -224,7 +260,14 @@ const ShareExperiencePage = () => {
                       className="bg-visa-blue hover:bg-visa-navy text-white"
                       disabled={isSubmitting}
                     >
-                      {isSubmitting ? 'Submitting...' : 'Submit Your Experience'}
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 size={16} className="mr-2 animate-spin" />
+                          Submitting...
+                        </>
+                      ) : (
+                        'Submit Your Experience'
+                      )}
                     </Button>
                   </div>
                 </div>

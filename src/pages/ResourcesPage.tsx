@@ -61,6 +61,14 @@ const ResourcesPage = () => {
     return savedResources.includes(resourceId);
   };
 
+  // Function to navigate to a different tab
+  const navigateToTab = (tabValue: string) => {
+    const tabTrigger = document.querySelector(`[data-value="${tabValue}"]`) as HTMLButtonElement | null;
+    if (tabTrigger && tabTrigger.click) {
+      tabTrigger.click();
+    }
+  };
+
   return (
     <div className={`min-h-screen flex flex-col ${theme === 'dark' ? 'dark bg-gray-900 text-white' : ''}`}>
       <Header />
@@ -455,7 +463,7 @@ const ResourcesPage = () => {
                         Click the bookmark icon on any resource to save it to your collection for easy access later.
                       </p>
                       <Button 
-                        onClick={() => document.querySelector('[data-value="all"]')?.click()} 
+                        onClick={() => navigateToTab('all')} 
                         className="bg-visa-blue hover:bg-visa-navy text-white dark:bg-blue-700 dark:hover:bg-blue-800"
                       >
                         Browse All Resources

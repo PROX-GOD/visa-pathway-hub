@@ -21,6 +21,7 @@ import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import BlogPage from "@/pages/BlogPage";
 import BlogPostPage from "@/pages/BlogPostPage";
 import AdminElectionPage from "@/pages/AdminElectionPage";
+import DashboardPage from "@/pages/DashboardPage";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const App = () => (
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<BlogPostPage />} />

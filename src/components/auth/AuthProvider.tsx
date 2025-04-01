@@ -11,7 +11,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 // Define our custom User type that extends Supabase's User
 type User = {
   id: string;
-  email: string | undefined; // Changed from required to optional
+  email: string | undefined; // Optional to match Supabase User type
   user_metadata?: {
     name?: string;
     avatar_url?: string;

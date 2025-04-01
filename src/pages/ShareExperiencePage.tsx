@@ -9,18 +9,15 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { createClient } from '@supabase/supabase-js';
-
-// Initialize Supabase client
-const supabaseUrl = 'https://mpckiisrkczpdnyzpqpm.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1wY2tpaXNya2N6cGRueXpwcXBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ4MzQwMjEsImV4cCI6MjAzMDQxMDAyMX0.ZBWcdHw1t0P4j4r0sqFxaj_aiGYAgse5FZE3MIobN8Q';
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from '@/components/auth/AuthProvider';
+import { useAuth } from '@/components/auth/AuthProvider';
 
 const ShareExperiencePage = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
+    name: user?.user_metadata?.name || '',
+    email: user?.email || '',
     consulate: '',
     interviewDate: '',
     university: '',
@@ -52,10 +49,10 @@ const ShareExperiencePage = () => {
             university: formData.university,
             major: formData.major,
             approved: formData.approved,
-            experience: formData.experience
+            experience: formData.experience,
+            user_id: user?.id || null
           }
-        ])
-        .select();
+        ]);
 
       if (error) {
         throw error;
@@ -65,8 +62,8 @@ const ShareExperiencePage = () => {
       
       // Reset form
       setFormData({
-        name: '',
-        email: '',
+        name: user?.user_metadata?.name || '',
+        email: user?.email || '',
         consulate: '',
         interviewDate: '',
         university: '',

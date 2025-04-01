@@ -1,6 +1,6 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { createClient, Session } from '@supabase/supabase-js';
+import { createClient, Session, User as SupabaseUser } from '@supabase/supabase-js';
 import { toast } from 'sonner';
 
 // Initialize Supabase client
@@ -8,9 +8,10 @@ const supabaseUrl = 'https://mpckiisrkczpdnyzpqpm.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1wY2tpaXNya2N6cGRueXpwcXBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ4MzQwMjEsImV4cCI6MjAzMDQxMDAyMX0.ZBWcdHw1t0P4j4r0sqFxaj_aiGYAgse5FZE3MIobN8Q';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+// Define our custom User type that extends Supabase's User
 type User = {
   id: string;
-  email: string;
+  email: string | undefined; // Changed from required to optional
   user_metadata?: {
     name?: string;
     avatar_url?: string;
@@ -31,6 +32,17 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Helper function to convert Supabase User to our User type
+const mapUser = (supabaseUser: SupabaseUser | null): User | null => {
+  if (!supabaseUser) return null;
+  
+  return {
+    id: supabaseUser.id,
+    email: supabaseUser.email,
+    user_metadata: supabaseUser.user_metadata
+  };
+};
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
@@ -44,7 +56,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Get session
       const { data: { session: currentSession } } = await supabase.auth.getSession();
       setSession(currentSession);
-      setUser(currentSession?.user || null);
+      setUser(currentSession ? mapUser(currentSession.user) : null);
 
       // Check if user is admin
       if (currentSession?.user) {
@@ -61,7 +73,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const { data: { subscription } } = supabase.auth.onAuthStateChange(
         async (_event, newSession) => {
           setSession(newSession);
-          setUser(newSession?.user || null);
+          setUser(newSession ? mapUser(newSession.user) : null);
 
           // Check if new user is admin
           if (newSession?.user) {
@@ -97,8 +109,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       
       toast.success("Signed in successfully!");
-      
-      return data;
     } catch (error: any) {
       toast.error(`Error signing in: ${error.message}`);
       throw error;
@@ -142,8 +152,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       
       toast.success("Account created successfully! Please check your email to verify your account.");
-      
-      return data;
     } catch (error: any) {
       toast.error(`Error signing up: ${error.message}`);
       throw error;
@@ -197,7 +205,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       // Refresh user data
       const { data: { user: updatedUser } } = await supabase.auth.getUser();
-      setUser(updatedUser);
+      setUser(mapUser(updatedUser));
       
     } catch (error: any) {
       toast.error(`Error updating profile: ${error.message}`);
@@ -220,7 +228,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const value = {
+  const value: AuthContextType = {
     user,
     session,
     isAdmin,

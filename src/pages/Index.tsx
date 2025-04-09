@@ -8,8 +8,10 @@ import StudyUSASection from '@/components/home/StudyUSASection';
 import VisaInterviewSection from '@/components/home/VisaInterviewSection';
 import VisaTimelineSection from '@/components/home/VisaTimelineSection';
 import ExperienceSection from '@/components/home/ExperienceSection';
+import TestimonialsSection from '@/components/home/TestimonialsSection';
 import FAQSection from '@/components/home/FAQSection';
 import CTASection from '@/components/home/CTASection';
+import NoticeBanner from '@/components/notice/NoticeBanner';
 import { Button } from '@/components/ui/button';
 import { Calendar, ThumbsUp, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -43,6 +45,7 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
+      <NoticeBanner />
       
       <main className="flex-grow">
         <HeroSection />
@@ -118,6 +121,7 @@ const Index = () => {
         <VisaInterviewSection />
         <VisaTimelineSection />
         <ExperienceSection />
+        <TestimonialsSection />
         <FAQSection />
         <CTASection />
       </main>

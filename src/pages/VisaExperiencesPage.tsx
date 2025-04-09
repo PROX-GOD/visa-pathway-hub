@@ -6,25 +6,9 @@ import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PlusCircle, Filter, Search, MapPin, Calendar, BookOpen, ThumbsUp, ArrowRight, Loader2 } from 'lucide-react';
-import { createClient } from '@supabase/supabase-js';
 import { toast } from 'sonner';
-
-// Initialize Supabase client
-const supabaseUrl = 'https://mpckiisrkczpdnyzpqpm.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1wY2tpaXNya2N6cGRueXpwcXBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ4MzQwMjEsImV4cCI6MjAzMDQxMDAyMX0.ZBWcdHw1t0P4j4r0sqFxaj_aiGYAgse5FZE3MIobN8Q';
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-type VisaExperience = {
-  id: string;
-  name: string;
-  consulate: string;
-  university: string;
-  major: string;
-  interview_date: string;
-  approved: string;
-  experience: string;
-  created_at: string;
-};
+import { VisaExperience } from '@/types/database';
+import { visaExperiencesClient } from '@/lib/supabase';
 
 const VisaExperiencesPage = () => {
   const [experiences, setExperiences] = useState<VisaExperience[]>([]);
@@ -44,7 +28,7 @@ const VisaExperiencesPage = () => {
   const fetchExperiences = async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await supabase
+      const { data, error } = await visaExperiencesClient
         .from('visa_experiences')
         .select('*')
         .order('created_at', { ascending: false });

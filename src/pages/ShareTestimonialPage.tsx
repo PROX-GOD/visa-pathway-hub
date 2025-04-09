@@ -9,19 +9,16 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { visaExperiencesClient } from '@/lib/supabase';
+import { testimonialsClient } from '@/lib/supabase';
 
-const ShareExperiencePage = () => {
+const ShareTestimonialPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    consulate: '',
-    interviewDate: '',
     university: '',
-    major: '',
-    approved: 'yes',
-    experience: ''
+    role: '',
+    quote: ''
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,18 +33,16 @@ const ShareExperiencePage = () => {
     setIsSubmitting(true);
     
     try {
-      const { data, error } = await visaExperiencesClient
-        .from('visa_experiences')
+      const { data, error } = await testimonialsClient
+        .from('testimonials')
         .insert([
           {
             name: formData.name,
             email: formData.email,
-            consulate: formData.consulate,
-            interview_date: formData.interviewDate,
             university: formData.university,
-            major: formData.major,
-            approved: formData.approved,
-            experience: formData.experience,
+            role: formData.role,
+            quote: formData.quote,
+            photo_url: null
           }
         ]);
 
@@ -55,27 +50,24 @@ const ShareExperiencePage = () => {
         throw error;
       }
 
-      toast.success("Your experience has been submitted successfully!");
+      toast.success("Your testimonial has been submitted successfully!");
       
       // Reset form
       setFormData({
         name: '',
         email: '',
-        consulate: '',
-        interviewDate: '',
         university: '',
-        major: '',
-        approved: 'yes',
-        experience: ''
+        role: '',
+        quote: ''
       });
       
-      // Redirect to experiences page after successful submission
+      // Redirect to testimonials page after successful submission
       setTimeout(() => {
-        navigate('/visa-experiences');
+        navigate('/testimonials');
       }, 2000);
     } catch (error) {
-      console.error("Error submitting experience:", error);
-      toast.error("Failed to submit your experience. Please try again.");
+      console.error("Error submitting testimonial:", error);
+      toast.error("Failed to submit your testimonial. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -88,17 +80,16 @@ const ShareExperiencePage = () => {
       <main className="flex-grow pt-28">
         <section className="py-16 bg-gradient-to-br from-visa-light via-white to-blue-50">
           <div className="container-custom mx-auto">
-            <Link to="/visa-experiences" className="inline-flex items-center text-visa-blue hover:text-visa-navy mb-6">
+            <Link to="/testimonials" className="inline-flex items-center text-visa-blue hover:text-visa-navy mb-6">
               <ArrowLeft size={16} className="mr-2" />
-              Back to Experiences
+              Back to Testimonials
             </Link>
             
             <h1 className="text-4xl font-serif font-bold text-visa-navy mb-6">
-              Share Your Visa <span className="text-visa-blue">Experience</span>
+              Share Your <span className="text-visa-blue">Story</span>
             </h1>
             <p className="text-lg text-gray-700 max-w-3xl">
-              Help other students by sharing your F-1 visa interview experience. Your story can provide
-              valuable insights and guidance to future applicants.
+              Help other students by sharing your experience with Spring/Fall USA. Your testimonial can inspire and guide others on their journey.
             </p>
           </div>
         </section>
@@ -137,33 +128,7 @@ const ShareExperiencePage = () => {
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="consulate">Consulate/Embassy</Label>
-                      <Input
-                        id="consulate"
-                        name="consulate"
-                        placeholder="e.g., New Delhi, India"
-                        value={formData.consulate}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="interviewDate">Interview Date</Label>
-                      <Input
-                        id="interviewDate"
-                        name="interviewDate"
-                        type="date"
-                        value={formData.interviewDate}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="university">University Name</Label>
+                      <Label htmlFor="university">University</Label>
                       <Input
                         id="university"
                         name="university"
@@ -175,75 +140,33 @@ const ShareExperiencePage = () => {
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor="major">Major/Program</Label>
+                      <Label htmlFor="role">Your Role (Optional)</Label>
                       <Input
-                        id="major"
-                        name="major"
-                        placeholder="e.g., Computer Science"
-                        value={formData.major}
+                        id="role"
+                        name="role"
+                        placeholder="e.g., Graduate Student, Alumni"
+                        value={formData.role}
                         onChange={handleChange}
-                        required
                       />
                     </div>
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="approved">Visa Outcome</Label>
-                    <div className="flex items-center space-x-4">
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="radio"
-                          name="approved"
-                          value="yes"
-                          checked={formData.approved === 'yes'}
-                          onChange={handleChange}
-                          className="text-visa-blue"
-                        />
-                        <span>Approved</span>
-                      </label>
-                      
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="radio"
-                          name="approved"
-                          value="no"
-                          checked={formData.approved === 'no'}
-                          onChange={handleChange}
-                          className="text-visa-blue"
-                        />
-                        <span>Denied</span>
-                      </label>
-                      
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="radio"
-                          name="approved"
-                          value="administrative"
-                          checked={formData.approved === 'administrative'}
-                          onChange={handleChange}
-                          className="text-visa-blue"
-                        />
-                        <span>Administrative Processing</span>
-                      </label>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="experience">Your Experience</Label>
+                    <Label htmlFor="quote">Your Testimonial</Label>
                     <Textarea
-                      id="experience"
-                      name="experience"
-                      placeholder="Please share the details of your visa interview experience, including questions asked, documents reviewed, and any advice for other students..."
-                      value={formData.experience}
+                      id="quote"
+                      name="quote"
+                      placeholder="Please share your experience with Spring/Fall USA..."
+                      value={formData.quote}
                       onChange={handleChange}
-                      rows={8}
+                      rows={6}
                       required
                     />
                   </div>
                   
                   <div>
                     <p className="text-sm text-gray-500">
-                      By submitting this form, you agree to share your experience with other students on our platform.
+                      By submitting this form, you agree to share your testimonial with other students on our platform.
                       Your email will not be displayed publicly.
                     </p>
                   </div>
@@ -260,7 +183,7 @@ const ShareExperiencePage = () => {
                           Submitting...
                         </>
                       ) : (
-                        'Submit Your Experience'
+                        'Submit Your Testimonial'
                       )}
                     </Button>
                   </div>
@@ -276,4 +199,4 @@ const ShareExperiencePage = () => {
   );
 };
 
-export default ShareExperiencePage;
+export default ShareTestimonialPage;

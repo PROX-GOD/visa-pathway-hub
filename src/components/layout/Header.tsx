@@ -37,8 +37,11 @@ const Header = () => {
       <div className="container-custom mx-auto">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center">
-            <span className="text-visa-blue font-serif font-bold text-2xl">Spring/Fall</span>
-            <span className="text-visa-navy font-serif font-bold text-2xl ml-1">USA</span>
+            <img 
+              src="https://i.imgur.com/JoM5Eal.png" 
+              alt="Spring/Fall USA Logo" 
+              className="h-10 mr-2"
+            />
           </Link>
 
           {/* Desktop Navigation */}

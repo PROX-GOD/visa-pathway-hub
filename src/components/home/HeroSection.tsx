@@ -40,16 +40,16 @@ const HeroSection = () => {
               Your Path to <span className="text-visa-blue">Studying in the USA</span> Starts Here
             </h1>
             
-            <p className="mt-6 text-lg text-gray-700 max-w-lg">
+            <p className="mt-6 text-lg text-gray-700 max-w-lg font-sans">
               We provide free guidance and resources to help international students navigate the F-1 visa process successfully.
             </p>
             
             <div className="mt-8 space-x-4 flex flex-wrap gap-4">
-              <Button size="lg" className="bg-visa-blue hover:bg-visa-navy text-white px-6">
+              <Button size="lg" className="bg-visa-blue hover:bg-visa-navy text-white px-6 font-sans">
                 Get Started
                 <ArrowRight size={16} className="ml-2" />
               </Button>
-              <Button size="lg" variant="outline" className="border-visa-blue text-visa-blue hover:bg-blue-50">
+              <Button size="lg" variant="outline" className="border-visa-blue text-visa-blue hover:bg-blue-50 font-sans">
                 Learn More
               </Button>
             </div>
@@ -59,13 +59,13 @@ const HeroSection = () => {
                 <h3 className="font-display text-visa-blue font-bold text-3xl lg:text-4xl">
                   {count.toLocaleString()}+
                 </h3>
-                <p className="text-gray-600 mt-2">Students helped with their F-1 visas</p>
+                <p className="text-gray-600 mt-2 font-sans">Students helped with their F-1 visas</p>
               </div>
               <div className="bg-white rounded-lg p-6 shadow-lg border border-gray-100 transform transition-transform hover:-translate-y-1">
                 <h3 className="font-display text-visa-blue font-bold text-3xl lg:text-4xl">
                   {successRate}%
                 </h3>
-                <p className="text-gray-600 mt-2">Success rate for visa applications</p>
+                <p className="text-gray-600 mt-2 font-sans">Success rate for visa applications</p>
               </div>
             </div>
           </div>
@@ -79,10 +79,10 @@ const HeroSection = () => {
               />
             </div>
             <div className="absolute -bottom-6 -right-6 bg-visa-gold p-4 rounded-lg shadow-lg transform rotate-3 z-20">
-              <p className="text-visa-navy font-bold">
+              <p className="text-visa-navy font-bold font-sans">
                 "Spring/Fall USA helped me achieve my dream of studying in the US!"
               </p>
-              <p className="text-sm mt-2 text-visa-navy">- Maria, Computer Science Student</p>
+              <p className="text-sm mt-2 text-visa-navy font-sans">- Maria, Computer Science Student</p>
             </div>
             <div className="absolute -z-10 top-1/4 -right-8 w-60 h-60 bg-visa-blue rounded-full opacity-10 blur-3xl"></div>
             <div className="absolute -z-10 bottom-1/4 -left-8 w-48 h-48 bg-visa-orange rounded-full opacity-10 blur-3xl"></div>

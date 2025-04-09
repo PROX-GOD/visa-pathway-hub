@@ -7,15 +7,22 @@ import { activeNotice } from './NoticeData';
 const NoticeBanner = () => {
   const [isOpen, setIsOpen] = useState(false);
   
-  // Check if notice is active
+  // Check if notice is active and if it has been seen before
   useEffect(() => {
     if (activeNotice.isActive) {
-      // Wait a moment before showing the notice
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-      }, 1500);
+      // Check if the user has already seen the notice in this session
+      const hasSeenNotice = sessionStorage.getItem(`notice-${activeNotice.slug}`);
       
-      return () => clearTimeout(timer);
+      if (!hasSeenNotice) {
+        // Wait a moment before showing the notice
+        const timer = setTimeout(() => {
+          setIsOpen(true);
+          // Mark this notice as seen for this session
+          sessionStorage.setItem(`notice-${activeNotice.slug}`, 'true');
+        }, 1500);
+        
+        return () => clearTimeout(timer);
+      }
     }
   }, []);
   

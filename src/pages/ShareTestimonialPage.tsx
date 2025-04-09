@@ -33,6 +33,8 @@ const ShareTestimonialPage = () => {
     setIsSubmitting(true);
     
     try {
+      console.log("Submitting testimonial with data:", formData);
+      
       const { data, error } = await testimonialsClient
         .from('testimonials')
         .insert([
@@ -47,6 +49,7 @@ const ShareTestimonialPage = () => {
         ]);
 
       if (error) {
+        console.error("Supabase error:", error);
         throw error;
       }
 

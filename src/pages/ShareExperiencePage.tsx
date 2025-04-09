@@ -36,6 +36,8 @@ const ShareExperiencePage = () => {
     setIsSubmitting(true);
     
     try {
+      console.log("Submitting experience with data:", formData);
+      
       const { data, error } = await visaExperiencesClient
         .from('visa_experiences')
         .insert([
@@ -52,6 +54,7 @@ const ShareExperiencePage = () => {
         ]);
 
       if (error) {
+        console.error("Supabase error:", error);
         throw error;
       }
 

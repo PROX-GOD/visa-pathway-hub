@@ -4,16 +4,16 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 // Import admin images
-import mukeshImg from '@/assets/images/admins/mukesh.png';
-import kanashuImg from '@/assets/images/admins/kanashu.png';
-import heluuImg from '@/assets/images/admins/original_heluu.png';
-import sekuwaImg from '@/assets/images/admins/sekuwa.png';
-import nkImg from '@/assets/images/admins/nk.png';
+import mukeshImg from '@/assets/images/mukesh.png';
+import kanashuImg from '@/assets/images/kanashu.png';
+import heluuImg from '@/assets/images/original_heluu.png';
+import sekuwaImg from '@/assets/images/sekuwa.png';
+import nkImg from '@/assets/images/nk.png';
 
 const admins = [
   {
     name: 'Mukesh Pokhrel',
-    role: 'Lead Admin',
+    role: 'Lead Admin / Owner',
     image: mukeshImg,
     fallback: 'MP'
   },
@@ -25,7 +25,7 @@ const admins = [
   },
   {
     name: 'Original_Heluu',
-    role: 'Admin',
+    role: 'Admin / Owner',
     image: heluuImg,
     fallback: 'OH'
   },

@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from 'react';
 
 // Import partner images
-import arkansasImg from '@/assets/images/partners/arkansas.png';
-import roanokeImg from '@/assets/images/partners/roanoke.png';
-import ukentucyImg from '@/assets/images/partners/ukentucy.png';
+import arkansasImg from '@/assets/images/arkansas.png';
+import roanokeImg from '@/assets/images/roanoke.png';
+import ukentucyImg from '@/assets/images/ukentucy.png';
 import jackImg from '@/assets/images/visa-officers/jack.png';
 import lissaImg from '@/assets/images/visa-officers/lissa.png';
 import yvetteImg from '@/assets/images/visa-officers/yvette.png';

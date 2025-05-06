@@ -6,6 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { User, Award, MessageCircle, Globe, School, CheckCircle, Heart, Lightbulb, Smile } from 'lucide-react';
+import mukeshImg from '../assets/images/mukesh.png';
+import bipinImg from '../assets/images/original_heluu.png';
+import nkImg from '../assets/images/admins/nk.png';
 
 const AboutPage = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
@@ -84,7 +87,7 @@ const AboutPage = () => {
                   resources were often confusing, and informal advice varied wildly in quality and accuracy.
                 </p>
                 <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                  That's why we created Spring/Fall USA in 2023 — to provide clear guidance, share authentic 
+                  That's why we created Spring/Fall USA in 2017 — to provide clear guidance, share authentic 
                   experiences, and build a supportive community for international students applying for 
                   F-1 visas to study in the United States.
                 </p>
@@ -162,57 +165,57 @@ const AboutPage = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4">
-                  <img 
-                    src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=388&q=80" 
-                    alt="Sarah Chen" 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <h3 className={`text-xl font-medium ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
-                  Sarah Chen
-                </h3>
-                <p className="text-visa-blue dark:text-blue-400">Co-Founder & CEO</p>
-                <p className={`mt-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                  Former international student from China with a passion for educational access.
-                </p>
-              </div>
-              
-              <div className="text-center">
-                <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4">
-                  <img 
-                    src="https://images.unsplash.com/photo-1566492031773-4f4e44671857?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80" 
-                    alt="Raj Patel" 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <h3 className={`text-xl font-medium ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
-                  Raj Patel
-                </h3>
-                <p className="text-visa-blue dark:text-blue-400">Co-Founder & Head of Content</p>
-                <p className={`mt-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                  Education consultant with experience helping students from India and Southeast Asia.
-                </p>
-              </div>
-              
-              <div className="text-center">
-                <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4">
-                  <img 
-                    src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=461&q=80" 
-                    alt="Elena Rodriguez" 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <h3 className={`text-xl font-medium ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
-                  Elena Rodriguez
-                </h3>
-                <p className="text-visa-blue dark:text-blue-400">Community Director</p>
-                <p className={`mt-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                  Former international student advisor with 8+ years of university experience.
-                </p>
-              </div>
-            </div>
+  <div className="text-center">
+    <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4">
+      <img 
+        src={mukeshImg} 
+        alt="Mukesh Pokhrel" 
+        className="w-full h-full object-cover"
+      />
+    </div>
+    <h3 className={`text-xl font-medium ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
+      Mukesh Pokhrel
+    </h3>
+    <p className="text-visa-blue dark:text-blue-400">Co-Founder & CEO</p>
+    <p className={`mt-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+      Founder of SpringFal USA
+    </p>
+  </div>
+  
+  <div className="text-center">
+    <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4">
+      <img 
+        src={bipinImg} 
+        alt="Bipin" 
+        className="w-full h-full object-cover"
+      />
+    </div>
+    <h3 className={`text-xl font-medium ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
+      Bipin
+    </h3>
+    <p className="text-visa-blue dark:text-blue-400">Co-Founder & Head of Content</p>
+    <p className={`mt-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+      Founder and Admin
+    </p>
+  </div>
+  
+  <div className="text-center">
+    <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4">
+      <img 
+        src={nkImg} 
+        alt="N K" 
+        className="w-full h-full object-cover"
+      />
+    </div>
+    <h3 className={`text-xl font-medium ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
+      N K
+    </h3>
+    <p className="text-visa-blue dark:text-blue-400">Community Director</p>
+    <p className={`mt-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+      Admin and Advisor
+    </p>
+  </div>
+</div>
             
             <div className="mt-12 text-center">
               <Link to="/contact">

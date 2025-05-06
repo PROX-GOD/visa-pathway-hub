@@ -5,10 +5,10 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 // Import admin images
 import mukeshImg from '@/assets/images/mukesh.png';
-import kanashuImg from '@/assets/images/kanashu.png';
+import kanashuImg from '@/assets/images/admins/kanashu.png';
 import heluuImg from '@/assets/images/original_heluu.png';
 import sekuwaImg from '@/assets/images/sekuwa.png';
-import nkImg from '@/assets/images/nk.png';
+import nkImg from '@/assets/images/admins/nk.png';
 
 const admins = [
   {

@@ -5,9 +5,9 @@ import React, { useEffect, useState } from 'react';
 import arkansasImg from '@/assets/images/arkansas.png';
 import roanokeImg from '@/assets/images/roanoke.png';
 import ukentucyImg from '@/assets/images/ukentucy.png';
-import jackImg from '@/assets/images/visa-officers/jack.png';
-import lissaImg from '@/assets/images/visa-officers/lissa.png';
-import yvetteImg from '@/assets/images/visa-officers/yvette.png';
+import jackImg from '@/assets/images/jack.png';
+import lissaImg from '@/assets/images/lissa.png';
+import yvetteImg from '@/assets/images/yvette.png';
 
 const PartnersSection = () => {
   const [isVisible, setIsVisible] = useState(false);

@@ -90,18 +90,12 @@ const Footer = () => {
               <li className="flex items-start">
                 <Mail size={18} className="mr-2 mt-1 text-visa-gold" />
                 <a href="mailto:info@springfallusa.org" className="text-gray-300 hover:text-visa-gold transition-colors">
-                  info@springfallusa.org
-                </a>
-              </li>
-              <li className="flex items-start">
-                <Phone size={18} className="mr-2 mt-1 text-visa-gold" />
-                <a href="tel:+1234567890" className="text-gray-300 hover:text-visa-gold transition-colors">
-                  +1 (234) 567-890
+                  support@springfallusa.org
                 </a>
               </li>
             </ul>
             <div className="mt-6">
-              <h4 className="font-semibold mb-2">Subscribe to Our Newsletter</h4>
+              <h4 className="font-semibold mb-2">Developed with love by PROX</h4>
               <div className="flex">
                 <input 
                   type="email" 

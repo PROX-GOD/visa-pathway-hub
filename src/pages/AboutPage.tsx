@@ -176,7 +176,7 @@ const AboutPage = () => {
     <h3 className={`text-xl font-medium ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
       Mukesh Pokhrel
     </h3>
-    <p className="text-visa-blue dark:text-blue-400">Co-Founder & CEO</p>
+    <p className="text-visa-blue dark:text-blue-400">Founder & CEO</p>
     <p className={`mt-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
       Founder of SpringFal USA
     </p>
@@ -186,14 +186,14 @@ const AboutPage = () => {
     <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4">
       <img 
         src={bipinImg} 
-        alt="Bipin" 
+        alt="Bipin Pandey" 
         className="w-full h-full object-cover"
       />
     </div>
     <h3 className={`text-xl font-medium ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
       Bipin
     </h3>
-    <p className="text-visa-blue dark:text-blue-400">Co-Founder & Head of Content</p>
+    <p className="text-visa-blue dark:text-blue-400">Co-Founder & F1 visa expert</p>
     <p className={`mt-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
       Founder and Admin
     </p>
@@ -210,7 +210,7 @@ const AboutPage = () => {
     <h3 className={`text-xl font-medium ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
       N K
     </h3>
-    <p className="text-visa-blue dark:text-blue-400">Community Director</p>
+    <p className="text-visa-blue dark:text-blue-400">Host</p>
     <p className={`mt-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
       Admin and Advisor
     </p>

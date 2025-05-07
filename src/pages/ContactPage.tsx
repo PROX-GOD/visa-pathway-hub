@@ -99,7 +99,7 @@ const ContactPage = () => {
                         <Input
                           id="name"
                           name="name"
-                          placeholder="John Doe"
+                          placeholder="Your Name"
                           value={formData.name}
                           onChange={handleChange}
                           required
@@ -184,8 +184,8 @@ const ContactPage = () => {
                     <div className="flex items-start">
                       <Phone className="text-visa-blue mr-4 mt-1" size={20} />
                       <div>
-                        <h3 className="font-medium text-gray-800 mb-1">Call Us</h3>
-                        <p className="text-gray-600">+1 (555) 123-4567</p>
+                        <h3 className="font-medium text-gray-800 mb-1">Email Us</h3>
+                        <p className="text-gray-600">support@springfallus.org</p>
                         <p className="text-gray-600">Mon-Fri: 9:00 AM - 5:00 PM EST</p>
                       </div>
                     </div>

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -9,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { visaExperiencesClient } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 
 const ShareExperiencePage = () => {
   const navigate = useNavigate();
@@ -38,7 +37,7 @@ const ShareExperiencePage = () => {
     try {
       console.log("Submitting experience with data:", formData);
       
-      const { data, error } = await visaExperiencesClient
+      const { data, error } = await supabase
         .from('visa_experiences')
         .insert([
           {
@@ -108,7 +107,7 @@ const ShareExperiencePage = () => {
         
         <section className="py-16">
           <div className="container-custom mx-auto max-w-3xl">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+            <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8">
               <form onSubmit={handleSubmit}>
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

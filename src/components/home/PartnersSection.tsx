@@ -71,75 +71,85 @@ const PartnersSection = () => {
   ];
 
   return (
-    <section id="partners-section" className="py-16 bg-white">
+    <section id="partners-section" className="py-16 bg-gradient-to-b from-white to-blue-50">
       <div className="container-custom mx-auto">
         <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-          <h2 className="text-3xl font-serif font-bold text-visa-navy">
+          <h2 className="text-3xl font-serif font-bold text-visa-navy mb-2">
             Trusted <span className="text-visa-blue">Partners</span>
           </h2>
+          <div className="w-24 h-1 bg-visa-blue mx-auto mb-6"></div>
           <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
             Our partnerships ensure you receive expert guidance and support throughout your visa journey.
           </p>
         </div>
 
-        <div className="mb-12">
-          <h3 className="text-xl font-medium text-visa-navy mb-6 text-center">University Partners</h3>
+        <div className="mb-16">
+          <h3 className="text-xl font-medium text-visa-navy mb-8 text-center">
+            <span className="border-b-2 border-visa-blue pb-2">University Partners</span>
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center justify-items-center">
             {universities.map((partner, index) => (
               <div 
                 key={partner.name}
-                className={`transition-all duration-700 delay-${index * 100} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center`}
+                className={`transition-all duration-700 delay-${index * 100} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} bg-white p-8 rounded-lg shadow-lg flex flex-col items-center transform hover:scale-105 transition-transform hover:shadow-xl w-full max-w-xs`}
               >
-                <img 
-                  src={partner.logo} 
-                  alt={`${partner.name} logo`} 
-                  className="h-16 w-auto mb-4"
-                />
-                <span className="text-visa-navy font-medium">{partner.name}</span>
+                <div className="bg-blue-50 p-6 rounded-full mb-6">
+                  <img 
+                    src={partner.logo} 
+                    alt={`${partner.name} logo`} 
+                    className="h-16 w-auto"
+                  />
+                </div>
+                <span className="text-visa-navy font-semibold text-lg text-center">{partner.name}</span>
               </div>
             ))}
           </div>
         </div>
 
         <div>
-          <h3 className="text-xl font-medium text-visa-navy mb-6 text-center">Visa Officer Partners</h3>
+          <h3 className="text-xl font-medium text-visa-navy mb-8 text-center">
+            <span className="border-b-2 border-visa-blue pb-2">Visa Officer Partners</span>
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
             {visaOfficers.map((officer, index) => (
               <div 
                 key={officer.name}
-                className={`transition-all duration-700 delay-${(index + 3) * 100} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} bg-white p-6 rounded-lg shadow-sm border border-gray-100`}
+                className={`transition-all duration-700 delay-${(index + 3) * 100} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-all`}
               >
-                <div className="flex items-center mb-4">
+                <div className="flex items-center mb-6">
                   <img 
                     src={officer.logo} 
                     alt={`${officer.name} photo`} 
-                    className="h-16 w-16 rounded-full object-cover mr-4"
+                    className="h-20 w-20 rounded-full object-cover border-4 border-blue-100 mr-4"
                   />
                   <div>
-                    <h4 className="font-medium text-visa-navy">{officer.name}</h4>
+                    <h4 className="font-semibold text-lg text-visa-navy">{officer.name}</h4>
                     <a 
                       href={`https://${officer.website}`} 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="text-sm text-visa-blue hover:underline"
+                      className="text-visa-blue hover:underline"
                     >
                       {officer.website}
                     </a>
                   </div>
                 </div>
-                <div className="bg-blue-50 p-3 rounded-md text-sm text-visa-navy">
-                  <span className="font-medium">Promo: </span>
-                  {officer.promo}
+                <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-md text-sm text-visa-navy">
+                  <span className="font-semibold block mb-1">Special Offer:</span>
+                  <span className="inline-block bg-white px-3 py-1 rounded-full text-visa-blue font-medium">
+                    {officer.promo}
+                  </span>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className={`mt-12 text-center transition-all duration-700 delay-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-          <p className="text-gray-600 italic">
+        <div className={`mt-16 text-center transition-all duration-700 delay-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+          <p className="text-gray-600 italic text-lg">
             "Spring/Fall USA has been an invaluable resource for our international students seeking F-1 visas."
           </p>
+          <div className="w-16 h-1 bg-visa-blue mx-auto my-4"></div>
           <p className="mt-2 font-semibold text-visa-navy">
             — Dr. Sarah Johnson, International Student Advisor
           </p>

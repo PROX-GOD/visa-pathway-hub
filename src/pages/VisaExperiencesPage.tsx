@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/layout/Header';
@@ -8,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { PlusCircle, Filter, Search, MapPin, Calendar, BookOpen, ThumbsUp, ArrowRight, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { VisaExperience } from '@/types/database';
-import { visaExperiencesClient } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 
 const VisaExperiencesPage = () => {
   const [experiences, setExperiences] = useState<VisaExperience[]>([]);
@@ -28,7 +27,9 @@ const VisaExperiencesPage = () => {
   const fetchExperiences = async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await visaExperiencesClient
+      console.log("Fetching all experiences from Supabase...");
+      
+      const { data, error } = await supabase
         .from('visa_experiences')
         .select('*')
         .order('created_at', { ascending: false });
@@ -36,12 +37,13 @@ const VisaExperiencesPage = () => {
       if (error) {
         throw error;
       }
-
+      
+      console.log("All experiences fetched:", data);
       setExperiences(data || []);
-      setIsLoading(false);
     } catch (error) {
       toast.error('Failed to fetch experiences');
       console.error('Error fetching experiences:', error);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -163,17 +165,17 @@ const VisaExperiencesPage = () => {
             ) : filteredExperiences.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredExperiences.map((exp) => (
-                  <div key={exp.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+                  <div key={exp.id} className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all">
                     <div className="p-6">
                       <div className="flex items-center mb-4">
                         <img 
                           src={getRandomAvatar(exp.name)} 
                           alt={exp.name} 
-                          className="w-12 h-12 rounded-full object-cover border-2 border-visa-blue"
+                          className="w-16 h-16 rounded-full object-cover border-4 border-blue-100"
                         />
                         <div className="ml-4">
-                          <h3 className="font-semibold text-visa-navy">{exp.name}</h3>
-                          <p className="text-sm text-gray-500">{exp.university}</p>
+                          <h3 className="font-semibold text-visa-navy text-lg">{exp.name}</h3>
+                          <p className="text-sm text-visa-blue">{exp.university}</p>
                         </div>
                       </div>
                       
@@ -192,10 +194,10 @@ const VisaExperiencesPage = () => {
                         </span>
                       </div>
                       
-                      <p className="text-gray-600 line-clamp-3 mb-4">"{exp.experience.substring(0, 150)}..."</p>
+                      <p className="text-gray-600 line-clamp-3 mb-4 bg-blue-50 p-4 rounded-lg italic">"{exp.experience.substring(0, 150)}..."</p>
                       
                       <div className="flex justify-between items-center mt-4">
-                        <span className={`text-xs px-3 py-1 rounded-full ${getApprovalStatusColor(exp.approved)}`}>
+                        <span className={`text-xs px-3 py-1 rounded-full font-medium ${getApprovalStatusColor(exp.approved)}`}>
                           {getApprovalStatusLabel(exp.approved)}
                         </span>
                         
@@ -209,12 +211,12 @@ const VisaExperiencesPage = () => {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-16 bg-gray-50 rounded-lg">
-                <div className="mb-4 text-gray-400">
+              <div className="text-center py-16 bg-blue-50 rounded-lg shadow-inner">
+                <div className="mb-4 text-visa-blue">
                   <Search size={48} className="mx-auto" />
                 </div>
-                <h3 className="text-xl font-medium text-gray-700 mb-2">No experiences found</h3>
-                <p className="text-gray-500 mb-6">
+                <h3 className="text-xl font-medium text-visa-navy mb-2">No experiences found</h3>
+                <p className="text-gray-600 mb-6">
                   {searchTerm || filter !== 'all'
                     ? "Try adjusting your search or filters"
                     : "Be the first to share your visa interview experience"}

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { VisaExperience } from '@/types/database';
-import { visaExperiencesClient } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 
 const ExperienceSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -41,10 +41,11 @@ const ExperienceSection = () => {
   const fetchExperiences = async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await visaExperiencesClient
+      console.log("Fetching experiences from Supabase...");
+      
+      const { data, error } = await supabase
         .from('visa_experiences')
         .select('*')
-        .eq('approved', 'yes')
         .order('created_at', { ascending: false })
         .limit(3);
 
@@ -52,10 +53,11 @@ const ExperienceSection = () => {
         throw error;
       }
 
+      console.log("Experiences fetched:", data);
       setExperiences(data || []);
     } catch (error) {
       console.error('Error fetching experiences:', error);
-      // Fall back to default experiences
+      toast.error("Failed to load experiences. Showing fallbacks instead.");
     } finally {
       setIsLoading(false);
     }
@@ -106,12 +108,13 @@ const ExperienceSection = () => {
   };
 
   return (
-    <section id="experience-section" className="py-16 bg-white">
+    <section id="experience-section" className="py-16 bg-gradient-to-br from-white to-blue-50">
       <div className="container-custom mx-auto">
         <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
           <h2 className="text-3xl font-serif font-bold text-visa-navy">
             Visa <span className="text-visa-blue">Experience Stories</span>
           </h2>
+          <div className="w-24 h-1 bg-visa-blue mx-auto mb-6"></div>
           <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
             Learn from real visa interview experiences shared by students who successfully obtained their F-1 visas.
           </p>
@@ -127,28 +130,28 @@ const ExperienceSection = () => {
             {displayExperiences.map((exp, index) => (
               <div 
                 key={exp.id} 
-                className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-700 hover:shadow-md delay-${index * 100} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+                className={`bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-700 hover:shadow-xl transform hover:scale-102 delay-${index * 100} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
               >
                 <div className="p-6">
-                  <div className="flex items-center mb-4">
+                  <div className="flex items-center mb-6">
                     <img 
                       src={getRandomAvatar(exp.name)} 
                       alt={exp.name} 
-                      className="w-12 h-12 rounded-full object-cover border-2 border-visa-blue"
+                      className="w-16 h-16 rounded-full object-cover border-4 border-blue-100"
                     />
                     <div className="ml-4">
-                      <h3 className="font-semibold text-visa-navy">{exp.name}</h3>
-                      <p className="text-sm text-gray-500">{exp.university}</p>
+                      <h3 className="font-semibold text-visa-navy text-lg">{exp.name}</h3>
+                      <p className="text-sm text-visa-blue">{exp.university}</p>
                     </div>
                   </div>
                   
-                  <p className="text-gray-600 italic">"{exp.experience.substring(0, 120)}..."</p>
+                  <p className="text-gray-600 italic bg-blue-50 p-4 rounded-lg mb-4">"{exp.experience.substring(0, 120)}..."</p>
                   
                   <div className="mt-4 flex justify-between items-center">
-                    <span className="text-xs bg-blue-50 text-visa-blue px-3 py-1 rounded-full">
+                    <span className="text-sm bg-blue-100 text-visa-blue px-4 py-1 rounded-full font-medium">
                       {exp.consulate}
                     </span>
-                    <span className="text-xs text-green-600 font-medium">APPROVED</span>
+                    <span className="text-sm bg-green-100 text-green-700 px-4 py-1 rounded-full font-medium">APPROVED</span>
                   </div>
                 </div>
               </div>
@@ -158,14 +161,14 @@ const ExperienceSection = () => {
 
         <div className={`mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 transition-all duration-700 delay-400 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
           <Link to="/visa-experiences">
-            <Button variant="outline" className="border-visa-blue text-visa-blue hover:bg-blue-50">
+            <Button variant="outline" className="border-visa-blue text-visa-blue hover:bg-blue-50 font-medium">
               Read More Experiences
               <ArrowRight size={16} className="ml-2" />
             </Button>
           </Link>
           
           <Link to="/visa-experiences/share">
-            <Button className="bg-visa-blue hover:bg-visa-navy text-white">
+            <Button className="bg-visa-blue hover:bg-visa-navy text-white font-medium">
               Share Your Experience
               <ArrowRight size={16} className="ml-2" />
             </Button>

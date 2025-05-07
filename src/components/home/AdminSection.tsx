@@ -24,7 +24,7 @@ const admins = [
     fallback: 'KA'
   },
   {
-    name: 'Original_Heluu',
+    name: 'Bipin Pandey',
     role: 'Admin / Owner',
     image: heluuImg,
     fallback: 'OH'

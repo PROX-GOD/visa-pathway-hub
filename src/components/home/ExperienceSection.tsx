@@ -54,7 +54,9 @@ const ExperienceSection = () => {
       }
 
       console.log("Experiences fetched:", data);
-      setExperiences(data || []);
+      // Cast the data to match our VisaExperience type
+      const typedData = data as VisaExperience[];
+      setExperiences(typedData || []);
     } catch (error) {
       console.error('Error fetching experiences:', error);
       toast.error("Failed to load experiences. Showing fallbacks instead.");

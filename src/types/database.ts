@@ -6,9 +6,10 @@ export type VisaExperience = {
   university: string;
   major: string;
   interview_date: string;
-  approved: 'yes' | 'no' | 'administrative';
+  approved: string; // Changed from union type to string to match what Supabase returns
   experience: string;
   created_at: string;
+  email?: string;
 };
 
 export type Testimonial = {

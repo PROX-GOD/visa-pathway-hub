@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/layout/Header';
@@ -39,7 +40,9 @@ const VisaExperiencesPage = () => {
       }
       
       console.log("All experiences fetched:", data);
-      setExperiences(data || []);
+      // Cast the data to match our VisaExperience type
+      const typedData = data as VisaExperience[];
+      setExperiences(typedData || []);
     } catch (error) {
       toast.error('Failed to fetch experiences');
       console.error('Error fetching experiences:', error);

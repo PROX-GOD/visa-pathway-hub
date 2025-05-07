@@ -39,7 +39,7 @@ const Header = () => {
             <img 
               src="https://i.imgur.com/9bH2SAJ.png" 
               alt="Spring/Fall USA Logo" 
-              className="h-25 mr-2"
+              className="h-18 mr-2"
             />
           </Link>
 

@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import springfallImg from '../assets/images/springfall.png';
-
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -39,7 +37,7 @@ const Header = () => {
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center">
             <img 
-              src={springfallImg} 
+              src="https://i.imgur.com/JoM5Eal.png" 
               alt="Spring/Fall USA Logo" 
               className="h-10 mr-2"
             />

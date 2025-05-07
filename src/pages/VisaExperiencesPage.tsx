@@ -5,10 +5,10 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { PlusCircle, Filter, Search, MapPin, Calendar, BookOpen, ThumbsUp, ArrowRight, Loader2 } from 'lucide-react';
+import { PlusCircle, Filter, Search, MapPin, Calendar, BookOpen, ThumbsUp, ArrowRight, Loader2, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 import { VisaExperience } from '@/types/database';
-import { supabase } from '@/integrations/supabase/client';
+import { visaExperiencesClient } from '@/lib/supabase';
 
 const VisaExperiencesPage = () => {
   const [experiences, setExperiences] = useState<VisaExperience[]>([]);
@@ -30,7 +30,7 @@ const VisaExperiencesPage = () => {
       setIsLoading(true);
       console.log("Fetching all experiences from Supabase...");
       
-      const { data, error } = await supabase
+      const { data, error } = await visaExperiencesClient
         .from('visa_experiences')
         .select('*')
         .order('created_at', { ascending: false });
@@ -204,10 +204,11 @@ const VisaExperiencesPage = () => {
                           {getApprovalStatusLabel(exp.approved)}
                         </span>
                         
-                        <Button variant="ghost" size="sm" className="text-visa-blue hover:text-visa-navy">
-                          <ThumbsUp size={14} className="mr-1" />
-                          Helpful
-                        </Button>
+                        <Link to={`/visa-experiences/${exp.id}`}>
+                          <Button variant="ghost" size="sm" className="text-visa-blue hover:text-visa-navy">
+                            Read Full Story <ExternalLink size={14} className="ml-1" />
+                          </Button>
+                        </Link>
                       </div>
                     </div>
                   </div>

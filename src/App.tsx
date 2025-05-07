@@ -11,6 +11,7 @@ import AboutPage from "./pages/AboutPage";
 import F1VisaInfoPage from "./pages/F1VisaInfoPage";
 import InterviewPrepPage from "./pages/InterviewPrepPage";
 import VisaExperiencesPage from "./pages/VisaExperiencesPage";
+import SingleVisaExperiencePage from "./pages/SingleVisaExperiencePage";
 import ResourcesPage from "./pages/ResourcesPage";
 import ContactPage from "./pages/ContactPage";
 import ShareExperiencePage from "./pages/ShareExperiencePage";
@@ -41,6 +42,7 @@ const App = () => (
             <Route path="/f1-visa-info" element={<F1VisaInfoPage />} />
             <Route path="/interview-prep" element={<InterviewPrepPage />} />
             <Route path="/visa-experiences" element={<VisaExperiencesPage />} />
+            <Route path="/visa-experiences/:id" element={<SingleVisaExperiencePage />} />
             <Route path="/visa-experiences/share" element={<ShareExperiencePage />} />
             <Route path="/testimonials" element={<TestimonialsPage />} />
             <Route path="/testimonials/share" element={<ShareTestimonialPage />} />

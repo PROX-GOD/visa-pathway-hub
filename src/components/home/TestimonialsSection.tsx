@@ -54,7 +54,8 @@ const TestimonialsSection = () => {
       setTestimonials(data || []);
     } catch (error) {
       console.error('Error fetching testimonials:', error);
-      toast.error('Failed to load testimonials');
+      toast.error('Failed to load testimonials. Showing fallbacks instead.');
+      setTestimonials(fallbackTestimonials);
     } finally {
       setIsLoading(false);
     }

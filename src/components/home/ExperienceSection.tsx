@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { ArrowRight, Loader2 } from 'lucide-react';
+import { ArrowRight, Loader2, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -60,6 +60,7 @@ const ExperienceSection = () => {
     } catch (error) {
       console.error('Error fetching experiences:', error);
       toast.error("Failed to load experiences. Showing fallbacks instead.");
+      setExperiences(defaultExperiences);
     } finally {
       setIsLoading(false);
     }
@@ -154,6 +155,15 @@ const ExperienceSection = () => {
                       {exp.consulate}
                     </span>
                     <span className="text-sm bg-green-100 text-green-700 px-4 py-1 rounded-full font-medium">APPROVED</span>
+                  </div>
+                  
+                  <div className="mt-4 text-right">
+                    <Link to={`/visa-experiences/${exp.id}`}>
+                      <Button variant="ghost" className="text-visa-blue hover:text-visa-navy">
+                        Read Full Story
+                        <ExternalLink size={14} className="ml-1" />
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </div>

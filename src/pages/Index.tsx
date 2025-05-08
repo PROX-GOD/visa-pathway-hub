@@ -17,6 +17,8 @@ import AdminSection from '@/components/home/AdminSection';
 import LogoCompetitionSection from '@/components/home/LogoCompetitionSection';
 import DonationSection from '@/components/home/DonationSection';
 import DesktopModeCheck from '@/components/common/DesktopModeCheck';
+import F1VisaGuideSection from '@/components/home/F1VisaGuideSection';
+import AboutUsSection from '@/components/home/AboutUsSection';
 
 const Index = () => {
   useEffect(() => {
@@ -53,6 +55,8 @@ const Index = () => {
       <main className="flex-grow">
         <HeroSection />
         <EmergencyNoticeSection />
+        <F1VisaGuideSection />
+        <AboutUsSection />
         <PartnersSection />
         <LogoCompetitionSection />
         <StudyUSASection />

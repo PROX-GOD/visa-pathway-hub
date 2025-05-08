@@ -1,8 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, Send } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -31,6 +32,11 @@ const Header = () => {
     { name: 'Contact Us', path: '/contact' },
   ];
 
+  // Telegram link handler
+  const openTelegramChannel = () => {
+    window.open('https://t.me/SpringfallUSA', '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-2' : 'bg-transparent py-4'}`}>
       <div className="container-custom mx-auto">
@@ -38,8 +44,8 @@ const Header = () => {
           <Link to="/" className="flex items-center">
             <img 
               src="https://i.imgur.com/9bH2SAJ.png" 
-              alt="Spring/Fall USA Logo" 
-              className="h-16 mr-2" // Increased from h-12 to h-16
+              alt="Spring/Fall USA Logo - F1 Visa Guide" 
+              className="h-16 mr-2"
             />
           </Link>
 
@@ -57,7 +63,11 @@ const Header = () => {
           </nav>
 
           <div className="hidden lg:block">
-            <Button className="bg-visa-blue hover:bg-visa-navy text-white">
+            <Button 
+              className="bg-visa-blue hover:bg-visa-navy text-white flex items-center"
+              onClick={openTelegramChannel}
+            >
+              <Send size={18} className="mr-2" />
               Get Free Guidance
             </Button>
           </div>
@@ -66,6 +76,7 @@ const Header = () => {
           <button 
             className="lg:hidden text-visa-blue"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -87,7 +98,14 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
-              <Button className="bg-visa-blue hover:bg-visa-navy text-white w-full mt-4">
+              <Button 
+                className="bg-visa-blue hover:bg-visa-navy text-white w-full mt-4 flex items-center justify-center"
+                onClick={() => {
+                  openTelegramChannel();
+                  setIsMenuOpen(false);
+                }}
+              >
+                <Send size={18} className="mr-2" />
                 Get Free Guidance
               </Button>
             </nav>

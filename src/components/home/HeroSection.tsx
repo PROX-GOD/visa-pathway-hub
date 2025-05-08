@@ -1,8 +1,14 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ArrowDown, ArrowRight } from 'lucide-react';
+
+// SEO metadata for the home page
+const SEO = {
+  title: "Spring/Fall USA - Free F1 Visa Guide & Preparation Resources",
+  description: "Get free guidance and resources to help international students navigate the F-1 visa process successfully. Expert tips for F1 visa preparation.",
+  keywords: "F1 visa, Free F1 visa guide, F1 visa preparation, US student visa, study in USA, F1 visa interview, F1 visa process"
+};
 
 const HeroSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -11,6 +17,29 @@ const HeroSection = () => {
   const successRate = 95;
 
   useEffect(() => {
+    // Add meta tags for SEO
+    document.title = SEO.title;
+    
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', SEO.description);
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'description';
+      meta.content = SEO.description;
+      document.head.appendChild(meta);
+    }
+    
+    const metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (metaKeywords) {
+      metaKeywords.setAttribute('content', SEO.keywords);
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'keywords';
+      meta.content = SEO.keywords;
+      document.head.appendChild(meta);
+    }
+
     setIsVisible(true);
     
     // Animate count up
@@ -31,11 +60,30 @@ const HeroSection = () => {
     return () => clearInterval(timer);
   }, []);
 
+  // Scroll functions for buttons
+  const scrollToAbout = () => {
+    const aboutSection = document.getElementById('about-section');
+    if (aboutSection) {
+      aboutSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const scrollToGuide = () => {
+    const guideSection = document.getElementById('f1-guide-section');
+    if (guideSection) {
+      guideSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      // If the guide section isn't on the homepage, navigate to the F1 visa info page
+      window.location.href = '/f1-visa-info';
+    }
+  };
+
   return (
     <section className="pt-28 pb-16 md:pt-32 md:pb-24 bg-gradient-to-br from-visa-light via-white to-blue-50 overflow-hidden">
       <div className="container-custom mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-6 items-center">
           <div className={`transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
+            {/* H1 heading for SEO */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-visa-navy leading-tight">
               Your Path to <span className="text-visa-blue">Studying in the USA</span> Starts Here
             </h1>
@@ -45,11 +93,20 @@ const HeroSection = () => {
             </p>
             
             <div className="mt-8 space-x-4 flex flex-wrap gap-4">
-              <Button size="lg" className="bg-visa-blue hover:bg-visa-navy text-white px-6 font-sans">
+              <Button 
+                size="lg" 
+                className="bg-visa-blue hover:bg-visa-navy text-white px-6 font-sans flex items-center"
+                onClick={scrollToGuide}
+              >
                 Get Started
-                <ArrowRight size={16} className="ml-2" />
+                <ArrowDown size={16} className="ml-2" />
               </Button>
-              <Button size="lg" variant="outline" className="border-visa-blue text-visa-blue hover:bg-blue-50 font-sans">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-visa-blue text-visa-blue hover:bg-blue-50 font-sans"
+                onClick={scrollToAbout}
+              >
                 Learn More
               </Button>
             </div>
@@ -74,7 +131,7 @@ const HeroSection = () => {
             <div className="relative z-10">
               <img 
                 src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080" 
-                alt="Students celebrating with diplomas" 
+                alt="International students celebrating with diplomas after successful F1 visa applications" 
                 className="rounded-xl shadow-2xl object-cover w-full h-auto"
               />
             </div>

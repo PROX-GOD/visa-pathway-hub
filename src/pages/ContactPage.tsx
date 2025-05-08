@@ -176,8 +176,8 @@ const ContactPage = () => {
                       <Mail className="text-visa-blue mr-4 mt-1" size={20} />
                       <div>
                         <h3 className="font-medium text-gray-800 mb-1">Email Us</h3>
-                        <p className="text-gray-600">preshak@springfallusa.org</p>
-                        <p className="text-gray-600">support@springfallusa.org</p>
+                        <p className="text-gray-600">preshak@springfallus.org</p>
+                        <p className="text-gray-600">support@springfallus.org</p>
                       </div>
                     </div>
                     

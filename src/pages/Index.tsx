@@ -20,8 +20,28 @@ import DesktopModeCheck from '@/components/common/DesktopModeCheck';
 import F1VisaGuideSection from '@/components/home/F1VisaGuideSection';
 import AboutUsSection from '@/components/home/AboutUsSection';
 
+// SEO metadata for the home page
+const SEO = {
+  title: "Spring/Fall USA - Free F1 Visa Guide & Preparation Resources",
+  description: "Get free guidance and resources to help international students navigate the F-1 visa process successfully. Expert tips for F1 visa preparation.",
+  keywords: "F1 visa, Free F1 visa guide, F1 visa preparation, US student visa, study in USA, F1 visa interview, F1 visa process"
+};
+
 const Index = () => {
   useEffect(() => {
+    // SEO metadata setup
+    document.title = SEO.title;
+    
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', SEO.description);
+    }
+    
+    const metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (metaKeywords) {
+      metaKeywords.setAttribute('content', SEO.keywords);
+    }
+
     // Intersection Observer for fade-in animations
     const observer = new IntersectionObserver(
       (entries) => {
@@ -47,7 +67,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col font-sans">
       <Header />
       <NoticeBanner />
       <DesktopModeCheck />

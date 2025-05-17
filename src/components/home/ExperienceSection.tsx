@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { ArrowRight, Loader2, ExternalLink } from 'lucide-react';
+import { ArrowRight, Loader2, ExternalLink, MessageCircle, MapPin, Calendar, User, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -11,6 +11,7 @@ const ExperienceSection = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [experiences, setExperiences] = useState<VisaExperience[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -38,6 +39,17 @@ const ExperienceSection = () => {
     fetchExperiences();
   }, []);
 
+  // Auto slide every 5 seconds
+  useEffect(() => {
+    if (experiences.length === 0) return;
+    
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % experiences.length);
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, [experiences.length]);
+
   const fetchExperiences = async () => {
     try {
       setIsLoading(true);
@@ -47,7 +59,7 @@ const ExperienceSection = () => {
         .from('visa_experiences')
         .select('*')
         .order('created_at', { ascending: false })
-        .limit(3);
+        .limit(6);
 
       if (error) {
         throw error;
@@ -110,77 +122,163 @@ const ExperienceSection = () => {
     return `https://i.pravatar.cc/150?u=${hash}`;
   };
 
+  // Format date (e.g., "March 15, 2024")
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-US', options);
+  };
+
+  // Next and previous slide controls
+  const goToNextSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % displayExperiences.length);
+  };
+
+  const goToPrevSlide = () => {
+    setCurrentIndex((prevIndex) => 
+      prevIndex === 0 ? displayExperiences.length - 1 : prevIndex - 1
+    );
+  };
+
   return (
-    <section id="experience-section" className="py-16 bg-gradient-to-br from-white to-blue-50">
+    <section id="experience-section" className="py-20 bg-gradient-to-br from-white to-blue-50">
       <div className="container-custom mx-auto">
         <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-          <h2 className="text-3xl font-serif font-bold text-visa-navy">
-            Visa <span className="text-visa-blue">Experience Stories</span>
-          </h2>
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <MessageCircle size={24} className="text-visa-blue" />
+            <h2 className="text-4xl font-serif font-bold text-visa-navy">
+              Visa <span className="text-gradient">Experience Stories</span>
+            </h2>
+          </div>
           <div className="w-24 h-1 bg-visa-blue mx-auto mb-6"></div>
-          <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+          <p className="mt-4 text-gray-600 max-w-2xl mx-auto text-lg">
             Learn from real visa interview experiences shared by students who successfully obtained their F-1 visas.
           </p>
         </div>
 
         {isLoading ? (
-          <div className="flex justify-center items-center py-10">
-            <Loader2 className="animate-spin text-visa-blue mr-2" size={24} />
-            <span className="text-gray-600">Loading experiences...</span>
+          <div className="flex justify-center items-center py-20">
+            <Loader2 className="animate-spin text-visa-blue mr-3" size={32} />
+            <span className="text-gray-600 text-lg">Loading experiences...</span>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {displayExperiences.map((exp, index) => (
+          <div className="relative max-w-5xl mx-auto">
+            {/* Experience Card Slider */}
+            <div className="overflow-hidden px-4 py-8">
               <div 
-                key={exp.id} 
-                className={`bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-700 hover:shadow-xl transform hover:scale-102 delay-${index * 100} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+                className="flex transition-transform duration-500 ease-in-out" 
+                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
               >
-                <div className="p-6">
-                  <div className="flex items-center mb-6">
-                    <img 
-                      src={getRandomAvatar(exp.name)} 
-                      alt={exp.name} 
-                      className="w-16 h-16 rounded-full object-cover border-4 border-blue-100"
-                    />
-                    <div className="ml-4">
-                      <h3 className="font-semibold text-visa-navy text-lg">{exp.name}</h3>
-                      <p className="text-sm text-visa-blue">{exp.university}</p>
+                {displayExperiences.map((exp) => (
+                  <div key={exp.id} className="w-full flex-shrink-0 px-4">
+                    <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 transform transition-all hover:scale-[1.02] hover:shadow-2xl">
+                      <div className="p-8">
+                        {/* Card Header */}
+                        <div className="flex items-center mb-6">
+                          <div className="relative avatar-border">
+                            <img 
+                              src={getRandomAvatar(exp.name)} 
+                              alt={exp.name} 
+                              className="w-20 h-20 rounded-full object-cover border-4 border-white"
+                            />
+                          </div>
+                          <div className="ml-4">
+                            <h3 className="font-semibold text-visa-navy text-2xl">{exp.name}</h3>
+                            <div className="flex items-center text-visa-blue mt-1">
+                              <User size={15} className="mr-1" />
+                              <p>{exp.major} Student</p>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                          <div className="bg-blue-50 p-4 rounded-lg flex items-center">
+                            <Calendar className="text-visa-blue mr-3" size={18} />
+                            <div>
+                              <p className="text-sm text-gray-500">Interview Date</p>
+                              <p className="font-medium">{formatDate(exp.interview_date)}</p>
+                            </div>
+                          </div>
+                          
+                          <div className="bg-blue-50 p-4 rounded-lg flex items-center">
+                            <MapPin className="text-visa-blue mr-3" size={18} />
+                            <div>
+                              <p className="text-sm text-gray-500">Consulate</p>
+                              <p className="font-medium">{exp.consulate}</p>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="mb-8">
+                          <div className="flex items-center mb-4">
+                            <div className="bg-green-100 text-green-700 p-1 px-3 rounded-full flex items-center">
+                              <Check size={16} className="mr-1" /> 
+                              <span className="font-medium">APPROVED</span>
+                            </div>
+                            <div className="ml-3 text-gray-600">{exp.university}</div>
+                          </div>
+                          
+                          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl mb-6">
+                            <p className="text-gray-700 italic">"{exp.experience.substring(0, 200)}..."</p>
+                          </div>
+                        </div>
+                        
+                        <div className="text-right">
+                          <Link to={`/visa-experiences/${exp.id}`}>
+                            <Button className="bg-visa-blue hover:bg-visa-navy text-white font-medium">
+                              Read Full Story
+                              <ArrowRight size={16} className="ml-2" />
+                            </Button>
+                          </Link>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  
-                  <p className="text-gray-600 italic bg-blue-50 p-4 rounded-lg mb-4">"{exp.experience.substring(0, 120)}..."</p>
-                  
-                  <div className="mt-4 flex justify-between items-center">
-                    <span className="text-sm bg-blue-100 text-visa-blue px-4 py-1 rounded-full font-medium">
-                      {exp.consulate}
-                    </span>
-                    <span className="text-sm bg-green-100 text-green-700 px-4 py-1 rounded-full font-medium">APPROVED</span>
-                  </div>
-                  
-                  <div className="mt-4 text-right">
-                    <Link to={`/visa-experiences/${exp.id}`}>
-                      <Button variant="ghost" className="text-visa-blue hover:text-visa-navy">
-                        Read Full Story
-                        <ExternalLink size={14} className="ml-1" />
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
+                ))}
               </div>
-            ))}
+            </div>
+            
+            {/* Navigation Dots */}
+            <div className="flex justify-center mt-6 space-x-2">
+              {displayExperiences.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentIndex(index)}
+                  className={`w-3 h-3 rounded-full transition-all transform ${
+                    index === currentIndex ? 'bg-visa-blue scale-125' : 'bg-gray-300'
+                  }`}
+                />
+              ))}
+            </div>
+            
+            {/* Navigation Arrows */}
+            <button
+              onClick={goToPrevSlide}
+              className="absolute top-1/2 left-0 -translate-y-1/2 bg-white w-10 h-10 rounded-full shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors z-10"
+              aria-label="Previous slide"
+            >
+              <ArrowRight size={20} className="text-visa-navy transform rotate-180" />
+            </button>
+            
+            <button
+              onClick={goToNextSlide}
+              className="absolute top-1/2 right-0 -translate-y-1/2 bg-white w-10 h-10 rounded-full shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors z-10"
+              aria-label="Next slide"
+            >
+              <ArrowRight size={20} className="text-visa-navy" />
+            </button>
           </div>
         )}
 
         <div className={`mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 transition-all duration-700 delay-400 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
           <Link to="/visa-experiences">
-            <Button variant="outline" className="border-visa-blue text-visa-blue hover:bg-blue-50 font-medium">
+            <Button variant="outline" className="border-visa-blue text-visa-blue hover:bg-blue-50 font-medium px-6 py-2.5">
               Read More Experiences
               <ArrowRight size={16} className="ml-2" />
             </Button>
           </Link>
           
           <Link to="/visa-experiences/share">
-            <Button className="bg-visa-blue hover:bg-visa-navy text-white font-medium">
+            <Button className="bg-visa-blue hover:bg-visa-navy text-white font-medium px-6 py-2.5 btn-pulse">
               Share Your Experience
               <ArrowRight size={16} className="ml-2" />
             </Button>

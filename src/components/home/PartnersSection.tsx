@@ -54,7 +54,7 @@ const PartnersSection = () => {
       name: 'University of Kentucky',
       logo: ukentucyImg,
       website: 'https://www.uky.edu/',
-      description: 'Kentucky's flagship institution of higher education',
+      description: "Kentucky's flagship institution of higher education",
     },
     { 
       name: 'Roanoke College',

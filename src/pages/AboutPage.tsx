@@ -335,9 +335,9 @@ const AboutPage = () => {
                 we'd love to have you as part of our growing community.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                <Link to="/register">
+                <a href="https://t.me/SpringfallUSA" target="_blank" rel="noopener noreferrer">
                   <Button className="bg-visa-blue hover:bg-visa-navy text-white dark:bg-blue-700 dark:hover:bg-blue-800">
-                    Create an Account
+                    Join Our Telegram Group
                   </Button>
                 </Link>
                 <Link to="/visa-experiences">

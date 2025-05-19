@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -44,10 +44,11 @@ const admins = [
 ];
 
 const AdminSection = () => {
-  const [isVisible, setIsVisible] = React.useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [hoveredAdmin, setHoveredAdmin] = useState<number | null>(null);
   const isMobile = useIsMobile();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -70,35 +71,79 @@ const AdminSection = () => {
   }, []);
 
   return (
-    <section id="admin-section" className="py-16 bg-visa-light">
-      <div className="container-custom mx-auto">
-        <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-          <h2 className="text-3xl font-serif font-bold text-visa-navy">
+    <section id="admin-section" className="py-16 bg-visa-light relative overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute -top-20 -right-20 w-64 h-64 bg-visa-blue opacity-5 rounded-full"></div>
+      <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-visa-navy opacity-5 rounded-full"></div>
+      
+      <div className="container-custom mx-auto relative z-10">
+        <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+          <h2 className="text-3xl font-serif font-bold text-visa-navy inline-block relative">
             Meet Our <span className="text-visa-blue">Admin Team</span>
+            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-visa-blue to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-out"></div>
           </h2>
           <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
             Dedicated volunteers helping students achieve their dreams of studying in the USA.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
+        <div className="flex flex-wrap justify-center gap-10">
           {admins.map((admin, index) => (
             <div
               key={admin.name}
-              className={`bg-white rounded-xl p-6 shadow-md border border-gray-100 text-center transition-all duration-700 delay-${index * 100} ${
+              className={`transition-all duration-700 delay-${index * 100} ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
               }`}
+              onMouseEnter={() => setHoveredAdmin(index)}
+              onMouseLeave={() => setHoveredAdmin(null)}
             >
-              <div className="flex justify-center mb-4">
-                <Avatar className="h-24 w-24">
-                  <AvatarImage src={admin.image} alt={admin.name} />
-                  <AvatarFallback className="bg-visa-blue text-white text-xl">
-                    {admin.fallback}
-                  </AvatarFallback>
-                </Avatar>
+              <div className="group flex flex-col items-center">
+                <div 
+                  className={`
+                    relative mb-3 transition-all duration-500
+                    ${hoveredAdmin === index ? 'scale-110' : 'scale-100'}
+                  `}
+                >
+                  {/* Animated gradient border */}
+                  <div className={`
+                    absolute -inset-0.5 bg-gradient-to-r from-visa-blue via-visa-navy to-visa-blue 
+                    rounded-full z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500
+                    ${!isMobile && 'group-hover:animate-spin-slow'}
+                  `}></div>
+                  
+                  <Avatar className="h-28 w-28 relative z-10">
+                    <AvatarImage 
+                      src={admin.image} 
+                      alt={admin.name} 
+                      className="group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <AvatarFallback className="bg-visa-blue text-white text-xl">
+                      {admin.fallback}
+                    </AvatarFallback>
+                  </Avatar>
+                  
+                  {/* Animated highlight */}
+                  <div className={`
+                    absolute inset-0 bg-white rounded-full blur-sm z-0 
+                    opacity-0 group-hover:opacity-20 transition-opacity duration-500
+                  `}></div>
+                </div>
+                
+                <h3 className={`
+                  text-lg font-medium text-visa-navy transition-all duration-300
+                  ${hoveredAdmin === index ? 'text-visa-blue' : ''}
+                `}>
+                  {admin.name}
+                </h3>
+                
+                <p className="text-sm text-gray-500">{admin.role}</p>
+                
+                {/* Animated underline */}
+                <div className={`
+                  h-0.5 bg-visa-blue mt-1 transition-all duration-500 ease-in-out
+                  ${hoveredAdmin === index ? 'w-full opacity-100' : 'w-0 opacity-0'}
+                `}></div>
               </div>
-              <h3 className="text-lg font-medium text-visa-navy">{admin.name}</h3>
-              <p className="text-sm text-gray-500">{admin.role}</p>
             </div>
           ))}
         </div>

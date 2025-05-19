@@ -71,67 +71,61 @@ const AdminSection = () => {
   }, []);
 
   return (
-    <section id="admin-section" className="py-16 bg-visa-light relative overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute -top-20 -right-20 w-64 h-64 bg-visa-blue opacity-5 rounded-full"></div>
-      <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-visa-navy opacity-5 rounded-full"></div>
-      
+    <section id="admin-section" className="py-16 bg-gradient-to-br from-white via-blue-50 to-white relative">      
       <div className="container-custom mx-auto relative z-10">
-        <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-          <h2 className="text-3xl font-serif font-bold text-visa-navy inline-block relative">
-            Meet Our <span className="text-visa-blue">Admin Team</span>
-            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-visa-blue to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-out"></div>
+        <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+          <h2 className="text-3xl font-serif font-bold text-visa-navy inline-flex items-center justify-center gap-2">
+            Meet Our <span className="text-visa-blue">Team</span>
           </h2>
-          <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+          <div className="w-24 h-1 bg-visa-blue mx-auto mt-2 mb-4"></div>
+          <p className="mt-2 text-gray-600 max-w-2xl mx-auto">
             Dedicated volunteers helping students achieve their dreams of studying in the USA.
           </p>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-10">
+        <div className="flex flex-wrap justify-center gap-8 md:gap-12">
           {admins.map((admin, index) => (
             <div
               key={admin.name}
-              className={`transition-all duration-700 delay-${index * 100} ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-              }`}
+              className={`transition-all duration-700 delay-${index * 100} 
+                ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
               onMouseEnter={() => setHoveredAdmin(index)}
               onMouseLeave={() => setHoveredAdmin(null)}
             >
               <div className="group flex flex-col items-center">
-                <div 
-                  className={`
-                    relative mb-3 transition-all duration-500
-                    ${hoveredAdmin === index ? 'scale-110' : 'scale-100'}
-                  `}
-                >
-                  {/* Animated gradient border */}
+                <div className="relative mb-3 transition-all duration-300">
+                  {/* Subtle animated overlay on hover */}
                   <div className={`
-                    absolute -inset-0.5 bg-gradient-to-r from-visa-blue via-visa-navy to-visa-blue 
-                    rounded-full z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500
-                    ${!isMobile && 'group-hover:animate-spin-slow'}
+                    absolute inset-0 bg-gradient-to-r from-blue-400 to-visa-blue
+                    rounded-full z-0 opacity-0 group-hover:opacity-20 
+                    transition-opacity duration-300 blur-sm
                   `}></div>
                   
-                  <Avatar className="h-28 w-28 relative z-10">
+                  <Avatar className="h-24 w-24 relative z-10 transition-transform duration-300 group-hover:scale-105">
                     <AvatarImage 
                       src={admin.image} 
                       alt={admin.name} 
-                      className="group-hover:scale-105 transition-transform duration-500"
+                      className={`
+                        transition-all duration-500
+                        ${hoveredAdmin === index ? 'grayscale-0' : 'grayscale-[30%]'}
+                      `}
                     />
                     <AvatarFallback className="bg-visa-blue text-white text-xl">
                       {admin.fallback}
                     </AvatarFallback>
                   </Avatar>
                   
-                  {/* Animated highlight */}
+                  {/* Animated ring on hover */}
                   <div className={`
-                    absolute inset-0 bg-white rounded-full blur-sm z-0 
-                    opacity-0 group-hover:opacity-20 transition-opacity duration-500
+                    absolute inset-0 border-2 border-visa-blue rounded-full 
+                    scale-0 group-hover:scale-110 opacity-0 group-hover:opacity-100
+                    transition-all duration-300
                   `}></div>
                 </div>
                 
                 <h3 className={`
-                  text-lg font-medium text-visa-navy transition-all duration-300
-                  ${hoveredAdmin === index ? 'text-visa-blue' : ''}
+                  text-lg font-medium transition-all duration-300
+                  ${hoveredAdmin === index ? 'text-visa-blue' : 'text-visa-navy'}
                 `}>
                   {admin.name}
                 </h3>
@@ -140,7 +134,7 @@ const AdminSection = () => {
                 
                 {/* Animated underline */}
                 <div className={`
-                  h-0.5 bg-visa-blue mt-1 transition-all duration-500 ease-in-out
+                  h-0.5 bg-visa-blue mt-1 transition-all duration-300
                   ${hoveredAdmin === index ? 'w-full opacity-100' : 'w-0 opacity-0'}
                 `}></div>
               </div>

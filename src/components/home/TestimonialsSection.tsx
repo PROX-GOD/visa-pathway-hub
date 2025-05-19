@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { ArrowRight, Loader2, Quote, Star, UserRound } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -116,21 +115,15 @@ const TestimonialsSection = () => {
     <section id="testimonials-section" className="py-20 bg-gradient-to-br from-blue-50 to-white">
       <div className="container-custom mx-auto">
         <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-          <div className="flex items-center justify-center mb-4">
-            <div className="relative">
-              <div className="absolute -top-3 -left-3 w-6 h-6 rounded-full bg-visa-gold animate-pulse"></div>
-              <Star size={24} fill="#FFD700" stroke="none" className="text-yellow-400 mr-2" />
-            </div>
-            <h2 className="text-4xl font-serif font-bold text-visa-navy inline-flex items-center">
-              Student <span className="text-gradient mx-2">Testimonials</span>
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Star size={24} fill="#FFD700" stroke="none" className="text-yellow-400" />
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-visa-navy">
+              Student <span className="text-visa-blue">Testimonials</span>
             </h2>
-            <div className="relative">
-              <div className="absolute -top-3 -right-3 w-6 h-6 rounded-full bg-visa-gold animate-pulse"></div>
-              <Star size={24} fill="#FFD700" stroke="none" className="text-yellow-400 ml-2" />
-            </div>
+            <Star size={24} fill="#FFD700" stroke="none" className="text-yellow-400" />
           </div>
-          <div className="w-24 h-1 bg-visa-blue mx-auto mb-8"></div>
-          <p className="mt-4 text-gray-600 max-w-2xl mx-auto text-lg">
+          <div className="w-24 h-1 bg-visa-blue mx-auto mb-6"></div>
+          <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
             See what students just like you are saying about their success with Spring/Fall USA's F-1 visa guidance.
           </p>
         </div>
@@ -142,68 +135,49 @@ const TestimonialsSection = () => {
           </div>
         ) : (
           <div className="relative px-4 max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
               {currentTestimonials.map((testimonial, index) => (
                 <Card
                   key={testimonial.id}
-                  className={`testimonial-card transition-all duration-700 hover:shadow-xl delay-${index * 300} 
-                    ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}
-                    transform overflow-visible group relative h-full flex flex-col
+                  className={`
+                    transition-all duration-500 delay-${index * 200}
+                    ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
+                    hover:shadow-md hover:-translate-y-1 group relative overflow-visible
+                    bg-gradient-to-b from-white to-blue-50/30 border-none
                   `}
                 >
-                  {/* Decorative elements */}
-                  <div className="absolute -top-6 -right-6 w-12 h-12 bg-blue-100 rounded-full opacity-0 group-hover:opacity-70 transition-opacity"></div>
-                  <div className="absolute -bottom-6 -left-6 w-12 h-12 bg-visa-gold rounded-full opacity-0 group-hover:opacity-50 transition-opacity"></div>
-                  
-                  {/* Rating stars */}
-                  <div className="bg-gradient-to-r from-visa-blue to-blue-500 py-3 px-6 rounded-t-xl">
-                    <div className="flex justify-between items-center">
-                      <div className="flex">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} size={18} className="text-yellow-400" fill="#FBBF24" />
-                        ))}
-                      </div>
-                      <Quote size={20} className="text-white" />
+                  <div className="absolute -top-3 -left-3">
+                    <div className="bg-visa-blue text-white p-1 rounded-full">
+                      <Quote size={18} />
                     </div>
                   </div>
                   
-                  <div className="p-8 flex flex-col flex-grow bg-gradient-to-b from-white to-blue-50 rounded-b-xl">
-                    <div className="mb-6 flex-grow">
-                      <p className="text-gray-700 italic text-lg leading-relaxed">"{testimonial.quote}"</p>
+                  <div className="p-6 pt-8">
+                    {/* Rating stars */}
+                    <div className="flex mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} size={16} className="text-yellow-400 mr-0.5" fill="#FBBF24" />
+                      ))}
                     </div>
+                    
+                    <p className="text-gray-700 italic text-base mb-6">"{testimonial.quote}"</p>
 
-                    <div className="flex items-start mt-6 pt-6 border-t border-gray-100">
-                      <div className="relative">
-                        {testimonial.photo_url ? (
-                          <img
-                            src={testimonial.photo_url}
-                            alt={testimonial.name}
-                            className="w-16 h-16 rounded-full object-cover ring-4 ring-blue-100"
-                          />
-                        ) : (
-                          <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center ring-4 ring-blue-50">
-                            <UserRound className="w-8 h-8 text-visa-blue" />
-                          </div>
-                        )}
-                        
-                        {/* Decorative circle */}
-                        <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-visa-blue rounded-full flex items-center justify-center">
-                          <div className="w-4 h-4 bg-white rounded-full"></div>
+                    <div className="flex items-center mt-auto pt-4 border-t border-gray-100">
+                      {testimonial.photo_url ? (
+                        <img
+                          src={testimonial.photo_url}
+                          alt={testimonial.name}
+                          className="w-12 h-12 rounded-full object-cover ring-2 ring-blue-100"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                          <UserRound className="w-6 h-6 text-visa-blue" />
                         </div>
-                      </div>
+                      )}
                       
-                      <div className="ml-4">
-                        <h3 className="font-semibold text-visa-navy text-lg">{testimonial.name}</h3>
-                        <div className="mt-1 flex flex-wrap gap-2">
-                          <span className="inline-flex items-center text-xs bg-blue-100 text-visa-blue px-2.5 py-1 rounded-full">
-                            {testimonial.university}
-                          </span>
-                          {testimonial.role && (
-                            <span className="inline-flex items-center text-xs bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-full">
-                              {testimonial.role}
-                            </span>
-                          )}
-                        </div>
+                      <div className="ml-3 flex-1">
+                        <p className="font-medium text-visa-navy">{testimonial.name}</p>
+                        <p className="text-xs text-gray-500">{testimonial.university}</p>
                       </div>
                     </div>
                   </div>
@@ -211,44 +185,40 @@ const TestimonialsSection = () => {
               ))}
             </div>
 
-            {/* 3D Carousel Indicators */}
+            {/* Pagination indicators */}
             {totalSlides > 1 && (
-              <div className="flex justify-center mt-10">
+              <div className="flex justify-center mt-8">
                 {[...Array(totalSlides)].map((_, idx) => (
                   <button
                     key={idx}
                     onClick={() => goToSlide(idx)}
+                    aria-label={`Go to slide ${idx + 1}`}
                     className={`
-                      mx-1.5 transition-all duration-300 relative
+                      mx-1 transition-all duration-300
                       ${currentSlide === idx 
-                        ? 'w-10 h-3 bg-visa-blue rounded-full transform scale-110' 
-                        : 'w-3 h-3 bg-blue-200 rounded-full hover:bg-blue-300'
+                        ? 'w-8 h-2 bg-visa-blue rounded-full' 
+                        : 'w-2 h-2 bg-gray-300 rounded-full hover:bg-gray-400'
                       }
                     `}
-                    aria-label={`Go to slide ${idx + 1}`}
-                  >
-                    {currentSlide === idx && (
-                      <span className="absolute inset-0 bg-visa-blue rounded-full animate-pulse opacity-50"></span>
-                    )}
-                  </button>
+                  />
                 ))}
               </div>
             )}
           </div>
         )}
 
-        <div className={`mt-16 flex flex-col sm:flex-row items-center justify-center gap-6 transition-all duration-700 delay-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`mt-12 flex flex-col sm:flex-row items-center justify-center gap-5 transition-all duration-700 delay-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
           <Link to="/testimonials">
-            <Button variant="outline" className="border-visa-blue text-visa-blue hover:bg-blue-50 px-6 py-2.5">
-              Read More Testimonials
-              <ArrowRight size={16} className="ml-2" />
+            <Button variant="outline" className="border-visa-blue text-visa-blue hover:bg-blue-50">
+              More Testimonials
+              <ArrowRight size={16} className="ml-1" />
             </Button>
           </Link>
           
           <Link to="/testimonials/share">
-            <Button className="bg-visa-blue hover:bg-visa-navy text-white px-6 py-2.5 btn-pulse">
+            <Button className="bg-visa-blue hover:bg-visa-navy text-white">
               Share Your Story
-              <ArrowRight size={16} className="ml-2" />
+              <ArrowRight size={16} className="ml-1" />
             </Button>
           </Link>
         </div>

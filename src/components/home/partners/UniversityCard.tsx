@@ -25,61 +25,54 @@ const UniversityCard: React.FC<UniversityProps> = ({
   isActive,
   isPrev,
   isNext,
-  onClick,
-  activeIndex,
-  index,
-  universities,
-  setActiveIndex
+  onClick
 }) => {
   return (
     <div 
       className={`
-        absolute top-0 left-0 right-0 mx-auto
-        bg-white p-8 rounded-2xl shadow-xl 
-        flex flex-col items-center
-        transition-all duration-700 transform origin-center
-        ${isActive ? 'z-30 opacity-100 translate-z-0 scale-100' : ''}
-        ${isPrev ? 'z-20 opacity-80 -translate-x-[55%] translate-z-[-80px] scale-90' : ''}
-        ${isNext ? 'z-20 opacity-80 translate-x-[55%] translate-z-[-80px] scale-90' : ''}
-        ${!isActive && !isPrev && !isNext ? 'opacity-0 z-10' : ''}
+        absolute transition-all duration-700
+        ${isActive ? 'opacity-100 z-30 translate-x-0 scale-100' : ''}
+        ${isPrev ? 'opacity-40 z-20 -translate-x-[70%] scale-90' : ''}
+        ${isNext ? 'opacity-40 z-20 translate-x-[70%] scale-90' : ''}
+        ${!isActive && !isPrev && !isNext ? 'opacity-0 z-10 scale-75' : ''}
       `}
       onClick={onClick}
     >
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-full mb-8 hover:bg-blue-100 transition-colors">
-        <img 
-          src={logo} 
-          alt={`${name} logo`} 
-          className="h-32 w-auto object-contain uni-logo"
-        />
-      </div>
-      <h4 className="text-visa-navy font-semibold text-2xl text-center mb-4">{name}</h4>
-      <p className="text-gray-600 text-center mb-6">{description}</p>
-      <a 
-        href={website}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`
-          inline-flex items-center gap-2 py-2 px-4 
-          bg-visa-blue text-white rounded-full
-          transition-all hover:bg-visa-navy
-          ${isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'}
-        `}
-      >
-        <span>Visit Website</span>
-        <ExternalLink size={14} />
-      </a>
-      
-      <div className={`absolute bottom-0 left-0 right-0 flex justify-center space-x-2 mb-4 ${isActive ? 'opacity-100' : 'opacity-0'}`}>
-        {universities.map((_, i) => (
-          <button
-            key={i}
-            className={`w-3 h-3 rounded-full transition-all ${i === activeIndex ? 'bg-visa-blue scale-125' : 'bg-gray-300'}`}
-            onClick={(e) => {
-              e.stopPropagation();
-              setActiveIndex(i);
-            }}
+      <div className={`
+        bg-white rounded-xl shadow-lg p-6 
+        transform transition-all duration-500
+        ${isActive ? 'hover:-translate-y-2 hover:shadow-xl' : ''}
+        flex flex-col items-center max-w-sm
+      `}>
+        <div className="mb-6">
+          <img 
+            src={logo} 
+            alt={`${name} logo`} 
+            className={`
+              h-24 w-auto object-contain 
+              transition-all duration-500
+              ${isActive ? 'filter-none' : 'filter grayscale'}
+            `}
           />
-        ))}
+        </div>
+        
+        <h4 className="text-visa-navy font-medium text-xl text-center mb-3">{name}</h4>
+        
+        <p className="text-gray-600 text-center text-sm mb-5">{description}</p>
+        
+        {isActive && (
+          <a 
+            href={website}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 py-1.5 px-4 mt-auto
+              bg-visa-blue/10 text-visa-blue rounded-full
+              transition-all hover:bg-visa-blue hover:text-white"
+          >
+            <span>Visit Website</span>
+            <ExternalLink size={14} />
+          </a>
+        )}
       </div>
     </div>
   );

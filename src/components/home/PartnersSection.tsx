@@ -49,67 +49,67 @@ const PartnersSection = () => {
 
   const universities = [
     { 
-      name: 'Arkansas State University',
+      name: "Arkansas State University",
       logo: arkansasImg,
-      website: 'https://www.astate.edu/',
-      description: 'A vibrant campus community with comprehensive academic programs',
+      website: "https://www.astate.edu/",
+      description: "A vibrant campus community with comprehensive academic programs",
     },
     { 
-      name: 'University of Kentucky',
+      name: "University of Kentucky",
       logo: ukentucyImg,
-      website: 'https://www.uky.edu/',
+      website: "https://www.uky.edu/",
       description: "Kentucky's flagship institution of higher education",
     },
     { 
-      name: 'Roanoke College',
+      name: "Roanoke College",
       logo: roanokeImg,
-      website: 'https://www.roanoke.edu/',
-      description: 'A private liberal arts college in the beautiful Roanoke Valley',
+      website: "https://www.roanoke.edu/",
+      description: "A private liberal arts college in the beautiful Roanoke Valley",
     },
   ];
 
   const visaOfficers = [
     { 
-      name: 'Jack Runkle',
+      name: "Jack Runkle",
       logo: jackImg,
-      website: 'visainterviewcoach.com',
-      promo: 'SPRINGFALL - 20% OFF',
-      description: 'Former consular officer with 15+ years experience',
+      website: "visainterviewcoach.com",
+      promo: "SPRINGFALL - 20% OFF",
+      description: "Former consular officer with 15+ years experience",
     },
     { 
-      name: 'Lissa Anderson',
+      name: "Lissa Anderson",
       logo: lissaImg,
-      website: 'argovisa.com',
-      promo: 'Email with Spring/Fall USA name for discount',
-      description: 'Specializing in complex visa cases and appeals',
+      website: "argovisa.com",
+      promo: "Email with Spring/Fall USA name for discount",
+      description: "Specializing in complex visa cases and appeals",
     },
     { 
-      name: 'Yvette Bansal',
+      name: "Yvette Bansal",
       logo: yvetteImg,
-      website: 'udetivisa.com',
-      promo: 'SPRINGFALL20 - 20% OFF',
-      description: 'Expert in student visa interview preparation',
+      website: "udetivisa.com",
+      promo: "SPRINGFALL20 - 20% OFF",
+      description: "Expert in student visa interview preparation",
     },
   ];
 
   return (
-    <section id="affiliates-section" className="py-20 bg-gradient-to-b from-white to-blue-50">
+    <section id="affiliates-section" className="py-16 bg-gradient-to-b from-white to-blue-50">
       <div className="container-custom mx-auto">
-        <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
           <div className="flex items-center justify-center gap-3 mb-4">
             <Users size={28} className="text-visa-blue" />
-            <h2 className="text-4xl font-serif font-bold text-visa-navy inline-block">
-              Our <span className="text-gradient">Affiliates</span>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-visa-navy inline-block">
+              Our <span className="text-visa-blue">Affiliates</span>
             </h2>
           </div>
           <div className="w-24 h-1 bg-visa-blue mx-auto mb-6"></div>
-          <p className="mt-4 text-gray-600 max-w-2xl mx-auto text-lg">
+          <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
             Our trusted partnerships ensure you receive expert guidance and support throughout your visa journey.
           </p>
         </div>
 
-        <div className="mb-20">
-          <h3 className="text-2xl font-medium text-visa-navy mb-12 text-center">
+        <div className="mb-16">
+          <h3 className="text-2xl font-medium text-visa-navy mb-10 text-center">
             <span className="border-b-2 border-visa-blue pb-2">University Affiliates</span>
           </h3>
           

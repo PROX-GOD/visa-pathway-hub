@@ -14,10 +14,10 @@ const AboutUsSection = () => {
     universities: 0
   });
   const finalStats = {
-    students: 10000,
-    countries: 120,
-    experiences: 3000,
-    universities: 500
+    students: 100000,
+    countries: 5,
+    experiences: 1000,
+    universities: 3
   };
 
   useEffect(() => {

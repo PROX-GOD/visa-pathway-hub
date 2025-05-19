@@ -30,7 +30,7 @@ const AboutPage = () => {
         <section className={`py-20 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gradient-to-br from-visa-light via-white to-blue-50'}`}>
           <div className="container-custom mx-auto">
             <div className="max-w-3xl mx-auto text-center">
-              <h1 className={`text-5xl font-serif font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
+              <h1 className={`text-5xl font-montserrat font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
                 About <span className="text-visa-blue">Spring/Fall USA</span>
               </h1>
               <p className={`text-lg ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-8`}>

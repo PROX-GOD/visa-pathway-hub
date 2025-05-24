@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -63,67 +62,39 @@ const DashboardPage = () => {
   const fetchUserData = async () => {
     setDashboardLoading(true);
     try {
-      // Fetch checklist items
-      const { data: checklistData, error: checklistError } = await supabase
-        .from('visa_checklist')
-        .select('*')
-        .eq('user_id', user?.id);
-      
-      if (!checklistError && checklistData) {
-        setChecklistItems(checklistData);
-      } else {
-        // Default checklist if none exists
-        setChecklistItems([
-          { id: '1', title: 'Complete DS-160 Form', completed: false },
-          { id: '2', title: 'Pay SEVIS Fee', completed: false },
-          { id: '3', title: 'Schedule Visa Interview', completed: false },
-          { id: '4', title: 'Prepare Financial Documents', completed: false },
-          { id: '5', title: 'Gather Academic Records', completed: false },
-          { id: '6', title: 'Complete Mock Interview', completed: false },
-        ]);
-      }
+      // Use default checklist items since we don't have a visa_checklist table
+      setChecklistItems([
+        { id: '1', title: 'Complete DS-160 Form', completed: false },
+        { id: '2', title: 'Pay SEVIS Fee', completed: false },
+        { id: '3', title: 'Schedule Visa Interview', completed: false },
+        { id: '4', title: 'Prepare Financial Documents', completed: false },
+        { id: '5', title: 'Gather Academic Records', completed: false },
+        { id: '6', title: 'Complete Mock Interview', completed: false },
+      ]);
 
-      // Fetch badges
-      const { data: badgeData, error: badgeError } = await supabase
-        .from('user_badges')
-        .select('*')
-        .eq('user_id', user?.id);
-      
-      if (!badgeError && badgeData) {
-        setBadges(badgeData);
-      } else {
-        // Default badges if none exists
-        setBadges([
-          { 
-            id: '1', 
-            title: 'Profile Creator', 
-            description: 'Created your profile and joined the community', 
-            icon: 'user',
-            earnedAt: new Date().toISOString()
-          },
-        ]);
-      }
+      // Use default badges since we don't have a user_badges table
+      setBadges([
+        { 
+          id: '1', 
+          title: 'Profile Creator', 
+          description: 'Created your profile and joined the community', 
+          icon: 'user',
+          earnedAt: new Date().toISOString()
+        },
+      ]);
 
-      // Fetch user stats
-      const { data: experiencesData } = await supabase
+      // Count user's actual visa experiences
+      const { data: experiencesData, error: expError } = await supabase
         .from('visa_experiences')
-        .select('count')
-        .eq('user_id', user?.id);
+        .select('id', { count: 'exact' })
+        .eq('email', user?.email)
+        .is('deleted_at', null);
 
-      const { data: votesData } = await supabase
-        .from('helpful_votes')
-        .select('count')
-        .eq('content_user_id', user?.id);
-
-      const { data: resourcesData } = await supabase
-        .from('saved_resources')
-        .select('count')
-        .eq('user_id', user?.id);
-
+      // Since we don't have helpful_votes and saved_resources tables, use mock data
       setUserStats({
-        experiencesShared: experiencesData?.[0]?.count || 0,
-        helpfulVotes: votesData?.[0]?.count || 0,
-        resourcesSaved: resourcesData?.[0]?.count || 0,
+        experiencesShared: experiencesData?.length || 0,
+        helpfulVotes: 0, // Mock data
+        resourcesSaved: 0, // Mock data
       });
 
     } catch (error) {
@@ -139,22 +110,8 @@ const DashboardPage = () => {
     );
     setChecklistItems(updatedItems);
     
-    try {
-      // Update in database
-      if (user) {
-        const item = updatedItems.find(i => i.id === id);
-        await supabase
-          .from('visa_checklist')
-          .upsert({ 
-            id, 
-            user_id: user.id, 
-            title: item?.title, 
-            completed: item?.completed,
-          });
-      }
-    } catch (error) {
-      console.error('Error updating checklist:', error);
-    }
+    // Since we don't have a visa_checklist table, just update local state
+    // In a real app, you would save this to the database
   };
 
   const calculateProgress = () => {

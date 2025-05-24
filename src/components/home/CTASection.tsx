@@ -1,12 +1,9 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-
 const CTASection = () => {
-  return (
-    <section className="py-16 bg-visa-blue relative overflow-hidden">
+  return <section className="py-16 bg-visa-blue relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
         <div className="absolute top-10 left-10 w-64 h-64 bg-visa-navy rounded-full opacity-10 blur-3xl"></div>
@@ -33,7 +30,7 @@ const CTASection = () => {
             </Link>
             
             <Link to="/interview-prep">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-visa-navy">
+              <Button size="lg" variant="outline" className="border-white hover:bg-visa-navy text-sky-400">
                 Schedule Mock Interview
               </Button>
             </Link>
@@ -44,8 +41,6 @@ const CTASection = () => {
           </p>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default CTASection;

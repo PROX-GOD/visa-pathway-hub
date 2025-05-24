@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Linkedin, Mail } from 'lucide-react';
+import { FaTelegramPlane, FaTiktok } from 'react-icons/fa';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -20,21 +20,23 @@ const Footer = () => {
               Helping international students achieve their dreams of studying in the USA with free F-1 visa guidance.
             </p>
             <div className="flex space-x-4 mt-6">
-              <a href="#" className="text-gray-300 hover:text-visa-gold transition-colors">
+              <a href="#" className="text-gray-300 hover:text-visa-gold transition-colors" aria-label="Facebook">
                 <Facebook size={20} />
-                <span className="visually-hidden">Facebook</span>
               </a>
-              <a href="#" className="text-gray-300 hover:text-visa-gold transition-colors">
+              <a href="#" className="text-gray-300 hover:text-visa-gold transition-colors" aria-label="TikTok">
+                <FaTiktok size={20} />
+              </a>
+              <a href="#" className="text-gray-300 hover:text-visa-gold transition-colors" aria-label="Telegram">
+                <FaTelegramPlane size={20} />
+              </a>
+              <a href="#" className="text-gray-300 hover:text-visa-gold transition-colors" aria-label="Twitter">
                 <Twitter size={20} />
-                <span className="visually-hidden">Twitter</span>
               </a>
-              <a href="#" className="text-gray-300 hover:text-visa-gold transition-colors">
+              <a href="#" className="text-gray-300 hover:text-visa-gold transition-colors" aria-label="Instagram">
                 <Instagram size={20} />
-                <span className="visually-hidden">Instagram</span>
               </a>
-              <a href="#" className="text-gray-300 hover:text-visa-gold transition-colors">
+              <a href="#" className="text-gray-300 hover:text-visa-gold transition-colors" aria-label="LinkedIn">
                 <Linkedin size={20} />
-                <span className="visually-hidden">LinkedIn</span>
               </a>
             </div>
           </div>
@@ -89,7 +91,7 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-start">
                 <Mail size={18} className="mr-2 mt-1 text-visa-gold" />
-                <a href="mailto:info@springfallusa.org" className="text-gray-300 hover:text-visa-gold transition-colors">
+                <a href="mailto:support@springfallusa.org" className="text-gray-300 hover:text-visa-gold transition-colors">
                   support@springfallusa.org
                 </a>
               </li>
@@ -134,3 +136,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

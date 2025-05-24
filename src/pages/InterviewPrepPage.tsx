@@ -413,6 +413,144 @@ const InterviewPrepPage = () => {
                 </TabsContent>
               </Tabs>
             </div>
+            
+            <div id="mock-interview" className="mb-12">
+              <h2 className={`text-2xl font-serif font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
+                Practice with Mock Interviews
+              </h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card className={`${theme === 'dark' ? 'bg-gray-800 border-gray-700' : ''}`}>
+                  <CardHeader>
+                    <div className="bg-blue-100 dark:bg-blue-900/30 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                      <Video size={24} className="text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <CardTitle className={`${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
+                      Virtual Mock Interview
+                    </CardTitle>
+                    <CardDescription className={theme === 'dark' ? 'text-gray-400' : ''}>
+                      Practice with AI-powered interviewer
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className={theme === 'dark' ? 'text-gray-300' : ''}>
+                      Experience a simulated visa interview with our AI interviewer. Get real-time 
+                      feedback on your answers and body language.
+                    </p>
+                    <ul className="space-y-2">
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-green-500" />
+                        <span className={theme === 'dark' ? 'text-gray-300' : ''}>Realistic interview scenarios</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-green-500" />
+                        <span className={theme === 'dark' ? 'text-gray-300' : ''}>Personalized feedback</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-green-500" />
+                        <span className={theme === 'dark' ? 'text-gray-300' : ''}>Practice as many times as you want</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                  <CardFooter>
+                    <Button className="w-full bg-visa-blue hover:bg-visa-navy text-white dark:bg-blue-700 dark:hover:bg-blue-800">
+                      Start Virtual Interview
+                    </Button>
+                  </CardFooter>
+                </Card>
+                
+                <Card className={`${theme === 'dark' ? 'bg-gray-800 border-gray-700' : ''}`}>
+                  <CardHeader>
+                    <div className="bg-purple-100 dark:bg-purple-900/30 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                      <MessageCircle size={24} className="text-purple-600 dark:text-purple-400" />
+                    </div>
+                    <CardTitle className={`${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
+                      Peer Interview Exchange
+                    </CardTitle>
+                    <CardDescription className={theme === 'dark' ? 'text-gray-400' : ''}>
+                      Practice with other students
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className={theme === 'dark' ? 'text-gray-300' : ''}>
+                      Connect with other visa applicants to conduct mock interviews with each other. 
+                      Give and receive feedback to improve your performance.
+                    </p>
+                    <ul className="space-y-2">
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-green-500" />
+                        <span className={theme === 'dark' ? 'text-gray-300' : ''}>Match with peers by program/country</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-green-500" />
+                        <span className={theme === 'dark' ? 'text-gray-300' : ''}>Learn from others' experiences</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-green-500" />
+                        <span className={theme === 'dark' ? 'text-gray-300' : ''}>Build your network</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                  <CardFooter>
+                    <Link to="/register" className="w-full">
+                      <Button className="w-full" variant="outline">
+                        Join Peer Network
+                      </Button>
+                    </Link>
+                  </CardFooter>
+                </Card>
+                
+                <Card className={`${theme === 'dark' ? 'bg-gray-800 border-gray-700' : ''}`}>
+                  <CardHeader>
+                    <div className="bg-amber-100 dark:bg-amber-900/30 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                      <Book size={24} className="text-amber-600 dark:text-amber-400" />
+                    </div>
+                    <CardTitle className={`${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
+                      Expert Coaching Session
+                    </CardTitle>
+                    <CardDescription className={theme === 'dark' ? 'text-gray-400' : ''}>
+                      One-on-one with visa experts
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className={theme === 'dark' ? 'text-gray-300' : ''}>
+                      Book a personalized coaching session with former visa officers or experienced 
+                      visa consultants for tailored preparation and advice.
+                    </p>
+                    <ul className="space-y-2">
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-green-500" />
+                        <span className={theme === 'dark' ? 'text-gray-300' : ''}>Insider tips from experts</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-green-500" />
+                        <span className={theme === 'dark' ? 'text-gray-300' : ''}>Document review service</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-green-500" />
+                        <span className={theme === 'dark' ? 'text-gray-300' : ''}>Personalized strategy session</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                  <CardFooter>
+                    <Button className="w-full" variant="secondary">
+                      Book Coach Session
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </div>
+            </div>
+            
+            <div className={`p-6 rounded-xl ${theme === 'dark' ? 'bg-blue-900/20 border border-blue-800/50' : 'bg-blue-50 border border-blue-100'}`}>
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                  <h3 className={`text-xl font-medium mb-2 ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
+                    Learn from Real Experiences
+                  </h3>
+                  <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                    Read authentic visa interview experiences shared by successful applicants.
+                  </p>
+                </div>
                 <div>
                   <Link to="/visa-experiences">
                     <Button className="bg-visa-blue hover:bg-visa-navy text-white dark:bg-blue-700 dark:hover:bg-blue-800">

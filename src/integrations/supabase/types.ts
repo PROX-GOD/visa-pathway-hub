@@ -15,6 +15,7 @@ export type Database = {
           email: string
           id: string
           name: string
+          password_hash: string | null
           role: string
           updated_at: string
         }
@@ -23,6 +24,7 @@ export type Database = {
           email: string
           id?: string
           name: string
+          password_hash?: string | null
           role?: string
           updated_at?: string
         }
@@ -31,6 +33,7 @@ export type Database = {
           email?: string
           id?: string
           name?: string
+          password_hash?: string | null
           role?: string
           updated_at?: string
         }

@@ -93,6 +93,11 @@ const AdminLoginPage = () => {
               <p className="text-xs text-gray-500">
                 Only authorized Spring/Fall USA administrators can access this area
               </p>
+              <div className="mt-2 p-3 bg-blue-50 rounded-lg">
+                <p className="text-xs text-blue-700 font-medium">Demo Credentials:</p>
+                <p className="text-xs text-blue-600">Email: admin@springfallus.org</p>
+                <p className="text-xs text-blue-600">Password: springfall@2025</p>
+              </div>
             </div>
           </div>
         </div>

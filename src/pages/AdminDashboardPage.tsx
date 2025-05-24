@@ -11,10 +11,9 @@ import {
   Trash2, 
   Plus,
   Shield,
-  BarChart3,
-  FileText
+  BarChart3
 } from 'lucide-react';
-import { supabase } from '@/components/auth/AdminAuthProvider';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
 const AdminDashboardPage = () => {

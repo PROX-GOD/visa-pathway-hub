@@ -16,22 +16,22 @@ const NoticeBanner = () => {
           .select('*')
           .eq('is_active', true)
           .order('created_at', { ascending: false })
-          .limit(1)
-          .single();
+          .limit(1);
 
-        if (error || !data) return;
+        if (error || !data || data.length === 0) return;
 
-        setNotice(data);
+        const latestNotice = data[0];
+        setNotice(latestNotice);
 
         // Check if the user has already seen this notice (use localStorage with notice ID)
-        const hasSeenNotice = localStorage.getItem(`notice-seen-${data.id}`);
+        const hasSeenNotice = localStorage.getItem(`notice-seen-${latestNotice.id}`);
         
         if (!hasSeenNotice) {
           // Wait a moment before showing the notice
           const timer = setTimeout(() => {
             setIsOpen(true);
             // Mark this notice as seen permanently
-            localStorage.setItem(`notice-seen-${data.id}`, 'true');
+            localStorage.setItem(`notice-seen-${latestNotice.id}`, 'true');
           }, 1500);
           
           return () => clearTimeout(timer);

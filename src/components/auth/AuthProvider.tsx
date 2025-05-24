@@ -1,13 +1,13 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { createClient, Session, User as SupabaseUser } from '@supabase/supabase-js';
+import { Session, User as SupabaseUser } from '@supabase/supabase-js';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 
 // Define our custom User type that extends Supabase's User
 type User = {
   id: string;
-  email: string | undefined; // Optional to match Supabase User type
+  email: string | undefined;
   user_metadata?: {
     name?: string;
     avatar_url?: string;
@@ -54,15 +54,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setSession(currentSession);
       setUser(currentSession ? mapUser(currentSession.user) : null);
 
-      // Check if user is admin
-      if (currentSession?.user) {
+      // Check if user is admin by looking up in admin_users table
+      if (currentSession?.user?.email) {
         const { data } = await supabase
-          .from('profiles')
-          .select('is_admin')
-          .eq('id', currentSession.user.id)
+          .from('admin_users')
+          .select('role')
+          .eq('email', currentSession.user.email)
           .single();
         
-        setIsAdmin(data?.is_admin || false);
+        setIsAdmin(!!data);
       }
 
       // Set up auth state change listener
@@ -72,14 +72,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setUser(newSession ? mapUser(newSession.user) : null);
 
           // Check if new user is admin
-          if (newSession?.user) {
+          if (newSession?.user?.email) {
             const { data } = await supabase
-              .from('profiles')
-              .select('is_admin')
-              .eq('id', newSession.user.id)
+              .from('admin_users')
+              .select('role')
+              .eq('email', newSession.user.email)
               .single();
             
-            setIsAdmin(data?.is_admin || false);
+            setIsAdmin(!!data);
           } else {
             setIsAdmin(false);
           }
@@ -113,6 +113,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signUp = async (email: string, password: string, name: string) => {
     try {
+      // Check if email is authorized for admin registration
+      if (!email.endsWith('@springfallus.org')) {
+        throw new Error('Only @springfallus.org email addresses are allowed to register');
+      }
+
       // Sign up the user
       const { data, error } = await supabase.auth.signUp({ 
         email, 
@@ -126,25 +131,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (error) {
         throw error;
-      }
-      
-      // Create a profile
-      if (data.user) {
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert([
-            { 
-              id: data.user.id, 
-              name, 
-              email,
-              is_admin: false,
-              created_at: new Date()
-            }
-          ]);
-
-        if (profileError) {
-          toast.error(`Error creating profile: ${profileError.message}`);
-        }
       }
       
       toast.success("Account created successfully! Please check your email to verify your account.");
@@ -182,20 +168,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
       
       if (updateError) throw updateError;
-
-      // Update profile in profiles table
-      const updates = {
-        ...(data.name && { name: data.name }),
-        ...(data.avatar_url && { avatar_url: data.avatar_url }),
-        updated_at: new Date()
-      };
-
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .update(updates)
-        .eq('id', user.id);
-
-      if (profileError) throw profileError;
       
       toast.success("Profile updated successfully");
       

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowDown, ArrowRight } from 'lucide-react';
@@ -8,11 +9,13 @@ const SEO = {
   description: "Get free guidance and resources to help international students navigate the F-1 visa process successfully. Expert tips for F1 visa preparation.",
   keywords: "F1 visa, Free F1 visa guide, F1 visa preparation, US student visa, study in USA, F1 visa interview, F1 visa process"
 };
+
 const HeroSection = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [count, setCount] = useState(0);
   const finalCount = 10000;
   const successRate = 95;
+
   useEffect(() => {
     // Add meta tags for SEO
     document.title = SEO.title;
@@ -60,6 +63,7 @@ const HeroSection = () => {
       });
     }
   };
+
   const scrollToGuide = () => {
     const guideSection = document.getElementById('f1-guide-section');
     if (guideSection) {
@@ -71,12 +75,14 @@ const HeroSection = () => {
       window.location.href = '/f1-visa-info';
     }
   };
-  return <section className="pt-28 pb-16 md:pt-32 md:pb-24 bg-gradient-to-br from-visa-light via-white to-blue-50 overflow-hidden">
+
+  return (
+    <section className="pt-28 pb-16 md:pt-32 md:pb-24 bg-gradient-to-br from-visa-light via-white to-blue-50 overflow-hidden">
       <div className="container-custom mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-6 items-center">
           <div className={`transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
             {/* H1 heading for SEO */}
-            <h1 className="class=\"text-4xl md:text-5xl lg:text-6xl font-serif text-visa-navy leading-snug tracking-tight\" font-extrabold text-4xl">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif text-visa-navy leading-snug tracking-tight font-extrabold">
               Your Path to <span className="text-visa-blue">Studying in the USA</span> Starts Here
             </h1>
             
@@ -125,6 +131,8 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default HeroSection;

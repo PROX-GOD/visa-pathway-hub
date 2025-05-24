@@ -1,10 +1,12 @@
 
-// This file can be easily modified to change the notice content
+// This file is no longer used as notices are now managed through the database
+// All notice data is now stored in the Supabase 'notices' table
+// and managed through the admin dashboard
 
 export const activeNotice = {
-  isActive: true,
-  title: "Summer 2025 Visa Interview Slots Open",
-  content: "The U.S. Embassy has released new F-1 visa interview slots for summer 2025. We recommend booking your appointment as soon as possible as slots fill up quickly.",
-  slug: "summer-2025-visa-slots",
-  date: "April 9, 2025"
+  isActive: false,
+  title: "",
+  content: "",
+  slug: "",
+  date: ""
 };

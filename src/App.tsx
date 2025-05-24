@@ -4,7 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/components/auth/AuthProvider";
+import { AdminAuthProvider } from "@/components/auth/AdminAuthProvider";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AboutPage from "./pages/AboutPage";
@@ -22,16 +22,15 @@ import DashboardPage from "@/pages/DashboardPage";
 import TestimonialsPage from "@/pages/TestimonialsPage";
 import ShareTestimonialPage from "@/pages/ShareTestimonialPage";
 import NoticePage from "@/pages/NoticePage";
-import LoginPage from "@/pages/LoginPage";
-import RegisterPage from "@/pages/RegisterPage";
-import ProfilePage from "@/pages/ProfilePage";
+import AdminLoginPage from "@/pages/AdminLoginPage";
+import AdminDashboardPage from "@/pages/AdminDashboardPage";
 import LogoCompetitionPage from "@/pages/LogoCompetitionPage";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>
+    <AdminAuthProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -54,14 +53,13 @@ const App = () => (
             <Route path="/notice/:slug" element={<NoticePage />} />
             <Route path="/admin-elections" element={<AdminElectionPage />} />
             <Route path="/logo-competition" element={<LogoCompetitionPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/admin-login" element={<AdminLoginPage />} />
+            <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
-    </AuthProvider>
+    </AdminAuthProvider>
   </QueryClientProvider>
 );
 

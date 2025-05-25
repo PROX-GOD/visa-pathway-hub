@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useAdminAuth } from '@/components/auth/AdminAuthProvider';
+import { useAuth } from '@/components/auth/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { 
@@ -16,7 +16,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
 const AdminDashboardPage = () => {
-  const { user, session, isAdmin, isLoading, signOut } = useAdminAuth();
+  const { user, session, isAdmin, isLoading, signOut } = useAuth();
   const navigate = useNavigate();
   const [stats, setStats] = useState({
     totalExperiences: 0,
@@ -50,41 +50,38 @@ const AdminDashboardPage = () => {
         return;
       }
 
-      // Use the admin-operations edge function for secure data fetching
       const headers = {
         'Authorization': `Bearer ${session.access_token}`,
         'Content-Type': 'application/json'
       };
 
-      // Fetch experiences
-      const expResponse = await supabase.functions.invoke('admin-operations', {
-        body: { operation: 'get_all_experiences' },
-        headers
-      });
+      // Fetch data using admin operations edge function
+      const [expResponse, testResponse, noticeResponse] = await Promise.all([
+        supabase.functions.invoke('admin-operations', {
+          body: { operation: 'get_all_experiences' },
+          headers
+        }),
+        supabase.functions.invoke('admin-operations', {
+          body: { operation: 'get_all_testimonials' },
+          headers
+        }),
+        supabase.functions.invoke('admin-operations', {
+          body: { operation: 'get_all_notices' },
+          headers
+        })
+      ]);
 
-      if (!expResponse.error && expResponse.data?.success) {
+      if (expResponse.data?.success) {
         setExperiences(expResponse.data.data || []);
         setStats(prev => ({ ...prev, totalExperiences: expResponse.data.data?.length || 0 }));
       }
 
-      // Fetch testimonials
-      const testResponse = await supabase.functions.invoke('admin-operations', {
-        body: { operation: 'get_all_testimonials' },
-        headers
-      });
-
-      if (!testResponse.error && testResponse.data?.success) {
+      if (testResponse.data?.success) {
         setTestimonials(testResponse.data.data || []);
         setStats(prev => ({ ...prev, totalTestimonials: testResponse.data.data?.length || 0 }));
       }
 
-      // Fetch notices
-      const noticeResponse = await supabase.functions.invoke('admin-operations', {
-        body: { operation: 'get_all_notices' },
-        headers
-      });
-
-      if (!noticeResponse.error && noticeResponse.data?.success) {
+      if (noticeResponse.data?.success) {
         setNotices(noticeResponse.data.data || []);
         setStats(prev => ({ 
           ...prev, 
@@ -256,17 +253,14 @@ const AdminDashboardPage = () => {
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Dashboard Overview</h3>
                 <p className="text-gray-600">
-                  Welcome to the Spring/Fall USA admin dashboard. Use the tabs above to manage visa experiences, 
-                  testimonials, and notices. All data is securely fetched through edge functions.
+                  Welcome to the Spring/Fall USA admin dashboard. Use the tabs above to manage content.
                 </p>
               </div>
             )}
 
             {activeTab === 'experiences' && (
               <div>
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-medium text-gray-900">Visa Experiences</h3>
-                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Visa Experiences</h3>
                 {dashboardLoading ? (
                   <div className="flex justify-center py-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-visa-blue"></div>
@@ -299,9 +293,7 @@ const AdminDashboardPage = () => {
 
             {activeTab === 'testimonials' && (
               <div>
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-medium text-gray-900">Testimonials</h3>
-                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Testimonials</h3>
                 {dashboardLoading ? (
                   <div className="flex justify-center py-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-visa-blue"></div>
@@ -332,9 +324,7 @@ const AdminDashboardPage = () => {
 
             {activeTab === 'notices' && (
               <div>
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-medium text-gray-900">Notices Management</h3>
-                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Notices Management</h3>
                 {dashboardLoading ? (
                   <div className="flex justify-center py-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-visa-blue"></div>
@@ -345,20 +335,13 @@ const AdminDashboardPage = () => {
                       <div key={notice.id} className="border rounded-lg p-4">
                         <div className="flex justify-between items-start mb-2">
                           <h4 className="font-medium text-gray-900">{notice.title}</h4>
-                          <div className="flex items-center space-x-2">
-                            <span className={`px-2 py-1 text-xs rounded-full ${
-                              notice.is_active 
-                                ? 'bg-green-100 text-green-800' 
-                                : 'bg-gray-100 text-gray-800'
-                            }`}>
-                              {notice.is_active ? 'Active' : 'Inactive'}
-                            </span>
-                            {notice.is_emergency && (
-                              <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">
-                                Emergency
-                              </span>
-                            )}
-                          </div>
+                          <span className={`px-2 py-1 text-xs rounded-full ${
+                            notice.is_active 
+                              ? 'bg-green-100 text-green-800' 
+                              : 'bg-gray-100 text-gray-800'
+                          }`}>
+                            {notice.is_active ? 'Active' : 'Inactive'}
+                          </span>
                         </div>
                         <p className="text-sm text-gray-600">{notice.content}</p>
                         <p className="text-xs text-gray-400 mt-2">

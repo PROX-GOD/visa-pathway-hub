@@ -23,26 +23,3 @@ export const supabase = createClient<Database>(
     },
   }
 );
-
-// Export specific clients for different tables for better organization
-export const visaExperiencesClient = supabase;
-export const testimonialsClient = supabase;
-
-// Secure API call wrapper for edge functions
-export const secureApiCall = async (functionName: string, data?: any) => {
-  try {
-    const { data: result, error } = await supabase.functions.invoke(functionName, {
-      body: data
-    });
-
-    if (error) {
-      console.error(`Error calling ${functionName}:`, error);
-      throw error;
-    }
-
-    return result;
-  } catch (error) {
-    console.error(`Failed to call ${functionName}:`, error);
-    throw error;
-  }
-};

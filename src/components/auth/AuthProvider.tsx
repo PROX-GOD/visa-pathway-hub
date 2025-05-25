@@ -1,18 +1,8 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { Session, User as SupabaseUser } from '@supabase/supabase-js';
+import { Session, User } from '@supabase/supabase-js';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-
-// Define our custom User type that extends Supabase's User
-type User = {
-  id: string;
-  email: string | undefined;
-  user_metadata?: {
-    name?: string;
-    avatar_url?: string;
-  };
-};
 
 type AuthContextType = {
   user: User | null;
@@ -22,22 +12,10 @@ type AuthContextType = {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, name: string) => Promise<void>;
   signOut: () => Promise<void>;
-  updateProfile: (data: { name?: string, avatar_url?: string }) => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-// Helper function to convert Supabase User to our User type
-const mapUser = (supabaseUser: SupabaseUser | null): User | null => {
-  if (!supabaseUser) return null;
-  
-  return {
-    id: supabaseUser.id,
-    email: supabaseUser.email,
-    user_metadata: supabaseUser.user_metadata
-  };
-};
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -47,39 +25,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     const initialize = async () => {
-      setIsLoading(true);
-
-      // Get session
       const { data: { session: currentSession } } = await supabase.auth.getSession();
       setSession(currentSession);
-      setUser(currentSession ? mapUser(currentSession.user) : null);
+      setUser(currentSession?.user || null);
 
-      // Check if user is admin by looking up in admin_users table
-      if (currentSession?.user?.email) {
-        const { data } = await supabase
-          .from('admin_users')
-          .select('role')
-          .eq('email', currentSession.user.email)
-          .single();
-        
-        setIsAdmin(!!data);
+      if (currentSession?.user?.id) {
+        await checkAdminStatus(currentSession.user.id);
       }
 
-      // Set up auth state change listener
       const { data: { subscription } } = supabase.auth.onAuthStateChange(
-        async (_event, newSession) => {
+        async (event, newSession) => {
           setSession(newSession);
-          setUser(newSession ? mapUser(newSession.user) : null);
+          setUser(newSession?.user || null);
 
-          // Check if new user is admin
-          if (newSession?.user?.email) {
-            const { data } = await supabase
-              .from('admin_users')
-              .select('role')
-              .eq('email', newSession.user.email)
-              .single();
-            
-            setIsAdmin(!!data);
+          if (newSession?.user?.id) {
+            await checkAdminStatus(newSession.user.id);
           } else {
             setIsAdmin(false);
           }
@@ -87,22 +47,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       );
 
       setIsLoading(false);
-
-      return () => {
-        subscription.unsubscribe();
-      };
+      return () => subscription.unsubscribe();
     };
 
     initialize();
   }, []);
 
+  const checkAdminStatus = async (userId: string) => {
+    try {
+      const { data: adminData } = await supabase
+        .from('admin_users')
+        .select('role')
+        .eq('user_id', userId)
+        .single();
+      
+      setIsAdmin(!!adminData);
+    } catch (error) {
+      setIsAdmin(false);
+    }
+  };
+
   const signIn = async (email: string, password: string) => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
       
       toast.success("Signed in successfully!");
     } catch (error: any) {
@@ -113,25 +82,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signUp = async (email: string, password: string, name: string) => {
     try {
-      // Check if email is authorized for admin registration
-      if (!email.endsWith('@springfallus.org')) {
-        throw new Error('Only @springfallus.org email addresses are allowed to register');
-      }
-
-      // Sign up the user
       const { data, error } = await supabase.auth.signUp({ 
         email, 
         password,
         options: {
-          data: {
-            name
-          }
+          data: { name }
         }
       });
       
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
       
       toast.success("Account created successfully! Please check your email to verify your account.");
     } catch (error: any) {
@@ -144,39 +103,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const { error } = await supabase.auth.signOut();
       
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
       
       toast.success("Signed out successfully");
     } catch (error: any) {
       toast.error(`Error signing out: ${error.message}`);
-      throw error;
-    }
-  };
-
-  const updateProfile = async (data: { name?: string; avatar_url?: string }) => {
-    try {
-      if (!user) throw new Error("User not authenticated");
-      
-      // Update auth metadata
-      const { error: updateError } = await supabase.auth.updateUser({
-        data: {
-          name: data.name,
-          avatar_url: data.avatar_url
-        }
-      });
-      
-      if (updateError) throw updateError;
-      
-      toast.success("Profile updated successfully");
-      
-      // Refresh user data
-      const { data: { user: updatedUser } } = await supabase.auth.getUser();
-      setUser(mapUser(updatedUser));
-      
-    } catch (error: any) {
-      toast.error(`Error updating profile: ${error.message}`);
       throw error;
     }
   };
@@ -204,7 +135,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signIn,
     signUp,
     signOut,
-    updateProfile,
     resetPassword
   };
 
@@ -218,5 +148,3 @@ export const useAuth = () => {
   }
   return context;
 };
-
-export { supabase };

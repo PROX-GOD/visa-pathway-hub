@@ -4,7 +4,7 @@ import { ArrowRight, Loader2, Quote, Star, UserRound } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Testimonial } from '@/types/database';
-import { testimonialsClient } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Card } from '@/components/ui/card';
 
@@ -54,17 +54,13 @@ const TestimonialsSection = () => {
   const fetchTestimonials = async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await testimonialsClient
-        .from('testimonials')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(9);
+      const { data, error } = await supabase.functions.invoke('get-testimonials');
 
       if (error) {
         throw error;
       }
 
-      setTestimonials(data || []);
+      setTestimonials(data.testimonials || []);
     } catch (error) {
       console.error("Error fetching testimonials:", error);
       toast.error("Failed to load testimonials. Showing fallbacks instead.");

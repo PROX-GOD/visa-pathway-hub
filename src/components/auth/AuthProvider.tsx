@@ -13,6 +13,7 @@ type AuthContextType = {
   signUp: (email: string, password: string, name: string) => Promise<void>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
+  updateProfile: (updates: { name?: string; avatar_url?: string }) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -127,6 +128,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const updateProfile = async (updates: { name?: string; avatar_url?: string }) => {
+    try {
+      const { error } = await supabase.auth.updateUser({
+        data: updates
+      });
+      
+      if (error) throw error;
+      
+      toast.success("Profile updated successfully");
+    } catch (error: any) {
+      toast.error(`Error updating profile: ${error.message}`);
+      throw error;
+    }
+  };
+
   const value: AuthContextType = {
     user,
     session,
@@ -135,7 +151,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signIn,
     signUp,
     signOut,
-    resetPassword
+    resetPassword,
+    updateProfile
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -148,3 +165,6 @@ export const useAuth = () => {
   }
   return context;
 };
+
+// Export supabase client for direct use where needed
+export { supabase };

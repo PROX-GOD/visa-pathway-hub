@@ -26,29 +26,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     const initialize = async () => {
-      const { data: { session: currentSession } } = await supabase.auth.getSession();
-      setSession(currentSession);
-      setUser(currentSession?.user || null);
+      try {
+        const { data: { session: currentSession } } = await supabase.auth.getSession();
+        setSession(currentSession);
+        setUser(currentSession?.user || null);
 
-      if (currentSession?.user?.id) {
-        await checkAdminStatus(currentSession.user.id);
-      }
-
-      const { data: { subscription } } = supabase.auth.onAuthStateChange(
-        async (event, newSession) => {
-          setSession(newSession);
-          setUser(newSession?.user || null);
-
-          if (newSession?.user?.id) {
-            await checkAdminStatus(newSession.user.id);
-          } else {
-            setIsAdmin(false);
-          }
+        if (currentSession?.user?.id) {
+          await checkAdminStatus(currentSession.user.id);
         }
-      );
 
-      setIsLoading(false);
-      return () => subscription.unsubscribe();
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(
+          async (event, newSession) => {
+            console.log('Auth state changed:', event);
+            setSession(newSession);
+            setUser(newSession?.user || null);
+
+            if (newSession?.user?.id) {
+              // Defer admin check to prevent deadlocks
+              setTimeout(() => {
+                checkAdminStatus(newSession.user.id);
+              }, 0);
+            } else {
+              setIsAdmin(false);
+            }
+          }
+        );
+
+        setIsLoading(false);
+        return () => subscription.unsubscribe();
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+        setIsLoading(false);
+      }
     };
 
     initialize();
@@ -56,14 +65,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const checkAdminStatus = async (userId: string) => {
     try {
-      const { data: adminData } = await supabase
-        .from('admin_users')
-        .select('role')
-        .eq('user_id', userId)
-        .single();
+      // Use the database function to verify admin status
+      const { data: isAdminUser, error } = await supabase.rpc('verify_admin_user', {
+        user_uuid: userId
+      });
       
-      setIsAdmin(!!adminData);
+      if (error) {
+        console.error('Error checking admin status:', error);
+        setIsAdmin(false);
+      } else {
+        setIsAdmin(!!isAdminUser);
+      }
     } catch (error) {
+      console.error('Error in checkAdminStatus:', error);
       setIsAdmin(false);
     }
   };

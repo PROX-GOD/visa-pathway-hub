@@ -3,43 +3,16 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-// Use environment variables or fallback to hardcoded values
-// In production, these should be set as environment variables
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://hhwtdmnekyrxpfvwqlmv.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhod3RkbW5la3lyeHBmdndxbG12Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY2MDIzNjEsImV4cCI6MjA2MjE3ODM2MX0.jmE42fAw-pQNu_FIK6UClL9Am-fJT_-mVpwHvN5V6vY";
+const SUPABASE_URL = "https://hhwtdmnekyrxpfvwqlmv.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhod3RkbW5la3lyeHBmdndxbG12Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY2MDIzNjEsImV4cCI6MjA2MjE3ODM2MX0.jmE42fAw-pQNu_FIK6UClL9Am-fJT_-mVpwHvN5V6vY";
 
-// Security enhancement: Validate the URL to prevent injection attacks
-const validateUrl = (url: string): string => {
-  try {
-    const parsedUrl = new URL(url);
-    // Ensure it's a proper Supabase URL
-    if (!parsedUrl.hostname.includes('supabase.co')) {
-      console.error('Invalid Supabase URL');
-      throw new Error('Invalid Supabase URL');
-    }
-    return url;
-  } catch (error) {
-    console.error('Invalid URL format:', error);
-    throw new Error('Invalid URL format');
-  }
-};
-
-// Security enhancement: Validate the API key format
-const validateApiKey = (key: string): string => {
-  // Simple validation: JWT format check
-  if (!key || !key.includes('.') || key.split('.').length !== 3) {
-    console.error('Invalid API key format');
-    throw new Error('Invalid API key format');
-  }
-  return key;
-};
-
-// Create the Supabase client with validated parameters
+// Create the Supabase client with proper configuration
 export const supabase = createClient<Database>(
-  validateUrl(SUPABASE_URL), 
-  validateApiKey(SUPABASE_PUBLISHABLE_KEY),
+  SUPABASE_URL, 
+  SUPABASE_PUBLISHABLE_KEY,
   {
     auth: {
+      storage: localStorage,
       persistSession: true,
       autoRefreshToken: true,
     },
@@ -51,38 +24,25 @@ export const supabase = createClient<Database>(
   }
 );
 
-// Console notification about environment setup
-if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_KEY) {
-  console.info(
-    'Using fallback Supabase credentials. For better security, set VITE_SUPABASE_URL and VITE_SUPABASE_KEY environment variables.'
-  );
-}
-
 // Export specific clients for different tables for better organization
 export const visaExperiencesClient = supabase;
 export const testimonialsClient = supabase;
 
-// Add rate limiting protection for API requests
-let requestCount = 0;
-const requestLimit = 100;
-const requestResetTime = 60000; // 1 minute
-
-setInterval(() => {
-  requestCount = 0;
-}, requestResetTime);
-
-// Wrap Supabase methods to add rate limiting and additional security
-export const secureQuery = async <T>(queryFn: () => Promise<T>): Promise<T> => {
-  if (requestCount >= requestLimit) {
-    throw new Error('Rate limit exceeded. Please try again later.');
-  }
-  
-  requestCount++;
-  
+// Secure API call wrapper for edge functions
+export const secureApiCall = async (functionName: string, data?: any) => {
   try {
-    return await queryFn();
+    const { data: result, error } = await supabase.functions.invoke(functionName, {
+      body: data
+    });
+
+    if (error) {
+      console.error(`Error calling ${functionName}:`, error);
+      throw error;
+    }
+
+    return result;
   } catch (error) {
-    console.error('Supabase query error:', error);
+    console.error(`Failed to call ${functionName}:`, error);
     throw error;
   }
 };

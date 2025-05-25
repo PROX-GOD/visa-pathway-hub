@@ -24,9 +24,8 @@ const AdminLoginPage = () => {
     
     try {
       await signIn(email, password);
-      navigate('/admin-dashboard');
     } catch (error) {
-      // Handle sign-in errors (already handled in AdminAuthProvider)
+      // Error handling is done in AdminAuthProvider
     }
   };
 
@@ -40,7 +39,7 @@ const AdminLoginPage = () => {
             </div>
             <h2 className="text-3xl font-bold text-gray-900">Admin Access</h2>
             <p className="mt-2 text-sm text-gray-600">
-              Sign in to access the Spring/Fall USA admin dashboard
+              Sign in with your admin credentials to access the dashboard
             </p>
           </div>
           
@@ -93,11 +92,6 @@ const AdminLoginPage = () => {
               <p className="text-xs text-gray-500">
                 Only authorized Spring/Fall USA administrators can access this area
               </p>
-              <div className="mt-2 p-3 bg-blue-50 rounded-lg">
-                <p className="text-xs text-blue-700 font-medium">Demo Credentials:</p>
-                <p className="text-xs text-blue-600">Email: admin@springfallus.org</p>
-                <p className="text-xs text-blue-600">Password: springfall@2025</p>
-              </div>
             </div>
           </div>
         </div>

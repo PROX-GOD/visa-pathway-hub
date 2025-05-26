@@ -10,52 +10,42 @@ const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 10);
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navItems = [
-    { name: 'About Us', path: '/about' },
+    { name: 'About', path: '/about' },
     { name: 'F-1 Visa Info', path: '/f1-visa-info' },
     { name: 'Interview Prep', path: '/interview-prep' },
     { name: 'Visa Experiences', path: '/visa-experiences' },
     { name: 'Resources', path: '/resources' },
-    { name: 'Contact Us', path: '/contact' },
+    { name: 'Contact', path: '/contact' },
   ];
 
-  // Telegram link handler
   const openTelegramChannel = () => {
     window.open('https://t.me/SpringfallUSA', '_blank', 'noopener,noreferrer');
   };
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-2' : 'bg-transparent py-4'}`}>
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      isScrolled ? 'bg-white border-b border-gray-200' : 'bg-transparent'
+    }`}>
       <div className="container-custom mx-auto">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between py-4">
           <Link to="/" className="flex items-center">
-            <img 
-              src="https://i.imgur.com/9bH2SAJ.png" 
-              alt="Spring/Fall USA Logo - F1 Visa Guide" 
-              className="h-16 mr-2"
-            />
+            <span className="text-2xl font-light text-black">Spring/Fall USA</span>
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
             {navItems.map((item) => (
               <Link 
                 key={item.name} 
                 to={item.path}
-                className="text-gray-700 hover:text-visa-blue font-medium transition-colors"
+                className="text-gray-600 hover:text-black transition-colors font-light"
               >
                 {item.name}
               </Link>
@@ -64,48 +54,47 @@ const Header = () => {
 
           <div className="hidden lg:block">
             <Button 
-              className="bg-visa-blue hover:bg-visa-navy text-white flex items-center"
+              variant="outline"
+              className="border-black text-black hover:bg-black hover:text-white"
               onClick={openTelegramChannel}
             >
-              <Send size={18} className="mr-2" />
+              <Send size={16} className="mr-2" />
               Get Free Guidance
             </Button>
           </div>
 
-          {/* Mobile Navigation Toggle */}
           <button 
-            className="lg:hidden text-visa-blue"
+            className="lg:hidden text-black"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Navigation Menu */}
       {isMenuOpen && (
-        <div className="lg:hidden bg-white shadow-lg absolute top-full left-0 right-0 animate-fade-in">
+        <div className="lg:hidden bg-white border-b border-gray-200">
           <div className="container-custom py-4">
             <nav className="flex flex-col space-y-4">
               {navItems.map((item) => (
                 <Link 
                   key={item.name} 
                   to={item.path}
-                  className="text-gray-700 hover:text-visa-blue font-medium py-2 transition-colors"
+                  className="text-gray-600 hover:text-black transition-colors font-light"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
                 </Link>
               ))}
               <Button 
-                className="bg-visa-blue hover:bg-visa-navy text-white w-full mt-4 flex items-center justify-center"
+                variant="outline"
+                className="border-black text-black hover:bg-black hover:text-white w-full mt-4"
                 onClick={() => {
                   openTelegramChannel();
                   setIsMenuOpen(false);
                 }}
               >
-                <Send size={18} className="mr-2" />
+                <Send size={16} className="mr-2" />
                 Get Free Guidance
               </Button>
             </nav>

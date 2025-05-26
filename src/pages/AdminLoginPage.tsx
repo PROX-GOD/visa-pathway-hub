@@ -3,28 +3,27 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuth } from '@/components/auth/AuthProvider';
+import { useAuth } from '@/components/auth/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Loader2, ArrowRight, Shield } from 'lucide-react';
 
 const AdminLoginPage = () => {
-  const { signIn, isLoading, isAdmin, user } = useAuth();
+  const { signIn, isLoading, isAdmin } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user && isAdmin) {
+    if (isAdmin) {
       navigate('/admin-dashboard');
     }
-  }, [user, isAdmin, navigate]);
+  }, [isAdmin, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     try {
       await signIn(email, password);
-      // Admin check happens in AuthProvider
     } catch (error) {
       // Error handling is done in AuthProvider
     }

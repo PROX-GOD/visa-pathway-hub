@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Loader2, MessageCircle, MapPin, Calendar, User, Check } from 'lucide-react';
+import { ArrowRight, MessageCircle, MapPin, Calendar, User, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { useVisaExperiences } from '@/hooks/useData';
@@ -34,7 +34,6 @@ const Experiences = () => {
       <section className="py-20 bg-gradient-to-br from-white to-blue-50">
         <div className="container mx-auto px-4">
           <div className="flex justify-center items-center py-20">
-            <Loader2 className="animate-spin text-visa-blue mr-3" size={32} />
             <span className="text-gray-600 text-lg">Loading experiences...</span>
           </div>
         </div>
@@ -130,7 +129,6 @@ const Experiences = () => {
             </div>
           </div>
           
-          {/* Navigation Dots */}
           <div className="flex justify-center mt-6 space-x-2">
             {experiences.map((_, index) => (
               <button

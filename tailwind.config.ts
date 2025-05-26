@@ -64,7 +64,12 @@ export default {
 					700: 'hsl(0 0% 20%)',
 					800: 'hsl(0 0% 10%)',
 					900: 'hsl(0 0% 5%)',
-				}
+				},
+				// Visa brand colors
+				'visa-blue': 'hsl(221, 83%, 53%)',
+				'visa-navy': 'hsl(221, 100%, 25%)',
+				'visa-light': 'hsl(221, 100%, 97%)',
+				'visa-gold': 'hsl(45, 100%, 50%)',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

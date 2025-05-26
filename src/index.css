@@ -81,4 +81,12 @@
     opacity: 1;
     transform: translateY(0);
   }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent;
+  }
+
+  .btn-pulse {
+    @apply hover:shadow-lg transform hover:scale-105 transition-all duration-200;
+  }
 }

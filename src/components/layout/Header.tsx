@@ -32,12 +32,12 @@ const Header = () => {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-white border-b border-gray-200' : 'bg-transparent'
+      isScrolled ? 'bg-white border-b border-gray-200 shadow-sm' : 'bg-transparent'
     }`}>
       <div className="container-custom mx-auto">
         <div className="flex items-center justify-between py-4">
           <Link to="/" className="flex items-center">
-            <span className="text-2xl font-light text-black">Spring/Fall USA</span>
+            <span className="text-2xl font-light text-visa-navy">Spring/Fall USA</span>
           </Link>
 
           <nav className="hidden lg:flex items-center space-x-8">
@@ -45,7 +45,7 @@ const Header = () => {
               <Link 
                 key={item.name} 
                 to={item.path}
-                className="text-gray-600 hover:text-black transition-colors font-light"
+                className="text-gray-600 hover:text-visa-blue transition-colors font-light"
               >
                 {item.name}
               </Link>
@@ -55,7 +55,7 @@ const Header = () => {
           <div className="hidden lg:block">
             <Button 
               variant="outline"
-              className="border-black text-black hover:bg-black hover:text-white"
+              className="border-visa-blue text-visa-blue hover:bg-visa-blue hover:text-white"
               onClick={openTelegramChannel}
             >
               <Send size={16} className="mr-2" />
@@ -64,7 +64,7 @@ const Header = () => {
           </div>
 
           <button 
-            className="lg:hidden text-black"
+            className="lg:hidden text-visa-navy"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -80,7 +80,7 @@ const Header = () => {
                 <Link 
                   key={item.name} 
                   to={item.path}
-                  className="text-gray-600 hover:text-black transition-colors font-light"
+                  className="text-gray-600 hover:text-visa-blue transition-colors font-light"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
@@ -88,7 +88,7 @@ const Header = () => {
               ))}
               <Button 
                 variant="outline"
-                className="border-black text-black hover:bg-black hover:text-white w-full mt-4"
+                className="border-visa-blue text-visa-blue hover:bg-visa-blue hover:text-white w-full mt-4"
                 onClick={() => {
                   openTelegramChannel();
                   setIsMenuOpen(false);

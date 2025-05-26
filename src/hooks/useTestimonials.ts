@@ -11,7 +11,7 @@ export const useTestimonials = () => {
   const fetchTestimonials = async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await supabase.functions.invoke('get-testimonials');
+      const { data, error } = await supabase.functions.invoke('secure-get-testimonials');
       
       if (error) throw error;
       

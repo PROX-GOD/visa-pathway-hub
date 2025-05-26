@@ -42,7 +42,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setUser(newSession?.user || null);
 
             if (newSession?.user?.id) {
-              // Defer admin check to prevent deadlocks
               setTimeout(() => {
                 checkAdminStatus(newSession.user.id);
               }, 0);
@@ -65,7 +64,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const checkAdminStatus = async (userId: string) => {
     try {
-      // Use the database function to verify admin status
       const { data: isAdminUser, error } = await supabase.rpc('verify_admin_user', {
         user_uuid: userId
       });
@@ -84,11 +82,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      // Check if this is an admin login
+      const adminEmails = ['preshak@springfallus.org', 'mukesh@springfallus.org', 'bipin@springfallus.org'];
       
-      if (error) throw error;
-      
-      toast.success("Signed in successfully!");
+      if (adminEmails.includes(email)) {
+        // Use secure admin auth edge function
+        const { data, error } = await supabase.functions.invoke('secure-admin-auth', {
+          body: { email, password }
+        });
+        
+        if (error || !data.success) {
+          throw new Error(data?.error || 'Admin authentication failed');
+        }
+        
+        // Set the session manually for admin users
+        const { error: sessionError } = await supabase.auth.setSession({
+          access_token: data.session.access_token,
+          refresh_token: data.session.refresh_token
+        });
+        
+        if (sessionError) {
+          throw sessionError;
+        }
+        
+        setIsAdmin(true);
+        toast.success("Admin signed in successfully!");
+      } else {
+        // Regular user login
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        
+        if (error) throw error;
+        
+        toast.success("Signed in successfully!");
+      }
     } catch (error: any) {
       toast.error(`Error signing in: ${error.message}`);
       throw error;
@@ -120,6 +146,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (error) throw error;
       
+      setIsAdmin(false);
       toast.success("Signed out successfully");
     } catch (error: any) {
       toast.error(`Error signing out: ${error.message}`);
@@ -180,5 +207,4 @@ export const useAuth = () => {
   return context;
 };
 
-// Export supabase client for direct use where needed
 export { supabase };

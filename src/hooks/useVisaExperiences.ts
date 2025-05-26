@@ -11,7 +11,7 @@ export const useVisaExperiences = () => {
   const fetchExperiences = async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await supabase.functions.invoke('get-visa-experiences');
+      const { data, error } = await supabase.functions.invoke('secure-get-experiences');
       
       if (error) throw error;
       

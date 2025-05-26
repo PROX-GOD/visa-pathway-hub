@@ -53,9 +53,9 @@ const ExperienceSection = () => {
   const fetchExperiences = async () => {
     try {
       setIsLoading(true);
-      console.log("Fetching experiences from edge function...");
+      console.log("Fetching experiences from secure edge function...");
       
-      const { data, error } = await supabase.functions.invoke('get-visa-experiences');
+      const { data, error } = await supabase.functions.invoke('secure-get-experiences');
 
       if (error) {
         throw error;

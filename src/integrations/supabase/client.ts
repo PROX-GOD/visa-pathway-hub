@@ -3,10 +3,11 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
+// Use environment variables that are safe for client-side
 const SUPABASE_URL = "https://hhwtdmnekyrxpfvwqlmv.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhod3RkbW5la3lyeHBmdndxbG12Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY2MDIzNjEsImV4cCI6MjA2MjE3ODM2MX0.jmE42fAw-pQNu_FIK6UClL9Am-fJT_-mVpwHvN5V6vY";
 
-// Create the Supabase client with proper configuration
+// Create the Supabase client with minimal permissions
 export const supabase = createClient<Database>(
   SUPABASE_URL, 
   SUPABASE_PUBLISHABLE_KEY,

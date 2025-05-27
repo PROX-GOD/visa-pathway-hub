@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useAuth } from '@/components/auth/AuthProvider';
+import { useAuth, supabase } from '@/components/auth/AuthProvider';
 import { Navigate, Link } from 'react-router-dom';
 import { Loader2, Settings, User, BookOpen, Calendar, Star } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 
 const ProfilePage = () => {

@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft, Calendar, MapPin, BookOpen, ThumbsUp, Loader2, Share } from 'lucide-react';
 import { toast } from 'sonner';
 import { VisaExperience } from '@/types/database';
-import { supabase } from '@/integrations/supabase/client';
+import { visaExperiencesClient } from '@/lib/supabase';
 
 const SingleVisaExperiencePage = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,36 +24,46 @@ const SingleVisaExperiencePage = () => {
   const fetchExperience = async (experienceId: string) => {
     try {
       setIsLoading(true);
-      
-      // Fetch experiences from edge function
-      const { data, error } = await supabase.functions.invoke('get-visa-experiences');
+      const { data, error } = await visaExperiencesClient
+        .from('visa_experiences')
+        .select('*')
+        .eq('id', experienceId)
+        .single();
 
       if (error) {
         throw error;
       }
 
-      const experiences = data.experiences || [];
-      const currentExperience = experiences.find((exp: VisaExperience) => exp.id === experienceId);
-
-      if (!currentExperience) {
-        throw new Error('Experience not found');
-      }
-
-      setExperience(currentExperience);
+      setExperience(data as VisaExperience);
 
       // Fetch related experiences from same consulate
-      const related = experiences
-        .filter((exp: VisaExperience) => 
-          exp.consulate === currentExperience.consulate && exp.id !== experienceId
-        )
-        .slice(0, 3);
-      
-      setRelatedExperiences(related);
+      if (data) {
+        fetchRelatedExperiences(data.consulate, experienceId);
+      }
     } catch (error) {
       console.error('Error fetching experience:', error);
       toast.error('Failed to load experience details');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const fetchRelatedExperiences = async (consulate: string, currentId: string) => {
+    try {
+      const { data, error } = await visaExperiencesClient
+        .from('visa_experiences')
+        .select('*')
+        .eq('consulate', consulate)
+        .neq('id', currentId)
+        .limit(3);
+
+      if (error) {
+        throw error;
+      }
+
+      setRelatedExperiences(data as VisaExperience[]);
+    } catch (error) {
+      console.error('Error fetching related experiences:', error);
     }
   };
 

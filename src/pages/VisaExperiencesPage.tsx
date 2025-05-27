@@ -1,45 +1,102 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { PlusCircle, Filter, Search, MapPin, Calendar, BookOpen, ExternalLink, Loader2 } from 'lucide-react';
-import { useVisaExperiences } from '@/hooks/useVisaExperiences';
+import { PlusCircle, Filter, Search, MapPin, Calendar, BookOpen, ThumbsUp, ArrowRight, Loader2, ExternalLink } from 'lucide-react';
+import { toast } from 'sonner';
+import { VisaExperience } from '@/types/database';
+import { visaExperiencesClient } from '@/lib/supabase';
 
 const VisaExperiencesPage = () => {
-  const { experiences, isLoading } = useVisaExperiences();
+  const [experiences, setExperiences] = useState<VisaExperience[]>([]);
+  const [filteredExperiences, setFilteredExperiences] = useState<VisaExperience[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
 
-  const filteredExperiences = experiences.filter(exp => {
-    const matchesSearch = !searchTerm || 
-      exp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      exp.consulate.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      exp.university.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      exp.major.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesFilter = filter === 'all' || exp.approved === filter;
-    
-    return matchesSearch && matchesFilter;
-  });
+  useEffect(() => {
+    fetchExperiences();
+  }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [searchTerm, filter, experiences]);
+
+  const fetchExperiences = async () => {
+    try {
+      setIsLoading(true);
+      console.log("Fetching all experiences from Supabase...");
+      
+      const { data, error } = await visaExperiencesClient
+        .from('visa_experiences')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        throw error;
+      }
+      
+      console.log("All experiences fetched:", data);
+      // Cast the data to match our VisaExperience type
+      const typedData = data as VisaExperience[];
+      setExperiences(typedData || []);
+    } catch (error) {
+      toast.error('Failed to fetch experiences');
+      console.error('Error fetching experiences:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const applyFilters = () => {
+    let filtered = [...experiences];
+
+    // Apply search term
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (exp) =>
+          exp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          exp.consulate.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          exp.university.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          exp.major.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          exp.experience.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Apply filters
+    if (filter !== 'all') {
+      filtered = filtered.filter((exp) => exp.approved === filter);
+    }
+
+    setFilteredExperiences(filtered);
+  };
 
   const getApprovalStatusColor = (status: string) => {
     switch (status) {
-      case 'yes': return 'text-green-600 bg-green-50';
-      case 'no': return 'text-red-600 bg-red-50';
-      case 'administrative': return 'text-amber-600 bg-amber-50';
-      default: return 'text-gray-600 bg-gray-50';
+      case 'yes':
+        return 'text-green-600 bg-green-50';
+      case 'no':
+        return 'text-red-600 bg-red-50';
+      case 'administrative':
+        return 'text-amber-600 bg-amber-50';
+      default:
+        return 'text-gray-600 bg-gray-50';
     }
   };
 
   const getApprovalStatusLabel = (status: string) => {
     switch (status) {
-      case 'yes': return 'Approved';
-      case 'no': return 'Denied';
-      case 'administrative': return 'Administrative Processing';
-      default: return 'Unknown';
+      case 'yes':
+        return 'Approved';
+      case 'no':
+        return 'Denied';
+      case 'administrative':
+        return 'Administrative Processing';
+      default:
+        return 'Unknown';
     }
   };
 
@@ -60,7 +117,8 @@ const VisaExperiencesPage = () => {
             </h1>
             <p className="text-lg text-gray-700 max-w-3xl">
               Read real F-1 visa interview experiences shared by students who 
-              have successfully navigated the application process.
+              have successfully navigated the application process. Learn from their 
+              journeys and prepare for your own interview.
             </p>
           </div>
         </section>
@@ -170,6 +228,7 @@ const VisaExperiencesPage = () => {
                 <Link to="/visa-experiences/share">
                   <Button className="bg-visa-blue hover:bg-visa-navy text-white">
                     Share Your Experience
+                    <ArrowRight size={16} className="ml-2" />
                   </Button>
                 </Link>
               </div>

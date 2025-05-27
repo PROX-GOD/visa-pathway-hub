@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -8,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
+import { testimonialsClient } from '@/lib/supabase';
 
 const ShareTestimonialPage = () => {
   const navigate = useNavigate();
@@ -32,7 +33,9 @@ const ShareTestimonialPage = () => {
     setIsSubmitting(true);
     
     try {
-      const { data, error } = await supabase
+      console.log("Submitting testimonial with data:", formData);
+      
+      const { data, error } = await testimonialsClient
         .from('testimonials')
         .insert([
           {
@@ -45,10 +48,23 @@ const ShareTestimonialPage = () => {
           }
         ]);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Supabase error:", error);
+        throw error;
+      }
 
       toast.success("Your testimonial has been submitted successfully!");
       
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        university: '',
+        role: '',
+        quote: ''
+      });
+      
+      // Redirect to testimonials page after successful submission
       setTimeout(() => {
         navigate('/testimonials');
       }, 2000);
@@ -76,7 +92,7 @@ const ShareTestimonialPage = () => {
               Share Your <span className="text-visa-blue">Story</span>
             </h1>
             <p className="text-lg text-gray-700 max-w-3xl">
-              Help other students by sharing your experience with Spring/Fall USA.
+              Help other students by sharing your experience with Spring/Fall USA. Your testimonial can inspire and guide others on their journey.
             </p>
           </div>
         </section>

@@ -1,10 +1,11 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/components/auth/AuthContext";
-import HomePage from "./pages/HomePage";
+import { AdminAuthProvider } from "@/components/auth/AdminAuthProvider";
+import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AboutPage from "./pages/AboutPage";
 import F1VisaInfoPage from "./pages/F1VisaInfoPage";
@@ -18,27 +19,24 @@ import BlogPage from "@/pages/BlogPage";
 import BlogPostPage from "@/pages/BlogPostPage";
 import AdminElectionPage from "@/pages/AdminElectionPage";
 import DashboardPage from "@/pages/DashboardPage";
-import LoginPage from "@/pages/LoginPage";
-import RegisterPage from "@/pages/RegisterPage";
 import TestimonialsPage from "@/pages/TestimonialsPage";
 import ShareTestimonialPage from "@/pages/ShareTestimonialPage";
 import NoticePage from "@/pages/NoticePage";
 import AdminLoginPage from "@/pages/AdminLoginPage";
 import AdminDashboardPage from "@/pages/AdminDashboardPage";
-import AdminSetupPage from "@/pages/AdminSetupPage";
 import LogoCompetitionPage from "@/pages/LogoCompetitionPage";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>
+    <AdminAuthProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<Index />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/f1-visa-info" element={<F1VisaInfoPage />} />
             <Route path="/interview-prep" element={<InterviewPrepPage />} />
@@ -49,8 +47,6 @@ const App = () => (
             <Route path="/testimonials/share" element={<ShareTestimonialPage />} />
             <Route path="/resources" element={<ResourcesPage />} />
             <Route path="/contact" element={<ContactPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<BlogPostPage />} />
@@ -59,12 +55,11 @@ const App = () => (
             <Route path="/logo-competition" element={<LogoCompetitionPage />} />
             <Route path="/admin-login" element={<AdminLoginPage />} />
             <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
-            <Route path="/admin-setup" element={<AdminSetupPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
-    </AuthProvider>
+    </AdminAuthProvider>
   </QueryClientProvider>
 );
 

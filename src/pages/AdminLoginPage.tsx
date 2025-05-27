@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuth } from '@/components/auth/AuthContext';
+import { useAdminAuth } from '@/components/auth/AdminAuthProvider';
 import { useNavigate } from 'react-router-dom';
 import { Loader2, ArrowRight, Shield } from 'lucide-react';
 
 const AdminLoginPage = () => {
-  const { signIn, isLoading, isAdmin } = useAuth();
+  const { signIn, isLoading, isAdmin } = useAdminAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -24,8 +24,9 @@ const AdminLoginPage = () => {
     
     try {
       await signIn(email, password);
+      navigate('/admin-dashboard');
     } catch (error) {
-      // Error handling is done in AuthProvider
+      // Handle sign-in errors (already handled in AdminAuthProvider)
     }
   };
 
@@ -39,7 +40,7 @@ const AdminLoginPage = () => {
             </div>
             <h2 className="text-3xl font-bold text-gray-900">Admin Access</h2>
             <p className="mt-2 text-sm text-gray-600">
-              Sign in with your admin credentials
+              Sign in to access the Spring/Fall USA admin dashboard
             </p>
           </div>
           

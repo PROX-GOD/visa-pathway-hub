@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { VisaExperience } from '@/types/database';
-import { supabase } from '@/integrations/supabase/client';
+import { visaExperiencesClient } from '@/lib/supabase';
 
 const ExperienceSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -53,16 +53,22 @@ const ExperienceSection = () => {
   const fetchExperiences = async () => {
     try {
       setIsLoading(true);
-      console.log("Fetching experiences from secure edge function...");
+      console.log("Fetching experiences from Supabase...");
       
-      const { data, error } = await supabase.functions.invoke('secure-get-experiences');
+      const { data, error } = await visaExperiencesClient
+        .from('visa_experiences')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(6);
 
       if (error) {
         throw error;
       }
 
       console.log("Experiences fetched:", data);
-      setExperiences(data.experiences || []);
+      // Cast the data to match our VisaExperience type
+      const typedData = data as VisaExperience[];
+      setExperiences(typedData || []);
     } catch (error) {
       console.error('Error fetching experiences:', error);
       toast.error("Failed to load experiences. Showing fallbacks instead.");

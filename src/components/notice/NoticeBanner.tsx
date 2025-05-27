@@ -2,30 +2,47 @@
 import React, { useState, useEffect } from 'react';
 import { X, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useNotices } from '@/hooks/useData';
+import { supabase } from '@/integrations/supabase/client';
 
 const NoticeBanner = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [notice, setNotice] = useState<any>(null);
-  const { notices } = useNotices();
   
   useEffect(() => {
-    if (notices.length > 0) {
-      const latestNotice = notices[0];
-      setNotice(latestNotice);
+    const fetchActiveNotice = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('notices')
+          .select('*')
+          .eq('is_active', true)
+          .order('created_at', { ascending: false })
+          .limit(1);
 
-      const hasSeenNotice = localStorage.getItem(`notice-seen-${latestNotice.id}`);
-      
-      if (!hasSeenNotice) {
-        const timer = setTimeout(() => {
-          setIsOpen(true);
-          localStorage.setItem(`notice-seen-${latestNotice.id}`, 'true');
-        }, 1500);
+        if (error || !data || data.length === 0) return;
+
+        const latestNotice = data[0];
+        setNotice(latestNotice);
+
+        // Check if the user has already seen this notice (use localStorage with notice ID)
+        const hasSeenNotice = localStorage.getItem(`notice-seen-${latestNotice.id}`);
         
-        return () => clearTimeout(timer);
+        if (!hasSeenNotice) {
+          // Wait a moment before showing the notice
+          const timer = setTimeout(() => {
+            setIsOpen(true);
+            // Mark this notice as seen permanently
+            localStorage.setItem(`notice-seen-${latestNotice.id}`, 'true');
+          }, 1500);
+          
+          return () => clearTimeout(timer);
+        }
+      } catch (error) {
+        console.error('Error fetching notice:', error);
       }
-    }
-  }, [notices]);
+    };
+
+    fetchActiveNotice();
+  }, []);
   
   if (!notice || !isOpen) {
     return null;

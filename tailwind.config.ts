@@ -77,9 +77,9 @@ export default {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			fontFamily: {
-				sans: ['Inter', 'system-ui', 'sans-serif'],
-				serif: ['Crimson Text', 'Georgia', 'serif'],
-				display: ['Crimson Text', 'Georgia', 'serif'],
+				sans: ['Poppins', 'sans-serif'],
+				serif: ['Playfair Display', 'serif'],
+				display: ['Playfair Display', 'serif'],
 			},
 			keyframes: {
 				'accordion-down': {

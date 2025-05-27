@@ -13,7 +13,7 @@ const SEO = {
 const HeroSection = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [count, setCount] = useState(0);
-  const finalCount = 100000;
+  const finalCount = 10000;
   const successRate = 95;
 
   useEffect(() => {
@@ -111,7 +111,7 @@ const HeroSection = () => {
                 <h3 className="font-display text-visa-blue font-bold text-3xl lg:text-4xl">
                   {successRate}%
                 </h3>
-                <p className="text-gray-600 mt-2 font-sans">Students satisfaction percentage</p>
+                <p className="text-gray-600 mt-2 font-sans">Success rate for visa applications</p>
               </div>
             </div>
           </div>
@@ -124,7 +124,7 @@ const HeroSection = () => {
               <p className="text-visa-navy font-bold font-sans">
                 "Spring/Fall USA helped me achieve my dream of studying in the US!"
               </p>
-              <p className="text-sm mt-2 text-visa-navy font-sans">- Kushal, UI/UX Student</p>
+              <p className="text-sm mt-2 text-visa-navy font-sans">- Maria, Computer Science Student</p>
             </div>
             <div className="absolute -z-10 top-1/4 -right-8 w-60 h-60 bg-visa-blue rounded-full opacity-10 blur-3xl"></div>
             <div className="absolute -z-10 bottom-1/4 -left-8 w-48 h-48 bg-visa-orange rounded-full opacity-10 blur-3xl"></div>

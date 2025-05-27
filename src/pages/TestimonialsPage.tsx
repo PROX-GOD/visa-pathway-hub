@@ -1,24 +1,66 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { PlusCircle, Search, School, Quote, Loader2 } from 'lucide-react';
-import { useTestimonials } from '@/hooks/useTestimonials';
+import { PlusCircle, Filter, Search, School, Quote, ThumbsUp, ArrowRight, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
+import { Testimonial } from '@/types/database';
+import { testimonialsClient } from '@/lib/supabase';
 
 const TestimonialsPage = () => {
-  const { testimonials, isLoading } = useTestimonials();
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [filteredTestimonials, setFilteredTestimonials] = useState<Testimonial[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredTestimonials = testimonials.filter(item =>
-    !searchTerm ||
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.university.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.quote.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (item.role && item.role.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  useEffect(() => {
+    fetchTestimonials();
+  }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [searchTerm, testimonials]);
+
+  const fetchTestimonials = async () => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await testimonialsClient
+        .from('testimonials')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        throw error;
+      }
+
+      setTestimonials(data || []);
+      setIsLoading(false);
+    } catch (error) {
+      toast.error('Failed to fetch testimonials');
+      console.error('Error fetching testimonials:', error);
+      setIsLoading(false);
+    }
+  };
+
+  const applyFilters = () => {
+    let filtered = [...testimonials];
+
+    // Apply search term
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (item) =>
+          item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.university.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.quote.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (item.role && item.role.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+    }
+
+    setFilteredTestimonials(filtered);
+  };
 
   const getRandomAvatar = (name: string) => {
     const hash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
@@ -36,7 +78,8 @@ const TestimonialsPage = () => {
               Student <span className="text-visa-blue">Testimonials</span>
             </h1>
             <p className="text-lg text-gray-700 max-w-3xl">
-              Discover what students say about their experience with Spring/Fall USA's resources and community support.
+              Discover what students say about their experience with Spring/Fall USA's resources and community support. 
+              Their stories can provide inspiration and guidance for your own journey.
             </p>
           </div>
         </section>
@@ -44,14 +87,16 @@ const TestimonialsPage = () => {
         <section className="py-16">
           <div className="container-custom mx-auto">
             <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                <Input
-                  placeholder="Search testimonials..."
-                  className="pl-10 w-full md:w-64"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
+              <div className="w-full md:w-auto flex flex-col md:flex-row gap-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                  <Input
+                    placeholder="Search testimonials..."
+                    className="pl-10 w-full md:w-64"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
               </div>
               
               <Link to="/testimonials/share">
@@ -102,14 +147,19 @@ const TestimonialsPage = () => {
               </div>
             ) : (
               <div className="text-center py-16 bg-gray-50 rounded-lg">
-                <Quote size={48} className="mx-auto text-gray-400 mb-4" />
+                <div className="mb-4 text-gray-400">
+                  <Quote size={48} className="mx-auto" />
+                </div>
                 <h3 className="text-xl font-medium text-gray-700 mb-2">No testimonials found</h3>
                 <p className="text-gray-500 mb-6">
-                  {searchTerm ? "Try adjusting your search" : "Be the first to share your story"}
+                  {searchTerm
+                    ? "Try adjusting your search"
+                    : "Be the first to share your story"}
                 </p>
                 <Link to="/testimonials/share">
                   <Button className="bg-visa-blue hover:bg-visa-navy text-white">
                     Share Your Story
+                    <ArrowRight size={16} className="ml-2" />
                   </Button>
                 </Link>
               </div>

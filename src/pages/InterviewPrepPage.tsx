@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -24,7 +25,7 @@ const InterviewPrepPage = () => {
   return (
     <div className={`min-h-screen flex flex-col ${theme === 'dark' ? 'dark bg-gray-900 text-white' : ''}`}>
       <Header />
-
+      
       <main className="flex-grow pt-28">
         <section className={`py-16 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gradient-to-br from-visa-light via-white to-blue-50'}`}>
           <div className="container-custom mx-auto">
@@ -52,7 +53,7 @@ const InterviewPrepPage = () => {
             </div>
           </div>
         </section>
-
+        
         <section className="py-12">
           <div className="container-custom mx-auto">
             <div className="mb-12">
@@ -80,6 +81,7 @@ const InterviewPrepPage = () => {
                     </p>
                   </CardContent>
                 </Card>
+                
                 <Card className={`${theme === 'dark' ? 'bg-gray-800 border-gray-700' : ''}`}>
                   <CardHeader>
                     <div className="bg-blue-100 dark:bg-blue-900/30 w-12 h-12 rounded-full flex items-center justify-center mb-4">
@@ -100,6 +102,7 @@ const InterviewPrepPage = () => {
                     </p>
                   </CardContent>
                 </Card>
+                
                 <Card className={`${theme === 'dark' ? 'bg-gray-800 border-gray-700' : ''}`}>
                   <CardHeader>
                     <div className="bg-amber-100 dark:bg-amber-900/30 w-12 h-12 rounded-full flex items-center justify-center mb-4">
@@ -121,7 +124,7 @@ const InterviewPrepPage = () => {
                 </Card>
               </div>
             </div>
-
+            
             <div className="py-8 border-t border-b mb-12 border-gray-200 dark:border-gray-700">
               <div className="flex flex-col md:flex-row gap-8 items-center">
                 <div className="md:w-1/2">
@@ -162,7 +165,7 @@ const InterviewPrepPage = () => {
                 </div>
               </div>
             </div>
-
+            
             <div id="common-questions" className="mb-12">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
                 <h2 className={`text-2xl font-serif font-bold ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
@@ -205,100 +208,121 @@ const InterviewPrepPage = () => {
                     </CardHeader>
                     <CardContent>
                       <Accordion type="single" collapsible className="w-full">
-                        <AccordionItem value="a1">
-                          <AccordionTrigger>Why did you choose this university?</AccordionTrigger>
-                          <AccordionContent>
-                            I chose this university because of its strong reputation in my field, excellent faculty, and state-of-the-art research facilities. I also like the support for international students and the opportunities for hands-on learning.
+                        <AccordionItem value="q1" className={theme === 'dark' ? 'border-gray-700' : ''}>
+                          <AccordionTrigger className={theme === 'dark' ? 'text-white hover:text-white' : ''}>
+                            Why did you choose this university/college?
+                          </AccordionTrigger>
+                          <AccordionContent className={theme === 'dark' ? 'text-gray-300' : ''}>
+                            <p className="font-medium mb-2">How to Answer:</p>
+                            <p className="mb-2">
+                              Speak specifically about the school's academic strengths in your field, unique programs, 
+                              research opportunities, faculty expertise, and its reputation. If possible, mention specific 
+                              professors whose work aligns with your interests.
+                            </p>
+                            <p className="font-medium mb-2">Sample Answer:</p>
+                            <p className="italic border-l-4 border-visa-blue pl-4">
+                              "I chose Stanford University because of its exceptional computer science program, which is 
+                              consistently ranked among the top programs globally. The university's focus on innovation 
+                              and its proximity to Silicon Valley offer unique opportunities for internships and industry 
+                              connections. I'm particularly interested in working with Professor Smith, whose research in 
+                              artificial intelligence aligns with my academic interests."
+                            </p>
                           </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="a2">
-                          <AccordionTrigger>Why do you want to study in the United States?</AccordionTrigger>
-                          <AccordionContent>
-                            The U.S. offers advanced education, world-class research, and a multicultural environment. Studying here will help me gain skills and experiences that are not available in my home country.
+                        
+                        <AccordionItem value="q2" className={theme === 'dark' ? 'border-gray-700' : ''}>
+                          <AccordionTrigger className={theme === 'dark' ? 'text-white hover:text-white' : ''}>
+                            Why did you choose this major/program?
+                          </AccordionTrigger>
+                          <AccordionContent className={theme === 'dark' ? 'text-gray-300' : ''}>
+                            <p className="font-medium mb-2">How to Answer:</p>
+                            <p className="mb-2">
+                              Explain your passion for the field, how your academic background or work experience has 
+                              prepared you for this program, and how it aligns with your career goals. Make connections 
+                              between your past experiences and future aspirations.
+                            </p>
+                            <p className="font-medium mb-2">Sample Answer:</p>
+                            <p className="italic border-l-4 border-visa-blue pl-4">
+                              "I've chosen to pursue a Master's in Environmental Engineering because I've always been 
+                              passionate about developing sustainable solutions to environmental challenges. During my 
+                              undergraduate studies in Chemical Engineering, I completed research projects on water 
+                              purification systems, which deepened my interest in this field. This program will help me 
+                              develop the specialized skills I need to contribute to environmental conservation efforts 
+                              in my country, which faces significant water scarcity issues."
+                            </p>
                           </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="a3">
-                          <AccordionTrigger>What is your major and why did you choose it?</AccordionTrigger>
-                          <AccordionContent>
-                            My major is Computer Science. I am passionate about technology and problem-solving, and this major will help me contribute to the tech industry back home.
+                        
+                        <AccordionItem value="q3" className={theme === 'dark' ? 'border-gray-700' : ''}>
+                          <AccordionTrigger className={theme === 'dark' ? 'text-white hover:text-white' : ''}>
+                            How does this program relate to your previous studies?
+                          </AccordionTrigger>
+                          <AccordionContent className={theme === 'dark' ? 'text-gray-300' : ''}>
+                            <p className="font-medium mb-2">How to Answer:</p>
+                            <p className="mb-2">
+                              Highlight the logical progression from your previous academic work to this program. 
+                              Identify specific skills, knowledge, or interests from your background that prepare you 
+                              for success in this program.
+                            </p>
+                            <p className="font-medium mb-2">Sample Answer:</p>
+                            <p className="italic border-l-4 border-visa-blue pl-4">
+                              "My undergraduate degree in Economics provided me with a strong foundation in statistical 
+                              analysis, economic theory, and research methodologies. This MBA program will build upon that 
+                              knowledge while adding specialized skills in business management, leadership, and strategic 
+                              planning. My undergraduate research on emerging markets is directly relevant to the international 
+                              business concentration I plan to pursue in my MBA studies."
+                            </p>
                           </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="a4">
-                          <AccordionTrigger>How did you select your courses?</AccordionTrigger>
-                          <AccordionContent>
-                            I reviewed the curriculum and chose courses that align with my academic interests and career goals. I also considered faculty expertise and current industry trends.
+                        
+                        <AccordionItem value="q4" className={theme === 'dark' ? 'border-gray-700' : ''}>
+                          <AccordionTrigger className={theme === 'dark' ? 'text-white hover:text-white' : ''}>
+                            Why do you want to study in the United States rather than in your home country?
+                          </AccordionTrigger>
+                          <AccordionContent className={theme === 'dark' ? 'text-gray-300' : ''}>
+                            <p className="font-medium mb-2">How to Answer:</p>
+                            <p className="mb-2">
+                              Focus on the unique educational opportunities, resources, and expertise available in the U.S. 
+                              that are not available in your home country. Be specific about what you hope to gain from the 
+                              American educational system that will benefit you when you return home.
+                            </p>
+                            <p className="font-medium mb-2">Sample Answer:</p>
+                            <p className="italic border-l-4 border-visa-blue pl-4">
+                              "While there are good universities in my country, the U.S. offers advanced research facilities 
+                              and specialized programs in aerospace engineering that are not available at home. American 
+                              universities are at the forefront of innovation in this field, with opportunities to work on 
+                              cutting-edge projects and access to industry partnerships. The knowledge and experience I gain in 
+                              the U.S. will be valuable when I return home to contribute to our growing aerospace industry."
+                            </p>
                           </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="a5">
-                          <AccordionTrigger>What are your academic qualifications?</AccordionTrigger>
-                          <AccordionContent>
-                            I completed my undergraduate degree in Computer Engineering with distinction, and have relevant experience from internships and projects.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="a6">
-                          <AccordionTrigger>Who is sponsoring your education?</AccordionTrigger>
-                          <AccordionContent>
-                            My parents are sponsoring my education with their savings and income. We have prepared all required financial documents.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="a7">
-                          <AccordionTrigger>Why didn’t you choose a university in your home country?</AccordionTrigger>
-                          <AccordionContent>
-                            While my home country has good universities, I believe the U.S. offers more advanced research opportunities and exposure to global perspectives, which are essential for my goals.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="a8">
-                          <AccordionTrigger>How did you learn about this university?</AccordionTrigger>
-                          <AccordionContent>
-                            I researched universities online, attended virtual education fairs, and sought advice from alumni and professors who recommended this institution.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="a9">
-                          <AccordionTrigger>How does this course relate to your previous studies?</AccordionTrigger>
-                          <AccordionContent>
-                            My undergraduate degree provided a strong foundation. This course builds on that knowledge and will help me specialize in areas like artificial intelligence and data science.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="a10">
-                          <AccordionTrigger>What are your plans if you are not granted a visa?</AccordionTrigger>
-                          <AccordionContent>
-                            If not granted a visa, I will reapply after addressing any concerns the officer may have. I am committed to pursuing this program and will continue working on relevant skills in the meantime.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="a11">
-                          <AccordionTrigger>Do you have any research plans?</AccordionTrigger>
-                          <AccordionContent>
-                            Yes. I plan to join research groups focusing on machine learning and contribute to ongoing projects under the guidance of faculty.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="a12">
-                          <AccordionTrigger>What are your future goals after this program?</AccordionTrigger>
-                          <AccordionContent>
-                            I wish to return to my country and work in a leading tech firm or launch my own startup to help solve local challenges using technology.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="a13">
-                          <AccordionTrigger>Why did you choose this intake/session?</AccordionTrigger>
-                          <AccordionContent>
-                            This intake aligns with my graduation timeline and allows me to start the program as soon as possible, keeping my academic progress continuous.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="a14">
-                          <AccordionTrigger>Can you explain any gaps in your studies?</AccordionTrigger>
-                          <AccordionContent>
-                            I had a short gap to gain work experience and strengthen my profile. I used that time productively to intern and learn practical skills.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="a15">
-                          <AccordionTrigger>Do you plan to work while studying?</AccordionTrigger>
-                          <AccordionContent>
-                            My primary focus is on my studies. If allowed by university policy and my visa, I may take up part-time on-campus work to gain experience.
+                        
+                        <AccordionItem value="q5" className={theme === 'dark' ? 'border-gray-700' : ''}>
+                          <AccordionTrigger className={theme === 'dark' ? 'text-white hover:text-white' : ''}>
+                            What are your English language qualifications?
+                          </AccordionTrigger>
+                          <AccordionContent className={theme === 'dark' ? 'text-gray-300' : ''}>
+                            <p className="font-medium mb-2">How to Answer:</p>
+                            <p className="mb-2">
+                              Clearly state your English language test scores (TOEFL, IELTS, etc.) and any other 
+                              qualifications or experiences that demonstrate your English proficiency. If English is used 
+                              frequently in your academic or professional life, mention this as well.
+                            </p>
+                            <p className="font-medium mb-2">Sample Answer:</p>
+                            <p className="italic border-l-4 border-visa-blue pl-4">
+                              "I scored 105 on the TOEFL iBT, with particularly strong scores in speaking and writing. 
+                              I've also been studying in English-medium schools throughout my high school and undergraduate 
+                              education. Additionally, I worked for two years at an international company where English was 
+                              the primary language of communication, and I've presented research papers in English at several 
+                              academic conferences."
+                            </p>
                           </AccordionContent>
                         </AccordionItem>
                       </Accordion>
                     </CardContent>
                   </Card>
                 </TabsContent>
+                
                 <TabsContent value="financial">
                   <Card className={`${theme === 'dark' ? 'bg-gray-800 border-gray-700' : ''}`}>
                     <CardHeader>
@@ -309,82 +333,53 @@ const InterviewPrepPage = () => {
                     </CardHeader>
                     <CardContent>
                       <Accordion type="single" collapsible className="w-full">
-                        <AccordionItem value="f1">
-                          <AccordionTrigger>How will you finance your education and living expenses?</AccordionTrigger>
-                          <AccordionContent>
-                            My parents are funding my education from their savings and income. We have sufficient funds, as shown in our bank documents.
+                        <AccordionItem value="q1" className={theme === 'dark' ? 'border-gray-700' : ''}>
+                          <AccordionTrigger className={theme === 'dark' ? 'text-white hover:text-white' : ''}>
+                            How will you finance your studies in the United States?
+                          </AccordionTrigger>
+                          <AccordionContent className={theme === 'dark' ? 'text-gray-300' : ''}>
+                            <p className="font-medium mb-2">How to Answer:</p>
+                            <p className="mb-2">
+                              Be specific about your funding sources, whether they include personal or family funds, 
+                              scholarships, loans, or sponsorships. Mention the documents you have brought to prove your 
+                              financial capacity.
+                            </p>
+                            <p className="font-medium mb-2">Sample Answer:</p>
+                            <p className="italic border-l-4 border-visa-blue pl-4">
+                              "My education will be funded through a combination of sources. I've received a 50% tuition 
+                              scholarship from the university, which I've documented here. My parents will cover the remaining 
+                              tuition and living expenses, as shown in these bank statements from our family savings account, 
+                              which has been maintained for over five years. I've also brought a letter from my father's employer 
+                              confirming his annual income and length of employment."
+                            </p>
                           </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="f2">
-                          <AccordionTrigger>Do you have any scholarships?</AccordionTrigger>
-                          <AccordionContent>
-                            Yes, I have received a partial scholarship from the university, which reduces my tuition costs. The remaining expenses will be covered by my family.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="f3">
-                          <AccordionTrigger>What does your sponsor do?</AccordionTrigger>
-                          <AccordionContent>
-                            My father owns a business and my mother is a teacher. Their combined income is sufficient to support my education and living expenses in the U.S.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="f4">
-                          <AccordionTrigger>Can I see your bank statements or financial documents?</AccordionTrigger>
-                          <AccordionContent>
-                            Yes, I have brought all the required financial documents, including recent bank statements, income tax returns, and affidavits of support, to confirm our financial capability.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="f5">
-                          <AccordionTrigger>What will you do if your funds run out?</AccordionTrigger>
-                          <AccordionContent>
-                            We have planned my finances carefully and have emergency savings for unforeseen circumstances. I do not anticipate running out of funds.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="f6">
-                          <AccordionTrigger>Do you plan to work off-campus to support yourself?</AccordionTrigger>
-                          <AccordionContent>
-                            No, my focus is on academics. My family’s support ensures that I do not need to work off-campus, and I will follow all visa regulations.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="f7">
-                          <AccordionTrigger>How much does your program cost annually?</AccordionTrigger>
-                          <AccordionContent>
-                            The total cost is approximately $35,000 per year, including tuition, living expenses, and insurance. We have budgeted accordingly.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="f8">
-                          <AccordionTrigger>Can you provide proof of liquid assets?</AccordionTrigger>
-                          <AccordionContent>
-                            Yes, I have official bank statements showing sufficient liquid assets to cover my tuition and living costs for the entire duration of my program.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="f9">
-                          <AccordionTrigger>What other sources of income do you have?</AccordionTrigger>
-                          <AccordionContent>
-                            Apart from my parents’ primary income, we have rental income and fixed deposits. All sources are documented.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="f10">
-                          <AccordionTrigger>How will you manage currency fluctuations?</AccordionTrigger>
-                          <AccordionContent>
-                            We have planned for currency fluctuations by keeping extra funds in reserve and monitoring rates closely.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="f11">
-                          <AccordionTrigger>Have you taken an education loan?</AccordionTrigger>
-                          <AccordionContent>
-                            I have not taken a loan, as my family can support my education. However, if needed in the future, I am eligible for a student loan.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="f12">
-                          <AccordionTrigger>Can you explain any large deposits in your bank account?</AccordionTrigger>
-                          <AccordionContent>
-                            The large deposits are from the sale of family property and matured fixed deposits. I have all the supporting documents.
+                        
+                        <AccordionItem value="q2" className={theme === 'dark' ? 'border-gray-700' : ''}>
+                          <AccordionTrigger className={theme === 'dark' ? 'text-white hover:text-white' : ''}>
+                            Who is your sponsor and what is their occupation?
+                          </AccordionTrigger>
+                          <AccordionContent className={theme === 'dark' ? 'text-gray-300' : ''}>
+                            <p className="font-medium mb-2">How to Answer:</p>
+                            <p className="mb-2">
+                              Clearly identify your sponsor(s), explain your relationship to them, describe their occupation 
+                              and financial capacity, and mention the documentation you have brought to verify this information.
+                            </p>
+                            <p className="font-medium mb-2">Sample Answer:</p>
+                            <p className="italic border-l-4 border-visa-blue pl-4">
+                              "My father is my primary sponsor. He has been working as a senior civil engineer at [Company Name] 
+                              for the past 15 years. His annual income is approximately [amount], as verified by these employment 
+                              letters and tax documents. My mother, who works as a hospital administrator, will also contribute to 
+                              my educational expenses. Together, they have sufficient savings and income to support my studies, as 
+                              shown in these bank statements and financial documents."
+                            </p>
                           </AccordionContent>
                         </AccordionItem>
                       </Accordion>
                     </CardContent>
                   </Card>
                 </TabsContent>
+                
                 <TabsContent value="ties">
                   <Card className={`${theme === 'dark' ? 'bg-gray-800 border-gray-700' : ''}`}>
                     <CardHeader>
@@ -396,65 +391,12 @@ const InterviewPrepPage = () => {
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <Accordion type="single" collapsible className="w-full">
-                        <AccordionItem value="t1">
-                          <AccordionTrigger>Do you plan to return to your home country after your studies?</AccordionTrigger>
-                          <AccordionContent>
-                            Yes, I have strong family, social, and professional ties in my home country. My goal is to contribute to my country’s development after graduation.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="t2">
-                          <AccordionTrigger>What are your plans after graduation?</AccordionTrigger>
-                          <AccordionContent>
-                            My plan is to return and work in a leading company or start my own business in my home country, using the knowledge gained during my studies.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="t3">
-                          <AccordionTrigger>Do you have any family members in the United States?</AccordionTrigger>
-                          <AccordionContent>
-                            No, my immediate family is based in my home country. I am strongly connected to them, which motivates me to return.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="t4">
-                          <AccordionTrigger>What motivates you to return home?</AccordionTrigger>
-                          <AccordionContent>
-                            My family, community, and career goals are all based in my home country. I want to make a positive impact where I grew up.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="t5">
-                          <AccordionTrigger>Do you own property or have investments in your home country?</AccordionTrigger>
-                          <AccordionContent>
-                            Yes, my family owns property and I am a co-owner, which is a significant reason for me to return.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="t6">
-                          <AccordionTrigger>Do you have a job offer after graduation?</AccordionTrigger>
-                          <AccordionContent>
-                            I have discussed potential opportunities with companies in my home country and have a conditional offer pending completion of my degree.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="t7">
-                          <AccordionTrigger>How will your family support your decision to return?</AccordionTrigger>
-                          <AccordionContent>
-                            My family is supportive of my educational goals and expects me to return and contribute to our family and community.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="t8">
-                          <AccordionTrigger>Are you involved in any community activities?</AccordionTrigger>
-                          <AccordionContent>
-                            Yes, I am active in local volunteer work and youth groups, which I plan to continue after my studies.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="t9">
-                          <AccordionTrigger>What is your long-term plan in your home country?</AccordionTrigger>
-                          <AccordionContent>
-                            I aim to start a business or take on a leadership role in a tech company, helping to advance technology in my region.
-                          </AccordionContent>
-                        </AccordionItem>
-                      </Accordion>
+                      {/* Accordion content similar to other tabs */}
+                      <p className="text-center py-4">Content coming soon...</p>
                     </CardContent>
                   </Card>
                 </TabsContent>
+                
                 <TabsContent value="post">
                   <Card className={`${theme === 'dark' ? 'bg-gray-800 border-gray-700' : ''}`}>
                     <CardHeader>
@@ -464,56 +406,141 @@ const InterviewPrepPage = () => {
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <Accordion type="single" collapsible className="w-full">
-                        <AccordionItem value="p1">
-                          <AccordionTrigger>What are your career plans after graduation?</AccordionTrigger>
-                          <AccordionContent>
-                            After graduation, I plan to return to my home country and work in a top technology firm or launch my own startup.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="p2">
-                          <AccordionTrigger>Will you stay in the U.S. after finishing your studies?</AccordionTrigger>
-                          <AccordionContent>
-                            No, my intention is to return home. My family, property, and career prospects are all in my home country.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="p3">
-                          <AccordionTrigger>How will your U.S. education help you in your future career?</AccordionTrigger>
-                          <AccordionContent>
-                            My U.S. education will provide advanced skills, international exposure, and help me stand out in the job market back home.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="p4">
-                          <AccordionTrigger>What if you get a job offer in the U.S.?</AccordionTrigger>
-                          <AccordionContent>
-                            My primary goal is to return home and apply my education there. My commitment is to my home country’s growth.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="p5">
-                          <AccordionTrigger>Are you aware of the OPT/CPT rules?</AccordionTrigger>
-                          <AccordionContent>
-                            Yes, I am aware. While I may consider practical training for experience, my ultimate plan is to return home afterward.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="p6">
-                          <AccordionTrigger>How will you stay connected to your home country during your studies?</AccordionTrigger>
-                          <AccordionContent>
-                            I will stay in touch with my family and community regularly, and plan to visit during academic breaks.
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="p7">
-                          <AccordionTrigger>Do you have any entrepreneurial plans?</AccordionTrigger>
-                          <AccordionContent>
-                            Yes, I hope to start a tech consulting firm to help local businesses modernize after I return.
-                          </AccordionContent>
-                        </AccordionItem>
-                      </Accordion>
+                      {/* Accordion content similar to other tabs */}
+                      <p className="text-center py-4">Content coming soon...</p>
                     </CardContent>
                   </Card>
                 </TabsContent>
               </Tabs>
             </div>
-
+            
+            <div id="mock-interview" className="mb-12">
+              <h2 className={`text-2xl font-serif font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
+                Practice with Mock Interviews
+              </h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card className={`${theme === 'dark' ? 'bg-gray-800 border-gray-700' : ''}`}>
+                  <CardHeader>
+                    <div className="bg-blue-100 dark:bg-blue-900/30 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                      <Video size={24} className="text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <CardTitle className={`${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
+                      Virtual Mock Interview
+                    </CardTitle>
+                    <CardDescription className={theme === 'dark' ? 'text-gray-400' : ''}>
+                      Practice with AI-powered interviewer
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className={theme === 'dark' ? 'text-gray-300' : ''}>
+                      Experience a simulated visa interview with our AI interviewer. Get real-time 
+                      feedback on your answers and body language.
+                    </p>
+                    <ul className="space-y-2">
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-green-500" />
+                        <span className={theme === 'dark' ? 'text-gray-300' : ''}>Realistic interview scenarios</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-green-500" />
+                        <span className={theme === 'dark' ? 'text-gray-300' : ''}>Personalized feedback</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-green-500" />
+                        <span className={theme === 'dark' ? 'text-gray-300' : ''}>Practice as many times as you want</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                  <CardFooter>
+                    <Button className="w-full bg-visa-blue hover:bg-visa-navy text-white dark:bg-blue-700 dark:hover:bg-blue-800">
+                      Start Virtual Interview
+                    </Button>
+                  </CardFooter>
+                </Card>
+                
+                <Card className={`${theme === 'dark' ? 'bg-gray-800 border-gray-700' : ''}`}>
+                  <CardHeader>
+                    <div className="bg-purple-100 dark:bg-purple-900/30 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                      <MessageCircle size={24} className="text-purple-600 dark:text-purple-400" />
+                    </div>
+                    <CardTitle className={`${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
+                      Peer Interview Exchange
+                    </CardTitle>
+                    <CardDescription className={theme === 'dark' ? 'text-gray-400' : ''}>
+                      Practice with other students
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className={theme === 'dark' ? 'text-gray-300' : ''}>
+                      Connect with other visa applicants to conduct mock interviews with each other. 
+                      Give and receive feedback to improve your performance.
+                    </p>
+                    <ul className="space-y-2">
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-green-500" />
+                        <span className={theme === 'dark' ? 'text-gray-300' : ''}>Match with peers by program/country</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-green-500" />
+                        <span className={theme === 'dark' ? 'text-gray-300' : ''}>Learn from others' experiences</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-green-500" />
+                        <span className={theme === 'dark' ? 'text-gray-300' : ''}>Build your network</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                  <CardFooter>
+                    <Link to="/register" className="w-full">
+                      <Button className="w-full" variant="outline">
+                        Join Peer Network
+                      </Button>
+                    </Link>
+                  </CardFooter>
+                </Card>
+                
+                <Card className={`${theme === 'dark' ? 'bg-gray-800 border-gray-700' : ''}`}>
+                  <CardHeader>
+                    <div className="bg-amber-100 dark:bg-amber-900/30 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                      <Book size={24} className="text-amber-600 dark:text-amber-400" />
+                    </div>
+                    <CardTitle className={`${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
+                      Expert Coaching Session
+                    </CardTitle>
+                    <CardDescription className={theme === 'dark' ? 'text-gray-400' : ''}>
+                      One-on-one with visa experts
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className={theme === 'dark' ? 'text-gray-300' : ''}>
+                      Book a personalized coaching session with former visa officers or experienced 
+                      visa consultants for tailored preparation and advice.
+                    </p>
+                    <ul className="space-y-2">
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-green-500" />
+                        <span className={theme === 'dark' ? 'text-gray-300' : ''}>Insider tips from experts</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-green-500" />
+                        <span className={theme === 'dark' ? 'text-gray-300' : ''}>Document review service</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-green-500" />
+                        <span className={theme === 'dark' ? 'text-gray-300' : ''}>Personalized strategy session</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                  <CardFooter>
+                    <Button className="w-full" variant="secondary">
+                      Book Coach Session
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </div>
+            </div>
+            
             <div className={`p-6 rounded-xl ${theme === 'dark' ? 'bg-blue-900/20 border border-blue-800/50' : 'bg-blue-50 border border-blue-100'}`}>
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>

@@ -11,25 +11,28 @@ export type Database = {
     Tables: {
       admin_users: {
         Row: {
-          created_at: string | null
+          created_at: string
+          email: string
           id: string
+          name: string
           role: string
-          updated_at: string | null
-          user_id: string
+          updated_at: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
+          email: string
           id?: string
+          name: string
           role?: string
-          updated_at?: string | null
-          user_id: string
+          updated_at?: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
+          email?: string
           id?: string
+          name?: string
           role?: string
-          updated_at?: string | null
-          user_id?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -67,7 +70,15 @@ export type Database = {
           title?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "notices_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       testimonials: {
         Row: {
@@ -106,7 +117,15 @@ export type Database = {
           role?: string | null
           university?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "testimonials_deleted_by_fkey"
+            columns: ["deleted_by"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       visa_experiences: {
         Row: {
@@ -151,25 +170,22 @@ export type Database = {
           name?: string
           university?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "visa_experiences_deleted_by_fkey"
+            columns: ["deleted_by"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      create_admin_user: {
-        Args: { email: string; user_uuid: string }
-        Returns: undefined
-      }
-      is_admin: {
-        Args: { user_uuid?: string }
-        Returns: boolean
-      }
-      verify_admin_user: {
-        Args: { user_uuid: string }
-        Returns: boolean
-      }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never

@@ -99,7 +99,8 @@ const ShareExperiencePage = () => {
               Share Your Visa <span className="text-visa-blue">Experience</span>
             </h1>
             <p className="text-lg text-gray-700 max-w-3xl">
-              Help other students by sharing your F-1 visa interview experience.
+              Help other students by sharing your F-1 visa interview experience. Your story can provide
+              valuable insights and guidance to future applicants.
             </p>
           </div>
         </section>

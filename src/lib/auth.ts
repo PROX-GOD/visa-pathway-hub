@@ -1,16 +1,14 @@
 
-import bcrypt from 'bcryptjs';
-
-const ADMIN_EMAIL = 'preshak@springfallus.org';
-const ADMIN_PASSWORD_HASH = '$2a$10$rQ8K8gGzX9YvQzX9YeOzX9YvQzX9YvQzX9YvQzX9YvQzX9YvQzX9Ye';
+import * as bcrypt from 'bcryptjs';
+import { ENV_CONFIG } from './env';
 
 export const validateAdminCredentials = async (email: string, password: string): Promise<boolean> => {
-  if (email !== ADMIN_EMAIL) {
+  if (email !== ENV_CONFIG.ADMIN_EMAIL) {
     return false;
   }
   
   try {
-    return await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
+    return await bcrypt.compare(password, ENV_CONFIG.ADMIN_PASSWORD_HASH);
   } catch (error) {
     console.error('Error validating credentials:', error);
     return false;

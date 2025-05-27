@@ -49,48 +49,62 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const initialize = async () => {
       setIsLoading(true);
 
-      // Get session
-      const { data: { session: currentSession } } = await supabase.auth.getSession();
-      setSession(currentSession);
-      setUser(currentSession ? mapUser(currentSession.user) : null);
+      try {
+        // Get current session
+        const { data: { session: currentSession } } = await supabase.auth.getSession();
+        setSession(currentSession);
+        setUser(currentSession ? mapUser(currentSession.user) : null);
 
-      // Check if user is admin by looking up in admin_users table
-      if (currentSession?.user?.email) {
-        const { data } = await supabase
-          .from('admin_users')
-          .select('role')
-          .eq('email', currentSession.user.email)
-          .single();
-        
-        setIsAdmin(!!data);
-      }
-
-      // Set up auth state change listener
-      const { data: { subscription } } = supabase.auth.onAuthStateChange(
-        async (_event, newSession) => {
-          setSession(newSession);
-          setUser(newSession ? mapUser(newSession.user) : null);
-
-          // Check if new user is admin
-          if (newSession?.user?.email) {
+        // Check if user is admin by looking up in admin_users table
+        if (currentSession?.user?.email) {
+          try {
             const { data } = await supabase
               .from('admin_users')
               .select('role')
-              .eq('email', newSession.user.email)
+              .eq('user_id', currentSession.user.id)
               .single();
             
             setIsAdmin(!!data);
-          } else {
+          } catch (error) {
+            // If error (like user not found in admin_users), just set isAdmin to false
             setIsAdmin(false);
           }
         }
-      );
 
-      setIsLoading(false);
+        // Set up auth state change listener
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(
+          async (event, newSession) => {
+            setSession(newSession);
+            setUser(newSession ? mapUser(newSession.user) : null);
 
-      return () => {
-        subscription.unsubscribe();
-      };
+            // Check if new user is admin
+            if (newSession?.user?.id) {
+              try {
+                const { data } = await supabase
+                  .from('admin_users')
+                  .select('role')
+                  .eq('user_id', newSession.user.id)
+                  .single();
+                
+                setIsAdmin(!!data);
+              } catch (error) {
+                setIsAdmin(false);
+              }
+            } else {
+              setIsAdmin(false);
+            }
+          }
+        );
+
+        setIsLoading(false);
+
+        return () => {
+          subscription.unsubscribe();
+        };
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+        setIsLoading(false);
+      }
     };
 
     initialize();

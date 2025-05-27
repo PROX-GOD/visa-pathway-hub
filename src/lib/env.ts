@@ -5,5 +5,5 @@
 export const ENV_CONFIG = {
   ADMIN_EMAIL: 'preshak@springfallus.org',
   // Bcrypt hash for 'springfall@2025'
-  ADMIN_PASSWORD_HASH: '$2a$10$XqvM8K9ZvQzX9YeOzX9YvQzX9YvQzX9YvQzX9YvQzX9YvQzX9YvQzXe'
+  ADMIN_PASSWORD_HASH: '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'
 };

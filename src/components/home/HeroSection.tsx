@@ -1,7 +1,7 @@
-
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowDown, ArrowRight } from 'lucide-react';
+import styles from './HeroSection.module.css';
 
 // SEO metadata for the home page
 const SEO = {
@@ -100,18 +100,29 @@ const HeroSection = () => {
               </Button>
             </div>
             
-            <div className="mt-12 grid grid-cols-2 gap-6">
-              <div className="bg-white rounded-lg p-6 shadow-lg border border-gray-100 transform transition-transform hover:-translate-y-1">
-                <h3 className="font-display text-visa-blue font-bold text-3xl lg:text-4xl">
-                  {count.toLocaleString()}+
-                </h3>
-                <p className="text-gray-600 mt-2 font-sans">Students helped with their F-1 visas</p>
+            <div className="mt-12 grid grid-cols-2 gap-16">
+              <div className="relative group">
+                <div className="absolute inset-0 bg-blue-50 rounded-2xl transform transition-all duration-500 group-hover:scale-105"></div>
+                <div className="relative p-4">
+                  <div className="flex items-baseline space-x-1">
+                    <span className={`font-sans text-6xl font-extrabold text-blue-600 ${styles['animate-slide-up']}`}>100K</span>
+                    <span className={`font-sans text-3xl font-bold text-blue-600 ${styles['animate-slide-up']}`}>+</span>
+                  </div>
+                  <p className={`mt-2 text-gray-600 text-lg font-medium ${styles['animate-fade-in']}`}>Students helped with their F-1 visas</p>
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-blue-600 transform origin-left transition-all duration-500 scale-x-0 group-hover:scale-x-100"></div>
+                </div>
               </div>
-              <div className="bg-white rounded-lg p-6 shadow-lg border border-gray-100 transform transition-transform hover:-translate-y-1">
-                <h3 className="font-display text-visa-blue font-bold text-3xl lg:text-4xl">
-                  {successRate}%
-                </h3>
-                <p className="text-gray-600 mt-2 font-sans">Success rate for visa applications</p>
+
+              <div className="relative group">
+                <div className="absolute inset-0 bg-emerald-50 rounded-2xl transform transition-all duration-500 group-hover:scale-105"></div>
+                <div className="relative p-4">
+                  <div className="flex items-baseline space-x-1">
+                    <span className={`font-sans text-6xl font-extrabold text-emerald-600 ${styles['animate-slide-up']}`}>95</span>
+                    <span className={`font-sans text-4xl font-bold text-emerald-600 ml-1 ${styles['animate-slide-up']}`}>%</span>
+                  </div>
+                  <p className={`mt-2 text-gray-600 text-lg font-medium ${styles['animate-fade-in']}`}>Satisfied and happy students</p>
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-emerald-600 transform origin-left transition-all duration-500 scale-x-0 group-hover:scale-x-100"></div>
+                </div>
               </div>
             </div>
           </div>

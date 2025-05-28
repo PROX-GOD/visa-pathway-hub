@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -8,7 +7,7 @@ import { Card } from '@/components/ui/card';
 import { User, Award, MessageCircle, Globe, School, CheckCircle, Heart, Lightbulb, Smile } from 'lucide-react';
 import mukeshImg from '../assets/images/mukesh.png';
 import bipinImg from '../assets/images/original_heluu.png';
-import nkImg from '../assets/images/admins/nk.png';
+import manojImg from '../assets/images/manoj.jpg';
 
 const AboutPage = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
@@ -165,57 +164,57 @@ const AboutPage = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-  <div className="text-center">
-    <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4">
-      <img 
-        src={mukeshImg} 
-        alt="Mukesh Pokhrel" 
-        className="w-full h-full object-cover"
-      />
-    </div>
-    <h3 className={`text-xl font-medium ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
-      Mukesh Pokhrel
-    </h3>
-    <p className="text-visa-blue dark:text-blue-400">Founder & CEO</p>
-    <p className={`mt-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-      Founder of SpringFal USA
-    </p>
-  </div>
-  
-  <div className="text-center">
-    <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4">
-      <img 
-        src={bipinImg} 
-        alt="Bipin Pandey" 
-        className="w-full h-full object-cover"
-      />
-    </div>
-    <h3 className={`text-xl font-medium ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
-      Bipin
-    </h3>
-    <p className="text-visa-blue dark:text-blue-400">Co-Founder & F1 visa expert</p>
-    <p className={`mt-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-      Founder and Admin
-    </p>
-  </div>
-  
-  <div className="text-center">
-    <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4">
-      <img 
-        src={nkImg} 
-        alt="N K" 
-        className="w-full h-full object-cover"
-      />
-    </div>
-    <h3 className={`text-xl font-medium ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
-      N K
-    </h3>
-    <p className="text-visa-blue dark:text-blue-400">Host</p>
-    <p className={`mt-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-      Admin and Advisor
-    </p>
-  </div>
-</div>
+              <div className="text-center">
+                <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4">
+                  <img 
+                    src={mukeshImg} 
+                    alt="Mukesh Pokhrel" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <h3 className={`text-xl font-medium ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
+                  Mukesh Pokhrel
+                </h3>
+                <p className="text-visa-blue dark:text-blue-400">Founder & CEO</p>
+                <p className={`mt-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                  Founder of SpringFall USA
+                </p>
+              </div>
+              
+              <div className="text-center">
+                <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4">
+                  <img 
+                    src={bipinImg} 
+                    alt="Bipin Pandey" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <h3 className={`text-xl font-medium ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
+                  Bipin
+                </h3>
+                <p className="text-visa-blue dark:text-blue-400">Co-Founder & F1 visa expert</p>
+                <p className={`mt-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                  Founder and Admin
+                </p>
+              </div>
+
+              <div className="text-center">
+                <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4">
+                  <img 
+                    src={manojImg} 
+                    alt="Manoj Dhakal" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <h3 className={`text-xl font-medium ${theme === 'dark' ? 'text-white' : 'text-visa-navy'}`}>
+                  Manoj Dhakal
+                </h3>
+                <p className="text-visa-blue dark:text-blue-400">Head Administrator</p>
+                <p className={`mt-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                  F1 Visa Expert & Community Manager
+                </p>
+              </div>
+            </div>
             
             <div className="mt-12 text-center">
               <Link to="/contact">

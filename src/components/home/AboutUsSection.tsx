@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -210,73 +209,77 @@ const AboutUsSection = () => {
         </div>
         
         {/* Stats counter section */}
-        <div className={`mt-20 transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 transform transition-all hover:shadow-lg hover:-translate-y-1">
-              <div className="flex items-center mb-4">
-                <div className="bg-blue-100 p-3 rounded-full text-visa-blue">
-                  <Users size={28} />
+        <div className={`mt-20 transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform translate-y-10'}`}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Students Helped */}
+            <div className="relative overflow-hidden bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-xl border border-blue-100/50 p-8 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform duration-500"></div>
+              <div className="relative">
+                <div className="flex items-center mb-6">
+                  <div className="bg-blue-600/10 p-3 rounded-xl">
+                    <Users className="w-8 h-8 text-blue-600" />
+                  </div>
                 </div>
-                <div className="ml-4">
-                  <h4 className="font-display text-visa-blue font-bold text-3xl">
-                    {countStats.students.toLocaleString()}+
-                  </h4>
-                  <p className="text-gray-600">Students Helped</p>
-                </div>
-              </div>
-              <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
-                <div className="bg-visa-blue h-full rounded-full" style={{ width: '100%' }}></div>
-              </div>
-            </div>
-            
-            <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 transform transition-all hover:shadow-lg hover:-translate-y-1">
-              <div className="flex items-center mb-4">
-                <div className="bg-blue-100 p-3 rounded-full text-visa-blue">
-                  <Globe size={28} />
-                </div>
-                <div className="ml-4">
-                  <h4 className="font-display text-visa-blue font-bold text-3xl">
-                    {countStats.countries}+
-                  </h4>
-                  <p className="text-gray-600">Countries Represented</p>
-                </div>
-              </div>
-              <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
-                <div className="bg-visa-blue h-full rounded-full" style={{ width: '100%' }}></div>
+                <h4 className="font-display text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent tracking-tight">
+                  {countStats.students.toLocaleString()}
+                  <span className="text-3xl">+</span>
+                </h4>
+                <p className="text-gray-600 mt-2 text-lg font-medium">Students Helped</p>
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-blue-400 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
               </div>
             </div>
-            
-            <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 transform transition-all hover:shadow-lg hover:-translate-y-1">
-              <div className="flex items-center mb-4">
-                <div className="bg-blue-100 p-3 rounded-full text-visa-blue">
-                  <Award size={28} />
+
+            {/* Countries Represented */}
+            <div className="relative overflow-hidden bg-gradient-to-br from-white to-indigo-50 rounded-2xl shadow-xl border border-indigo-100/50 p-8 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-600/5 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform duration-500"></div>
+              <div className="relative">
+                <div className="flex items-center mb-6">
+                  <div className="bg-indigo-600/10 p-3 rounded-xl">
+                    <Globe className="w-8 h-8 text-indigo-600" />
+                  </div>
                 </div>
-                <div className="ml-4">
-                  <h4 className="font-display text-visa-blue font-bold text-3xl">
-                    {countStats.experiences.toLocaleString()}+
-                  </h4>
-                  <p className="text-gray-600">Visa Experiences Shared</p>
-                </div>
-              </div>
-              <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
-                <div className="bg-visa-blue h-full rounded-full" style={{ width: '100%' }}></div>
+                <h4 className="font-display text-4xl font-bold bg-gradient-to-r from-indigo-600 to-indigo-800 bg-clip-text text-transparent tracking-tight">
+                  {countStats.countries}
+                  <span className="text-3xl">+</span>
+                </h4>
+                <p className="text-gray-600 mt-2 text-lg font-medium">Countries Represented</p>
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-600 to-indigo-400 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
               </div>
             </div>
-            
-            <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 transform transition-all hover:shadow-lg hover:-translate-y-1">
-              <div className="flex items-center mb-4">
-                <div className="bg-blue-100 p-3 rounded-full text-visa-blue">
-                  <School size={28} />
+
+            {/* Visa Experiences */}
+            <div className="relative overflow-hidden bg-gradient-to-br from-white to-purple-50 rounded-2xl shadow-xl border border-purple-100/50 p-8 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-purple-600/5 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform duration-500"></div>
+              <div className="relative">
+                <div className="flex items-center mb-6">
+                  <div className="bg-purple-600/10 p-3 rounded-xl">
+                    <Award className="w-8 h-8 text-purple-600" />
+                  </div>
                 </div>
-                <div className="ml-4">
-                  <h4 className="font-display text-visa-blue font-bold text-3xl">
-                    {countStats.universities}+
-                  </h4>
-                  <p className="text-gray-600">Universities</p>
-                </div>
+                <h4 className="font-display text-4xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent tracking-tight">
+                  {countStats.experiences.toLocaleString()}
+                  <span className="text-3xl">+</span>
+                </h4>
+                <p className="text-gray-600 mt-2 text-lg font-medium">Visa Experiences Shared</p>
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-purple-600 to-purple-400 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
               </div>
-              <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
-                <div className="bg-visa-blue h-full rounded-full" style={{ width: '100%' }}></div>
+            </div>
+
+            {/* Universities */}
+            <div className="relative overflow-hidden bg-gradient-to-br from-white to-cyan-50 rounded-2xl shadow-xl border border-cyan-100/50 p-8 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-600/5 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform duration-500"></div>
+              <div className="relative">
+                <div className="flex items-center mb-6">
+                  <div className="bg-cyan-600/10 p-3 rounded-xl">
+                    <School className="w-8 h-8 text-cyan-600" />
+                  </div>
+                </div>
+                <h4 className="font-display text-4xl font-bold bg-gradient-to-r from-cyan-600 to-cyan-800 bg-clip-text text-transparent tracking-tight">
+                  {countStats.universities}
+                  <span className="text-3xl">+</span>
+                </h4>
+                <p className="text-gray-600 mt-2 text-lg font-medium">Universities</p>
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-600 to-cyan-400 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
               </div>
             </div>
           </div>

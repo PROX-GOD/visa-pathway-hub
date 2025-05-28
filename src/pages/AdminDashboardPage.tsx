@@ -1,372 +1,475 @@
-
 import React, { useState, useEffect } from 'react';
-import { useAdminAuth } from '@/components/auth/AdminAuthProvider';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { 
-  LogOut, 
-  Users, 
-  MessageSquare, 
-  Bell, 
-  Trash2, 
-  Plus,
-  Shield,
-  BarChart3
-} from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/components/ui/use-toast';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { AlertTriangle, Trash2, Bell, MessageSquare, Star, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { format } from 'date-fns';
 
-const AdminDashboardPage = () => {
-  const { adminUser, isAdmin, isLoading, signOut } = useAdminAuth();
+interface Experience {
+  id: string;
+  name: string;
+  university: string;
+  experience: string;
+  created_at: string;
+}
+
+interface Testimonial {
+  id: string;
+  name: string;
+  content: string;
+  created_at: string;
+  quote?: string;
+  email: string | null;
+  photo_url: string | null;
+  role: string | null;
+}
+
+interface Notice {
+  title: string;
+  content: string;
+  image_url?: string;
+  is_emergency: boolean;
+  is_active: boolean;
+}
+
+export default function AdminDashboardPage(): JSX.Element {
   const navigate = useNavigate();
-  const [stats, setStats] = useState({
-    totalExperiences: 0,
-    totalTestimonials: 0,
-    activeNotices: 0
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [notice, setNotice] = useState<Notice>({
+    title: '',
+    content: '',
+    is_emergency: false,
+    is_active: true,
   });
-  const [experiences, setExperiences] = useState([]);
-  const [testimonials, setTestimonials] = useState([]);
-  const [notices, setNotices] = useState([]);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [deleteConfirmation, setDeleteConfirmation] = useState<{ type: string; id: string } | null>(null);
 
+  // Check admin authentication
   useEffect(() => {
-    if (!isLoading && !isAdmin) {
+    const isAuthenticated = sessionStorage.getItem('isAdminAuthenticated');
+    if (!isAuthenticated) {
       navigate('/admin-login');
     }
-  }, [isAdmin, isLoading, navigate]);
+  }, [navigate]);
 
+  // Fetch data
   useEffect(() => {
-    if (isAdmin) {
-      fetchDashboardData();
-    }
-  }, [isAdmin]);
+    fetchExperiences();
+    fetchTestimonials();
+  }, []);
 
-  const fetchDashboardData = async () => {
+  const fetchExperiences = async () => {
     try {
-      // Fetch experiences
-      const { data: expData, error: expError } = await supabase
+      const { data, error } = await supabase
         .from('visa_experiences')
         .select('*')
-        .is('deleted_at', null)
         .order('created_at', { ascending: false });
 
-      if (!expError) {
-        setExperiences(expData || []);
-        setStats(prev => ({ ...prev, totalExperiences: expData?.length || 0 }));
-      }
+      if (error) throw error;
+      setExperiences(data || []);
+    } catch (error) {
+      console.error('Error fetching experiences:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch visa experiences",
+        variant: "destructive",
+      });
+    }
+  };
 
-      // Fetch testimonials
-      const { data: testData, error: testError } = await supabase
+  const fetchTestimonials = async () => {
+    try {
+      const { data, error } = await supabase
         .from('testimonials')
         .select('*')
-        .is('deleted_at', null)
         .order('created_at', { ascending: false });
 
-      if (!testError) {
-        setTestimonials(testData || []);
-        setStats(prev => ({ ...prev, totalTestimonials: testData?.length || 0 }));
-      }
-
-      // Fetch notices
-      const { data: noticeData, error: noticeError } = await supabase
-        .from('notices')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (!noticeError) {
-        setNotices(noticeData || []);
-        setStats(prev => ({ ...prev, activeNotices: noticeData?.filter(n => n.is_active)?.length || 0 }));
-      }
+      if (error) throw error;
+      
+      // Map the data to match the Testimonial interface
+      const mappedTestimonials: Testimonial[] = (data || []).map(item => ({
+        id: item.id,
+        name: item.name,
+        content: item.quote || '', // Use quote field as content
+        created_at: item.created_at,
+        quote: item.quote,
+        email: item.email,
+        photo_url: item.photo_url,
+        role: item.role
+      }));
+      
+      setTestimonials(mappedTestimonials);
     } catch (error) {
-      console.error('Error fetching dashboard data:', error);
-      toast.error('Failed to load dashboard data');
+      console.error('Error fetching testimonials:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch testimonials",
+        variant: "destructive",
+      });
     }
   };
 
   const handleDeleteExperience = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this experience?')) return;
-    
+    setIsLoading(true);
     try {
       const { error } = await supabase
         .from('visa_experiences')
-        .update({ 
-          deleted_at: new Date().toISOString(),
-          deleted_by: adminUser?.id 
-        })
+        .delete()
         .eq('id', id);
 
       if (error) throw error;
-      
-      toast.success('Experience deleted successfully');
-      fetchDashboardData();
+
+      toast({
+        title: "Success",
+        description: "Experience deleted successfully",
+      });
+      setExperiences(experiences.filter(exp => exp.id !== id));
     } catch (error) {
       console.error('Error deleting experience:', error);
-      toast.error('Failed to delete experience');
+      toast({
+        title: "Error",
+        description: "Failed to delete experience",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+      setDeleteConfirmation(null);
     }
   };
 
   const handleDeleteTestimonial = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this testimonial?')) return;
-    
+    setIsLoading(true);
     try {
       const { error } = await supabase
         .from('testimonials')
-        .update({ 
-          deleted_at: new Date().toISOString(),
-          deleted_by: adminUser?.id 
-        })
+        .delete()
         .eq('id', id);
 
       if (error) throw error;
-      
-      toast.success('Testimonial deleted successfully');
-      fetchDashboardData();
+
+      toast({
+        title: "Success",
+        description: "Testimonial deleted successfully",
+      });
+      setTestimonials(testimonials.filter(test => test.id !== id));
     } catch (error) {
       console.error('Error deleting testimonial:', error);
-      toast.error('Failed to delete testimonial');
+      toast({
+        title: "Error",
+        description: "Failed to delete testimonial",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+      setDeleteConfirmation(null);
     }
   };
 
-  const handleSignOut = async () => {
-    await signOut();
+  const handleCreateNotice = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      let image_url = '';
+
+      // Upload image if selected
+      if (selectedImage) {
+        const fileExt = selectedImage.name.split('.').pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const filePath = `notice-images/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('public')
+          .upload(filePath, selectedImage);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('public')
+          .getPublicUrl(filePath);
+
+        image_url = publicUrl;
+      }
+
+      // Deactivate all existing notices if this is active
+      if (notice.is_active) {
+        await supabase
+          .from('notices')
+          .update({ is_active: false })
+          .eq('is_active', true);
+      }
+
+      // Create new notice
+      const { error } = await supabase
+        .from('notices')
+        .insert([{
+          ...notice,
+          image_url,
+          slug: notice.title.toLowerCase().replace(/\s+/g, '-'),
+        }]);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Notice created successfully",
+      });
+      setNotice({
+        title: '',
+        content: '',
+        is_emergency: false,
+        is_active: true,
+      });
+      setSelectedImage(null);
+    } catch (error) {
+      console.error('Error creating notice:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create notice",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedImage(e.target.files[0]);
+    }
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('isAdminAuthenticated');
+    sessionStorage.removeItem('adminEmail');
     navigate('/admin-login');
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-visa-blue"></div>
-          <p className="mt-4 text-gray-600">Loading admin dashboard...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isAdmin) {
-    return null;
-  }
-
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center">
-              <Shield className="h-8 w-8 text-visa-blue mr-3" />
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-                <p className="text-sm text-gray-600">Welcome back, {adminUser?.name}</p>
-              </div>
-            </div>
-            <Button 
-              onClick={handleSignOut}
-              variant="outline"
-              className="flex items-center"
-            >
-              <LogOut size={16} className="mr-2" />
-              Sign Out
-            </Button>
+      <div className="max-w-7xl mx-auto p-6">
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-visa-navy">Admin Dashboard</h1>
+            <p className="text-gray-600">Manage your website content</p>
           </div>
-        </div>
-      </header>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <Users className="h-8 w-8 text-blue-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Experiences</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.totalExperiences}</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <MessageSquare className="h-8 w-8 text-green-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Testimonials</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.totalTestimonials}</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <Bell className="h-8 w-8 text-yellow-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Active Notices</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.activeNotices}</p>
-              </div>
-            </div>
-          </div>
+          <Button onClick={handleLogout} variant="outline">
+            Logout
+          </Button>
         </div>
 
-        {/* Tabs */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="border-b border-gray-200">
-            <nav className="-mb-px flex">
-              <button
-                onClick={() => setActiveTab('overview')}
-                className={`py-4 px-6 border-b-2 font-medium text-sm ${
-                  activeTab === 'overview'
-                    ? 'border-visa-blue text-visa-blue'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                <BarChart3 className="inline h-4 w-4 mr-2" />
-                Overview
-              </button>
-              <button
-                onClick={() => setActiveTab('experiences')}
-                className={`py-4 px-6 border-b-2 font-medium text-sm ${
-                  activeTab === 'experiences'
-                    ? 'border-visa-blue text-visa-blue'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                <Users className="inline h-4 w-4 mr-2" />
-                Visa Experiences
-              </button>
-              <button
-                onClick={() => setActiveTab('testimonials')}
-                className={`py-4 px-6 border-b-2 font-medium text-sm ${
-                  activeTab === 'testimonials'
-                    ? 'border-visa-blue text-visa-blue'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                <MessageSquare className="inline h-4 w-4 mr-2" />
-                Testimonials
-              </button>
-              <button
-                onClick={() => setActiveTab('notices')}
-                className={`py-4 px-6 border-b-2 font-medium text-sm ${
-                  activeTab === 'notices'
-                    ? 'border-visa-blue text-visa-blue'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                <Bell className="inline h-4 w-4 mr-2" />
-                Notices
-              </button>
-            </nav>
-          </div>
+        <Tabs defaultValue="notices" className="space-y-6">
+          <TabsList className="bg-white p-1 rounded-lg border">
+            <TabsTrigger value="notices" className="flex items-center gap-2">
+              <Bell className="w-4 h-4" />
+              Emergency Notices
+            </TabsTrigger>
+            <TabsTrigger value="experiences" className="flex items-center gap-2">
+              <MessageSquare className="w-4 h-4" />
+              Visa Experiences
+            </TabsTrigger>
+            <TabsTrigger value="testimonials" className="flex items-center gap-2">
+              <Star className="w-4 h-4" />
+              Testimonials
+            </TabsTrigger>
+          </TabsList>
 
-          <div className="p-6">
-            {activeTab === 'overview' && (
-              <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Dashboard Overview</h3>
-                <p className="text-gray-600">
-                  Welcome to the Spring/Fall USA admin dashboard. Use the tabs above to manage visa experiences, 
-                  testimonials, and notices.
-                </p>
-              </div>
-            )}
+          <TabsContent value="notices">
+            <Card>
+              <CardHeader>
+                <CardTitle>Create Emergency Notice</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleCreateNotice} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="title">Title</Label>
+                    <Input
+                      id="title"
+                      value={notice.title}
+                      onChange={(e) => setNotice({ ...notice, title: e.target.value })}
+                      placeholder="Notice title"
+                      required
+                    />
+                  </div>
 
-            {activeTab === 'experiences' && (
-              <div>
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-medium text-gray-900">Visa Experiences</h3>
-                </div>
-                <div className="space-y-4">
-                  {experiences.map((exp: any) => (
-                    <div key={exp.id} className="border rounded-lg p-4 flex justify-between items-start">
-                      <div className="flex-1">
-                        <h4 className="font-medium text-gray-900">{exp.name}</h4>
-                        <p className="text-sm text-gray-600">{exp.university} - {exp.major}</p>
-                        <p className="text-sm text-gray-500 mt-1">
-                          {exp.consulate} | {new Date(exp.interview_date).toLocaleDateString()}
+                  <div className="space-y-2">
+                    <Label htmlFor="content">Content</Label>
+                    <Textarea
+                      id="content"
+                      value={notice.content}
+                      onChange={(e) => setNotice({ ...notice, content: e.target.value })}
+                      placeholder="Write your notice content here..."
+                      className="min-h-[200px]"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="image">Image (Optional)</Label>
+                    <div className="flex items-center gap-4">
+                      <Input
+                        id="image"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="flex-1"
+                      />
+                      {selectedImage && (
+                        <img
+                          src={URL.createObjectURL(selectedImage)}
+                          alt="Preview"
+                          className="w-20 h-20 object-cover rounded"
+                        />
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={notice.is_emergency}
+                        onChange={(e) => setNotice({ ...notice, is_emergency: e.target.checked })}
+                        className="rounded border-gray-300"
+                      />
+                      Emergency Notice
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={notice.is_active}
+                        onChange={(e) => setNotice({ ...notice, is_active: e.target.checked })}
+                        className="rounded border-gray-300"
+                      />
+                      Active
+                    </label>
+                  </div>
+
+                  <Button type="submit" disabled={isLoading} className="w-full">
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Creating Notice...
+                      </>
+                    ) : (
+                      'Create Notice'
+                    )}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="experiences">
+            <div className="grid gap-4">
+              {experiences.map((exp) => (
+                <Card key={exp.id}>
+                  <CardContent className="p-6">
+                    <div className="flex justify-between items-start">
+                      <div className="space-y-2">
+                        <h3 className="font-semibold text-lg">{exp.name}</h3>
+                        <p className="text-sm text-gray-600">{exp.university}</p>
+                        <p className="text-gray-600">{exp.experience}</p>
+                        <p className="text-xs text-gray-400">
+                          Posted on {format(new Date(exp.created_at), 'MMM d, yyyy')}
                         </p>
                       </div>
-                      <Button
-                        onClick={() => handleDeleteExperience(exp.id)}
-                        variant="outline"
-                        size="sm"
-                        className="text-red-600 hover:text-red-700"
-                      >
-                        <Trash2 size={16} />
-                      </Button>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            onClick={() => setDeleteConfirmation({ type: 'experience', id: exp.id })}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Confirm Deletion</DialogTitle>
+                          </DialogHeader>
+                          <p>Are you sure you want to delete this experience? This action cannot be undone.</p>
+                          <div className="flex justify-end gap-4">
+                            <Button variant="outline" onClick={() => setDeleteConfirmation(null)}>
+                              Cancel
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              onClick={() => handleDeleteExperience(exp.id)}
+                              disabled={isLoading}
+                            >
+                              {isLoading ? 'Deleting...' : 'Delete'}
+                            </Button>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
                     </div>
-                  ))}
-                </div>
-              </div>
-            )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
 
-            {activeTab === 'testimonials' && (
-              <div>
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-medium text-gray-900">Testimonials</h3>
-                </div>
-                <div className="space-y-4">
-                  {testimonials.map((test: any) => (
-                    <div key={test.id} className="border rounded-lg p-4 flex justify-between items-start">
-                      <div className="flex-1">
-                        <h4 className="font-medium text-gray-900">{test.name}</h4>
-                        <p className="text-sm text-gray-600">{test.university}</p>
-                        <p className="text-sm text-gray-500 mt-1">"{test.quote}"</p>
+          <TabsContent value="testimonials">
+            <div className="grid gap-4">
+              {testimonials.map((testimonial) => (
+                <Card key={testimonial.id}>
+                  <CardContent className="p-6">
+                    <div className="flex justify-between items-start">
+                      <div className="space-y-2">
+                        <h3 className="font-semibold text-lg">{testimonial.name}</h3>
+                        <p className="text-gray-600">{testimonial.content}</p>
+                        <p className="text-xs text-gray-400">
+                          Posted on {format(new Date(testimonial.created_at), 'MMM d, yyyy')}
+                        </p>
                       </div>
-                      <Button
-                        onClick={() => handleDeleteTestimonial(test.id)}
-                        variant="outline"
-                        size="sm"
-                        className="text-red-600 hover:text-red-700"
-                      >
-                        <Trash2 size={16} />
-                      </Button>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            onClick={() => setDeleteConfirmation({ type: 'testimonial', id: testimonial.id })}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Confirm Deletion</DialogTitle>
+                          </DialogHeader>
+                          <p>Are you sure you want to delete this testimonial? This action cannot be undone.</p>
+                          <div className="flex justify-end gap-4">
+                            <Button variant="outline" onClick={() => setDeleteConfirmation(null)}>
+                              Cancel
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              onClick={() => handleDeleteTestimonial(testimonial.id)}
+                              disabled={isLoading}
+                            >
+                              {isLoading ? 'Deleting...' : 'Delete'}
+                            </Button>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
                     </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'notices' && (
-              <div>
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-medium text-gray-900">Notices Management</h3>
-                  <Button className="bg-visa-blue hover:bg-visa-navy">
-                    <Plus size={16} className="mr-2" />
-                    Create Notice
-                  </Button>
-                </div>
-                <div className="space-y-4">
-                  {notices.map((notice: any) => (
-                    <div key={notice.id} className="border rounded-lg p-4">
-                      <div className="flex justify-between items-start mb-2">
-                        <h4 className="font-medium text-gray-900">{notice.title}</h4>
-                        <div className="flex items-center space-x-2">
-                          <span className={`px-2 py-1 text-xs rounded-full ${
-                            notice.is_active 
-                              ? 'bg-green-100 text-green-800' 
-                              : 'bg-gray-100 text-gray-800'
-                          }`}>
-                            {notice.is_active ? 'Active' : 'Inactive'}
-                          </span>
-                          {notice.is_emergency && (
-                            <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">
-                              Emergency
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      <p className="text-sm text-gray-600">{notice.content}</p>
-                      <p className="text-xs text-gray-400 mt-2">
-                        Created: {new Date(notice.created_at).toLocaleDateString()}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
-};
-
-export default AdminDashboardPage;
+}

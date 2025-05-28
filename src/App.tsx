@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -25,6 +24,7 @@ import NoticePage from "@/pages/NoticePage";
 import AdminLoginPage from "@/pages/AdminLoginPage";
 import AdminDashboardPage from "@/pages/AdminDashboardPage";
 import LogoCompetitionPage from "@/pages/LogoCompetitionPage";
+import CommunityLinks from "@/pages/CommunityLinks";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +55,7 @@ const App = () => (
             <Route path="/logo-competition" element={<LogoCompetitionPage />} />
             <Route path="/admin-login" element={<AdminLoginPage />} />
             <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
+            <Route path="/community" element={<CommunityLinks />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

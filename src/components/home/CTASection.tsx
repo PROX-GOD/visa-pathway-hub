@@ -1,8 +1,13 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Send } from 'lucide-react';
+
 const CTASection = () => {
+  const openTelegramChannel = () => {
+    window.open('https://t.me/SpringfallUSA', '_blank', 'noopener,noreferrer');
+  };
+
   return <section className="py-16 bg-visa-blue relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
@@ -29,11 +34,15 @@ const CTASection = () => {
               </Button>
             </Link>
             
-            <Link to="/interview-prep">
-              <Button size="lg" variant="outline" className="border-white hover:bg-visa-navy text-sky-400">
-                Schedule Mock Interview
-              </Button>
-            </Link>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="border-white hover:bg-visa-navy text-sky-400"
+              onClick={openTelegramChannel}
+            >
+              Join Our Telegram
+              <Send size={16} className="ml-2" />
+            </Button>
           </div>
           
           <p className="mt-8 text-blue-100 animate-fade-in">
@@ -43,4 +52,5 @@ const CTASection = () => {
       </div>
     </section>;
 };
+
 export default CTASection;

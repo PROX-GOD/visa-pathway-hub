@@ -1,15 +1,14 @@
-
 export type VisaExperience = {
   id: string;
   name: string;
-  consulate: string;
   university: string;
+  consulate: string;
   major: string;
   interview_date: string;
-  approved: string; // Changed from union type to string to match what Supabase returns
+  approved: 'yes' | 'no' | 'administrative';
   experience: string;
-  created_at: string;
   email?: string;
+  created_at: string;
 };
 
 export type Testimonial = {
@@ -19,6 +18,7 @@ export type Testimonial = {
   photo_url?: string;
   quote: string;
   role?: string;
+  email?: string;
   created_at: string;
 };
 
@@ -27,6 +27,9 @@ export type Notice = {
   title: string;
   content: string;
   is_active: boolean;
+  is_emergency: boolean;
   slug: string;
   created_at: string;
+  updated_at: string;
+  created_by?: string;
 };

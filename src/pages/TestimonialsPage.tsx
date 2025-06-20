@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { PlusCircle, Filter, Search, School, Quote, ThumbsUp, ArrowRight, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Testimonial } from '@/types/database';
-import { testimonialsClient } from '@/lib/supabase';
+import { firebaseAPI } from '@/lib/firebase-api.js';
 
 const TestimonialsPage = () => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
@@ -17,33 +17,25 @@ const TestimonialsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    fetchTestimonials();
+    // Subscribe to real-time testimonials
+    const unsubscribe = firebaseAPI.subscribeToTestimonials((result) => {
+      setIsLoading(false);
+      if (result.error) {
+        toast.error('Failed to fetch testimonials');
+        console.error('Error fetching testimonials:', result.error);
+      } else {
+        setTestimonials(result.data || []);
+      }
+    });
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
     applyFilters();
   }, [searchTerm, testimonials]);
-
-  const fetchTestimonials = async () => {
-    try {
-      setIsLoading(true);
-      const { data, error } = await testimonialsClient
-        .from('testimonials')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        throw error;
-      }
-
-      setTestimonials(data || []);
-      setIsLoading(false);
-    } catch (error) {
-      toast.error('Failed to fetch testimonials');
-      console.error('Error fetching testimonials:', error);
-      setIsLoading(false);
-    }
-  };
 
   const applyFilters = () => {
     let filtered = [...testimonials];

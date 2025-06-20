@@ -1,31 +1,23 @@
 
-import { supabase } from '@/integrations/supabase/client';
-import { secureAPI } from './secure-api';
+import { firebaseAPI } from './firebase-api.js';
 
-// Legacy client for backward compatibility
+// Legacy client for backward compatibility - now using Firebase
 export const visaExperiencesClient = {
   from: () => ({
     select: () => ({
       order: () => ({
-        limit: async (limit?: number) => {
-          try {
-            const response = await secureAPI.getExperiences(limit);
-            return { data: response.data, error: null };
-          } catch (error) {
-            console.error('Error fetching experiences:', error);
-            return { data: null, error };
-          }
+        limit: async (limitCount?: number) => {
+          return new Promise((resolve) => {
+            const unsubscribe = firebaseAPI.subscribeToExperiences((result) => {
+              unsubscribe(); // Unsubscribe immediately for one-time fetch
+              resolve(result);
+            }, limitCount);
+          });
         }
       })
     }),
     insert: async (data: any[]) => {
-      try {
-        const response = await secureAPI.createExperience(data[0]);
-        return { data: response.data, error: null };
-      } catch (error) {
-        console.error('Error creating experience:', error);
-        return { data: null, error };
-      }
+      return firebaseAPI.createExperience(data[0]);
     }
   })
 };
@@ -34,26 +26,18 @@ export const testimonialsClient = {
   from: () => ({
     select: () => ({
       order: () => ({
-        limit: async (limit?: number) => {
-          try {
-            const response = await secureAPI.getTestimonials();
-            const data = limit ? response.data.slice(0, limit) : response.data;
-            return { data, error: null };
-          } catch (error) {
-            console.error('Error fetching testimonials:', error);
-            return { data: null, error };
-          }
+        limit: async (limitCount?: number) => {
+          return new Promise((resolve) => {
+            const unsubscribe = firebaseAPI.subscribeToTestimonials((result) => {
+              unsubscribe(); // Unsubscribe immediately for one-time fetch
+              resolve(result);
+            }, limitCount);
+          });
         }
       })
     }),
     insert: async (data: any[]) => {
-      try {
-        const response = await secureAPI.createTestimonial(data[0]);
-        return { data: response.data, error: null };
-      } catch (error) {
-        console.error('Error creating testimonial:', error);
-        return { data: null, error };
-      }
+      return firebaseAPI.createTestimonial(data[0]);
     }
   })
 };

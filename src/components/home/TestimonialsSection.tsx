@@ -3,7 +3,7 @@ import { ArrowRight, Loader2, Quote, Star, UserRound } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Testimonial } from '@/types/database';
-import { testimonialsClient } from '@/lib/supabase';
+import { firebaseAPI } from '@/lib/firebase-api.js';
 import { toast } from 'sonner';
 import { Card } from '@/components/ui/card';
 
@@ -36,7 +36,21 @@ const TestimonialsSection = () => {
   }, []);
 
   useEffect(() => {
-    fetchTestimonials();
+    // Subscribe to real-time testimonials
+    const unsubscribe = firebaseAPI.subscribeToTestimonials((result) => {
+      setIsLoading(false);
+      if (result.error) {
+        console.error("Error fetching testimonials:", result.error);
+        toast.error("Failed to load testimonials. Showing fallbacks instead.");
+        setTestimonials(fallbackTestimonials);
+      } else {
+        setTestimonials(result.data || []);
+      }
+    }, 9);
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   // Auto-advance carousel
@@ -49,29 +63,6 @@ const TestimonialsSection = () => {
     
     return () => clearInterval(interval);
   }, [testimonials.length]);
-
-  const fetchTestimonials = async () => {
-    try {
-      setIsLoading(true);
-      const { data, error } = await testimonialsClient
-        .from('testimonials')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(9);
-
-      if (error) {
-        throw error;
-      }
-
-      setTestimonials(data || []);
-    } catch (error) {
-      console.error("Error fetching testimonials:", error);
-      toast.error("Failed to load testimonials. Showing fallbacks instead.");
-      setTestimonials(fallbackTestimonials);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   // Fallback data if API fails or returns empty
   const fallbackTestimonials = [

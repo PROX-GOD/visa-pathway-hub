@@ -1,34 +1,15 @@
 
-import { supabase } from '@/integrations/supabase/client';
-
-const FUNCTIONS_URL = import.meta.env.VITE_PUBLIC_SUPABASE_URL?.replace('/rest/v1', '') || '';
+import { firebaseAPI } from './firebase-api.js';
 
 class SecureAPIClient {
-  private async makeRequest(endpoint: string, options: RequestInit = {}) {
-    const { data: { session } } = await supabase.auth.getSession();
-    
-    const headers = {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${session?.access_token || import.meta.env.VITE_PUBLIC_SUPABASE_ANON_KEY}`,
-      ...options.headers,
-    };
-
-    const response = await fetch(`${FUNCTIONS_URL}/functions/v1/${endpoint}`, {
-      ...options,
-      headers,
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Request failed');
-    }
-
-    return response.json();
-  }
-
   // Testimonials API
   async getTestimonials() {
-    return this.makeRequest('testimonials?action=list');
+    return new Promise((resolve) => {
+      const unsubscribe = firebaseAPI.subscribeToTestimonials((result) => {
+        unsubscribe();
+        resolve(result);
+      });
+    });
   }
 
   async createTestimonial(testimonial: {
@@ -38,16 +19,17 @@ class SecureAPIClient {
     email?: string;
     role?: string;
   }) {
-    return this.makeRequest('testimonials?action=create', {
-      method: 'POST',
-      body: JSON.stringify(testimonial),
-    });
+    return firebaseAPI.createTestimonial(testimonial);
   }
 
   // Experiences API
   async getExperiences(limit?: number) {
-    const url = limit ? `experiences?action=list&limit=${limit}` : 'experiences?action=list';
-    return this.makeRequest(url);
+    return new Promise((resolve) => {
+      const unsubscribe = firebaseAPI.subscribeToExperiences((result) => {
+        unsubscribe();
+        resolve(result);
+      }, limit);
+    });
   }
 
   async createExperience(experience: {
@@ -60,10 +42,7 @@ class SecureAPIClient {
     experience: string;
     email?: string;
   }) {
-    return this.makeRequest('experiences?action=create', {
-      method: 'POST',
-      body: JSON.stringify(experience),
-    });
+    return firebaseAPI.createExperience(experience);
   }
 }
 

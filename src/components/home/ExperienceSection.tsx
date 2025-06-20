@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { VisaExperience } from '@/types/database';
-import { visaExperiencesClient } from '@/lib/supabase';
+import { firebaseAPI } from '@/lib/firebase-api.js';
 
 const ExperienceSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -35,7 +35,22 @@ const ExperienceSection = () => {
   }, []);
 
   useEffect(() => {
-    fetchExperiences();
+    // Subscribe to real-time experiences
+    const unsubscribe = firebaseAPI.subscribeToExperiences((result) => {
+      setIsLoading(false);
+      if (result.error) {
+        console.error('Error fetching experiences:', result.error);
+        toast.error("Failed to load experiences. Showing fallbacks instead.");
+        setExperiences(defaultExperiences);
+      } else {
+        const typedData = result.data as VisaExperience[];
+        setExperiences(typedData || []);
+      }
+    }, 6);
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   // Auto slide every 5 seconds
@@ -48,34 +63,6 @@ const ExperienceSection = () => {
     
     return () => clearInterval(interval);
   }, [experiences.length]);
-
-  const fetchExperiences = async () => {
-    try {
-      setIsLoading(true);
-      console.log("Fetching experiences from Supabase...");
-      
-      const { data, error } = await visaExperiencesClient
-        .from('visa_experiences')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(6);
-
-      if (error) {
-        throw error;
-      }
-
-      console.log("Experiences fetched:", data);
-      // Cast the data to match our VisaExperience type
-      const typedData = data as VisaExperience[];
-      setExperiences(typedData || []);
-    } catch (error) {
-      console.error('Error fetching experiences:', error);
-      toast.error("Failed to load experiences. Showing fallbacks instead.");
-      setExperiences(defaultExperiences);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   // Default experiences if API fails or returns empty
   const defaultExperiences = [

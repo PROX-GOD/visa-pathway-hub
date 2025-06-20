@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -9,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { testimonialsClient } from '@/lib/supabase';
+import { secureAPI } from '@/lib/secure-api';
 
 const ShareTestimonialPage = () => {
   const navigate = useNavigate();
@@ -35,23 +34,13 @@ const ShareTestimonialPage = () => {
     try {
       console.log("Submitting testimonial with data:", formData);
       
-      const { data, error } = await testimonialsClient
-        .from('testimonials')
-        .insert([
-          {
-            name: formData.name,
-            email: formData.email,
-            university: formData.university,
-            role: formData.role,
-            quote: formData.quote,
-            photo_url: null
-          }
-        ]);
-
-      if (error) {
-        console.error("Supabase error:", error);
-        throw error;
-      }
+      await secureAPI.createTestimonial({
+        name: formData.name,
+        email: formData.email,
+        university: formData.university,
+        role: formData.role,
+        quote: formData.quote
+      });
 
       toast.success("Your testimonial has been submitted successfully!");
       

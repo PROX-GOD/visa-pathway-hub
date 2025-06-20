@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
+import { secureAPI } from '@/lib/secure-api';
 
 const ShareExperiencePage = () => {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const ShareExperiencePage = () => {
     interviewDate: '',
     university: '',
     major: '',
-    approved: 'yes',
+    approved: 'yes' as 'yes' | 'no' | 'administrative',
     experience: ''
   });
   
@@ -37,25 +37,16 @@ const ShareExperiencePage = () => {
     try {
       console.log("Submitting experience with data:", formData);
       
-      const { data, error } = await supabase
-        .from('visa_experiences')
-        .insert([
-          {
-            name: formData.name,
-            email: formData.email,
-            consulate: formData.consulate,
-            interview_date: formData.interviewDate,
-            university: formData.university,
-            major: formData.major,
-            approved: formData.approved,
-            experience: formData.experience,
-          }
-        ]);
-
-      if (error) {
-        console.error("Supabase error:", error);
-        throw error;
-      }
+      await secureAPI.createExperience({
+        name: formData.name,
+        email: formData.email,
+        consulate: formData.consulate,
+        interview_date: formData.interviewDate,
+        university: formData.university,
+        major: formData.major,
+        approved: formData.approved,
+        experience: formData.experience,
+      });
 
       toast.success("Your experience has been submitted successfully!");
       
